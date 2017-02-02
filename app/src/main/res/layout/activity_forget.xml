@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="drawable"
+            type="android.graphics.drawable.Drawable" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@{drawable}"
+        android:fitsSystemWindows="true"
+        tools:context=".activity.ForgetActivity">
+
+        <include
+            android:id="@id/pub_layout_title"
+            layout="@layout/pub_title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/pub_layout_title">
+
+            <Button
+                android:id="@+id/forget_test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Test" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

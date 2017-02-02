@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:fresco="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.mwm.loyal.utils.StringUtil" />
+
+        <variable
+            name="loginBean"
+            type="com.mwm.loyal.beans.LoginBean" />
+
+        <variable
+            name="click"
+            type="com.mwm.loyal.handle.PersonalHandler" />
+
+        <variable
+            name="drawable"
+            type="android.graphics.drawable.Drawable" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@{drawable}"
+        android:fitsSystemWindows="true"
+        tools:context=".activity.PersonalActivity">
+
+        <include
+            android:id="@id/pub_layout_title"
+            layout="@layout/pub_title" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/pub_layout_title"
+            android:background="@color/albumWhiteGray"
+            android:fillViewport="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@id/pub_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="60dp"
+                        android:gravity="bottom"
+                        android:orientation="horizontal"
+                        android:paddingEnd="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingStart="8dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/account"
+                        android:textColor="@color/text_personal"
+                        android:textSize="@dimen/text_sp_18" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|end"
+                        android:paddingBottom="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingStart="8dp"
+                        android:text="@{loginBean.account}"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_sp_18" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/grey" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:paddingEnd="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingStart="8dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/nickname"
+                        android:textColor="@color/text_personal"
+                        android:textSize="@dimen/text_sp_18" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:gravity="center_vertical|end"
+                            android:paddingBottom="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingStart="8dp"
+                            android:text="@{StringUtil.isEmpty(loginBean.nickname)?@string/key_default:loginBean.nickname}"
+                            android:textColor="@{StringUtil.isEmpty(loginBean.nickname)?@color/text_personal:@color/black}"
+                            android:textSize="@dimen/text_sp_18"
+                            android:visibility="@{loginBean.editable?View.GONE:View.VISIBLE}" />
+
+                        <EditText
+                            android:id="@+id/personal_nickname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:background="@color/white"
+                            android:gravity="center_vertical|end"
+                            android:hint="@string/hint_nickname"
+                            android:maxLength="18"
+                            android:maxLines="1"
+                            android:paddingBottom="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingStart="8dp"
+                            android:text="@{loginBean.nickname}"
+                            android:textColor="@color/text_personal"
+                            android:textSize="@dimen/text_sp_18"
+                            android:visibility="@{loginBean.editable?View.VISIBLE:View.GONE}" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/grey" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:paddingEnd="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingStart="8dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/signature"
+                        android:textColor="@color/text_personal"
+                        android:textSize="@dimen/text_sp_18" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical|end"
+                            android:paddingBottom="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingStart="8dp"
+                            android:text="@{StringUtil.isEmpty(loginBean.signature)?@string/key_default:loginBean.signature}"
+                            android:textColor="@{StringUtil.isEmpty(loginBean.signature)?@color/text_personal:@color/black}"
+                            android:textSize="@dimen/text_sp_18"
+                            android:visibility="@{loginBean.editable?View.GONE:View.VISIBLE}" />
+
+                        <EditText
+                            android:id="@+id/personal_signature"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:background="@color/white"
+                            android:gravity="center_vertical|end"
+                            android:hint="@string/hint_signature"
+                            android:maxLength="100"
+                            android:paddingBottom="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingStart="8dp"
+                            android:text="@{loginBean.signature}"
+                            android:textColor="@color/text_personal"
+                            android:textSize="@dimen/text_sp_18"
+                            android:visibility="@{loginBean.editable?View.VISIBLE:View.GONE}" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/grey" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:paddingEnd="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingStart="8dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/qr"
+                        android:textColor="@color/text_personal"
+                        android:textSize="@dimen/text_sp_18" />
+
+                    <RelativeLayout
+                        android:id="@+id/view_person_qr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:onClick="@{click.onClick}">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:contentDescription="@string/empty"
+                            android:src="@mipmap/qr_pressed" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/simple_personal_icon"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="48dp"
+                    android:onClick="@{click.onClick}"
+                    fresco:actualImageScaleType="centerInside"
+                    fresco:placeholderImage="@mipmap/icon_1"
+                    fresco:roundAsCircle="true"
+                    fresco:roundingBorderColor="@color/white"
+                    fresco:roundingBorderWidth="2dp" />
+            </RelativeLayout>
+        </ScrollView>
+    </RelativeLayout>
+</layout>

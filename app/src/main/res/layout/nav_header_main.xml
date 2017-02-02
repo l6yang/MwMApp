@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/pub_color_title"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/nav_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        fresco:actualImageScaleType="centerInside"
+        fresco:placeholderImage="@mipmap/icon_1"
+        fresco:roundAsCircle="true"
+        fresco:roundingBorderColor="@color/white"
+        fresco:roundingBorderWidth="2dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_toEndOf="@id/nav_icon"
+        android:layout_toRightOf="@id/nav_icon"
+        android:paddingTop="@dimen/nav_header_vertical_spacing">
+
+        <ImageView
+            android:id="@+id/nav_zxing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/empty"
+            android:src="@drawable/src_qr_img" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/nav_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nav_icon"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_sp_18" />
+
+</RelativeLayout>

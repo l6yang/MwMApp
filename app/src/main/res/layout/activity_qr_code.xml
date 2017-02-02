@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="drawable"
+            type="android.graphics.drawable.Drawable" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@{drawable}"
+        android:fitsSystemWindows="true"
+        tools:context=".activity.QrCodeActivity">
+
+        <include
+            android:id="@id/pub_layout_title"
+            layout="@layout/pub_title" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/pub_layout_title"
+            android:background="@color/whiteSmoke">
+
+            <ImageView
+                android:id="@+id/img_qr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:contentDescription="@string/empty" />
+
+            <include layout="@layout/pub_menu" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</layout>

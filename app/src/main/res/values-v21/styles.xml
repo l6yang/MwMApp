@@ -1,0 +1,8 @@
+<resources>
+
+    <style name="BaseSwipeTheme" parent="@style/SwipeTheme">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="BaseAppTheme" parent="@style/AppTheme" />
+</resources>
