@@ -18,7 +18,7 @@ public class TestImageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityTestImageBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_test_image);
-        TransManage.compat(this);
+        TransManage.setTranslucentStatus(this);
         ButterKnife.bind(this);
         binding.setDrawable(ResUtil.getBackground(this));
     }

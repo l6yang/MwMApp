@@ -27,7 +27,7 @@ public class FeedBackActivity extends BaseSwipeActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityFeedBackBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_feed_back);
-        TransManage.compat(this);
+        TransManage.setTranslucentStatus(this);
         ButterKnife.bind(this);
         binding.setClick(new FeedBackHandler(this, binding));
         binding.setDrawable(ResUtil.getBackground(this));

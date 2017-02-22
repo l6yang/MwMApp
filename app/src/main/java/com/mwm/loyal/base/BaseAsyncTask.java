@@ -62,20 +62,18 @@ public abstract class BaseAsyncTask<Params, Progress, Result> extends AsyncTask<
     }
 
     protected void cancelDialog() {
-        if (mDialog != null)
-            mDialog.cancel();
+        dismissDialog();
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        if (mDialog != null)
-            if (!mDialog.isShowing())
-                mDialog.show();
+        if (mDialog != null && !mDialog.isShowing())
+            mDialog.show();
     }
 
     @Override
     public void onCancel(DialogInterface dialogInterface) {
-        BaseAsyncTask.this.cancel(true);
+        cancel(true);
     }
 }

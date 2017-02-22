@@ -5,11 +5,11 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import com.mwm.loyal.beans.LoginBean;
-import com.mwm.loyal.imp.ResListener;
+import com.mwm.loyal.imp.Contact;
 
 import static com.mwm.loyal.utils.StringUtil.*;
 
-public class PreferencesUtil implements ResListener {
+public class PreferencesUtil implements Contact {
 
     private static String PREFERENCE_NAME = "MvvM";
 

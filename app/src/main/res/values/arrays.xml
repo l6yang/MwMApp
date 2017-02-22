@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="server">
+        <item>61.178.79.18</item>
         <item>192.168.1.15</item>
+        <item>192.168.0.66</item>
         <item>192.168.1.16</item>
         <item>192.168.1.140</item>
     </array>

@@ -48,7 +48,7 @@ public class CaptureActivity extends BaseCaptureActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture);
         ButterKnife.bind(this);
-        TransManage.compat(this);
+        TransManage.setTranslucentStatus(this);
         autoScan = getIntent().getBooleanExtra("auto", false);
         pubBack.setOnClickListener(this);
         pubTitle.setText(getIntent().getStringExtra("title"));
@@ -58,6 +58,11 @@ public class CaptureActivity extends BaseCaptureActivity implements View.OnClick
         viewfinderView.setVisibility(autoScan ? View.GONE : View.VISIBLE);
         pubMenu.setOnClickListener(this);
     }
+
+   /* @Override
+    public int setEdgePosition() {
+        return LEFT;
+    }*/
 
     @Override
     public void onClick(View view) {

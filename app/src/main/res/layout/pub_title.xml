@@ -8,8 +8,7 @@
         <RelativeLayout
             android:id="@id/pub_layout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/trans">
+            android:layout_height="?attr/actionBarSize">
 
             <TextView
                 android:id="@id/pub_title"

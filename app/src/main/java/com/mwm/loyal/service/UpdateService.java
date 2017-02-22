@@ -10,7 +10,7 @@ import android.text.TextUtils;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.beans.ResultBean;
-import com.mwm.loyal.imp.ResListener;
+import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.utils.ApkUtil;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.GsonUtil;
@@ -26,7 +26,7 @@ import java.io.InputStream;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class UpdateService extends IntentService implements ResListener {
+public class UpdateService extends IntentService implements Contact {
     private static final String NOTIFY_TAG = "Update";
 
     public UpdateService() {

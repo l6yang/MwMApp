@@ -15,6 +15,7 @@ import com.mwm.loyal.imp.Progress;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.StringUtil;
+import com.mwm.loyal.utils.TransManage;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +36,7 @@ public class ForgetActivity extends BaseSwipeActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         ActivityForgetBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_forget);
         ButterKnife.bind(this);
+        TransManage.setTranslucentStatus(this);
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();
     }

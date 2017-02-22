@@ -33,7 +33,7 @@ public class RegisterActivity extends BaseSwipeActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register);
         ButterKnife.bind(this);
-        TransManage.compat(this);
+        TransManage.setTranslucentStatus(this);
         LoginBean loginBean = new LoginBean();
         binding.setLoginBean(loginBean);
         String account = getIntent().getStringExtra("account");

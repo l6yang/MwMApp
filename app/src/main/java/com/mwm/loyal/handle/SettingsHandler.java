@@ -7,10 +7,10 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.activity.AboutActivity;
 import com.mwm.loyal.activity.AccountActivity;
 import com.mwm.loyal.activity.SettingsActivity;
-import com.mwm.loyal.imp.ResListener;
+import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.utils.IntentUtil;
 
-public class SettingsHandler implements ResListener {
+public class SettingsHandler implements Contact {
     private final SettingsActivity settingsActivity;
 
     public SettingsHandler(SettingsActivity activity) {

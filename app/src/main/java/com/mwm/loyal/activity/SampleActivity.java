@@ -23,6 +23,7 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseuCropActivity;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ToastUtil;
+import com.mwm.loyal.utils.TransManage;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
@@ -67,6 +68,7 @@ public class SampleActivity extends BaseuCropActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
         ButterKnife.bind(this);
+        TransManage.setTranslucentStatus(this);
         setupUI();
     }
 

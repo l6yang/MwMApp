@@ -13,10 +13,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.imp.ResListener;
+import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.service.UpdateService;
 
-public abstract class BaseActivity extends AppCompatActivity implements ResListener {
+public abstract class BaseActivity extends AppCompatActivity implements Contact {
     private UpdateReceiver updateReceiver;
 
     @Override

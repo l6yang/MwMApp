@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mwm.loyal.imp.OnFragment2ActivityListener;
-import com.mwm.loyal.imp.ResListener;
+import com.mwm.loyal.imp.Contact;
 
-public abstract class BaseFragment extends Fragment implements View.OnClickListener ,ResListener{
+public abstract class BaseFragment extends Fragment implements View.OnClickListener ,Contact {
     protected final String TAG = BaseFragment.class.getSimpleName();
     protected OnFragment2ActivityListener mListener;
 

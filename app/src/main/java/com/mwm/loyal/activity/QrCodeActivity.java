@@ -18,13 +18,14 @@ import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.ToastUtil;
+import com.mwm.loyal.utils.TransManage;
 
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.mwm.loyal.imp.ResListener.Str.*;
+import static com.mwm.loyal.imp.Contact.Str.*;
 
 public class QrCodeActivity extends BaseSwipeActivity implements View.OnClickListener {
     @BindView(R.id.pub_back)
@@ -51,6 +52,7 @@ public class QrCodeActivity extends BaseSwipeActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         ActivityQrCodeBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_qr_code);
         ButterKnife.bind(this);
+        TransManage.setTranslucentStatus(this);
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();
     }

@@ -39,7 +39,7 @@ public class AccountActivity extends BaseSwipeActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_account);
         ButterKnife.bind(this);
-        TransManage.compat(this);
+        TransManage.setTranslucentStatus(this);
         binding.setClick(new AccountHandler(this, binding));
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();

@@ -7,9 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import com.mwm.loyal.imp.ResListener;
+import com.mwm.loyal.imp.Contact;
 
-public class TimeUtil implements ResListener {
+public class TimeUtil implements Contact {
     public static String getWeek() {
         SimpleDateFormat format = new SimpleDateFormat(Str.TIME_WEEK, Locale.CHINA);
         return replaceTime(format.format(new Date()));

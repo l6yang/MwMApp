@@ -78,11 +78,19 @@ public class ResUtil {
     }
 
     public static Drawable getBackground(Context context) {
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_bg_login);
-        Bitmap newBitmap = createScaledBitmap(bitmap, true);
-        if (bitmap != null)
-            bitmap.recycle();
-        return new BitmapDrawable(context.getResources(), newBitmap);
+        return getBackground(context, R.mipmap.img_bg_login, true);
+    }
+
+    public static Drawable getBackground(Context context, int resId, boolean scale) {
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
+        if (!scale)
+            return new BitmapDrawable(context.getResources(), bitmap);
+        else {
+            Bitmap newBitmap = createScaledBitmap(bitmap, true);
+            if (bitmap != null)
+                bitmap.recycle();
+            return new BitmapDrawable(context.getResources(), newBitmap);
+        }
     }
 
     private static Bitmap createScaledBitmap(Bitmap src, boolean filter) {

@@ -4,12 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.mwm.loyal.imp.ResListener;
+import com.mwm.loyal.imp.Contact;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringUtil implements ResListener {
+public class StringUtil implements Contact {
 
     public static boolean showErrorToast(Context context, String error) {
         if (showErrorToast(error)) {

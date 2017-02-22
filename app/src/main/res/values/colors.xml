@@ -11,6 +11,7 @@
     <color name="text_color_normal">#0099CC</color>
     <color name="text_color_pressed">#0066CC</color>
     <color name="pub_color_title">#031424</color>
+    <color name="statusBar">#051728</color>
     <!---->
     <color name="albumWhite">#FFFFFFFF</color>
     <color name="albumWhiteGray">#E0E0E0</color>

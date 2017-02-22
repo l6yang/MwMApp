@@ -39,7 +39,7 @@ public class LoginActivity extends BaseActivity implements RationaleListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        TransManage.compat(this);
+        TransManage.setTranslucentStatus(this);
         ButterKnife.bind(this);
         LoginBean bean = PreferencesUtil.getLoginBean(this);
         binding.setLoginbean(bean);

@@ -8,6 +8,14 @@
         <variable
             name="drawable"
             type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="weather"
+            type="String" />
+
+        <variable
+            name="city"
+            type="String" />
     </data>
 
     <RelativeLayout
@@ -51,9 +59,49 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
+                android:background="@color/white"
                 android:fitsSystemWindows="true"
                 app:headerLayout="@layout/nav_header_main"
-                app:menu="@menu/activity_main_drawer" />
+                app:menu="@menu/activity_main_drawer">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin">
+
+                    <TextView
+                        android:id="@+id/text_city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingTop="5dp"
+                        android:text="@{city}"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/text_weather"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/text_city"
+                        android:gravity="end"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="@{weather}"
+                        android:onClick="onClick"
+                        android:textColor="@color/text_color_normal"
+                        android:textSize="28sp" />
+                </RelativeLayout>
+            </android.support.design.widget.NavigationView>
 
         </android.support.v4.widget.DrawerLayout>
     </RelativeLayout>

@@ -22,13 +22,13 @@ public class AboutActivity extends BaseSwipeActivity implements View.OnClickList
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_menu)
-    ImageView pubFilter;
+    ImageView pubMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityAboutBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_about);
-        TransManage.compat(this);
+        TransManage.setTranslucentStatus(this);
         ButterKnife.bind(this);
         binding.setVersion(ApkUtil.getApkVersion(this));
         binding.setDrawable(ResUtil.getBackground(this));
@@ -37,7 +37,7 @@ public class AboutActivity extends BaseSwipeActivity implements View.OnClickList
     }
 
     private void initViews() {
-        pubFilter.setVisibility(View.GONE);
+        pubMenu.setVisibility(View.GONE);
         pubTitle.setText("关于我们");
         pubBack.setOnClickListener(this);
     }

@@ -22,15 +22,15 @@
         android:background="@{drawable}"
         android:fitsSystemWindows="true"
         android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@color/trans"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -148,10 +148,10 @@
                         android:layout_toLeftOf="@id/server_clear"
                         android:layout_toStartOf="@id/server_clear"
                         android:background="@color/white"
+                        android:completionThreshold="1"
                         android:hint="@string/hint_server"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
-                        android:completionThreshold="1"
                         android:padding="10dp"
                         android:text="@{loginbean.server}"
                         android:textColor="@color/black"

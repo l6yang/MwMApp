@@ -4,9 +4,9 @@ import android.os.Bundle;
 
 import com.mwm.loyal.libs.swipback.app.SwipeBackActivity;
 import com.mwm.loyal.libs.swipback.utils.SwipeBackLayout;
-import com.mwm.loyal.imp.ResListener;
+import com.mwm.loyal.imp.Contact;
 
-public abstract class BaseSwipeActivity extends SwipeBackActivity implements SwipeBackLayout.SwipeListener, ResListener {
+public abstract class BaseSwipeActivity extends SwipeBackActivity implements SwipeBackLayout.SwipeListener, Contact {
     protected int LEFT = SwipeBackLayout.EDGE_LEFT;
     protected int RIGHT = SwipeBackLayout.EDGE_RIGHT;
     protected int BOTTOM = SwipeBackLayout.EDGE_BOTTOM;

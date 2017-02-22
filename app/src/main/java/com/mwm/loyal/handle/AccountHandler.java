@@ -11,7 +11,7 @@ import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAccountBinding;
 import com.mwm.loyal.imp.Progress;
-import com.mwm.loyal.imp.ResListener;
+import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.utils.ApkUtil;
 import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.IntentUtil;
@@ -33,7 +33,7 @@ public class AccountHandler implements Progress.SubscribeListener<String> {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.account_mm_reset:
-                IntentUtil.toStartActivityForResult(accountActivity, RegisterActivity.class, ResListener.Int.reqCode_Account_UpdateMM);
+                IntentUtil.toStartActivityForResult(accountActivity, RegisterActivity.class, Contact.Int.reqCode_Account_UpdateMM);
                 break;
             case R.id.account_device_lock:
                 String des = binding.accountDeviceLock.getContentDescription().toString();

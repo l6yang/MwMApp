@@ -3,7 +3,7 @@ package com.mwm.loyal.asynctask;
 import android.content.Context;
 
 import com.mwm.loyal.base.BaseAsyncTask;
-import com.mwm.loyal.imp.ResListener;
+import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.utils.ApkUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 
@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import retrofit2.Call;
 
-public final class VerApkAsync extends BaseAsyncTask<Void, Void, String> implements ResListener {
+public final class VerApkAsync extends BaseAsyncTask<Void, Void, String> implements Contact {
     private final String apkVersion;
 
     public VerApkAsync(Context context) {

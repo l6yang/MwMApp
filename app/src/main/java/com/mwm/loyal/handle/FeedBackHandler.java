@@ -11,7 +11,7 @@ import com.mwm.loyal.base.BaseAsyncTask;
 import com.mwm.loyal.beans.FeedBackBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityFeedBackBinding;
-import com.mwm.loyal.imp.ResListener;
+import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.StringUtil;
@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import retrofit2.Call;
 
-public class FeedBackHandler implements ResListener {
+public class FeedBackHandler implements Contact {
     private FeedBackActivity feedBackActivity;
     private final ActivityFeedBackBinding binding;
     private FeedBackAsync mFeedAuth;

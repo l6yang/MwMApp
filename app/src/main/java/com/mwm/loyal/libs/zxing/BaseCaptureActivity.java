@@ -1,6 +1,5 @@
 package com.mwm.loyal.libs.zxing;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -27,17 +27,14 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.mwm.loyal.R;
+import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.libs.zxing.camera.CameraManager;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
-/**
- * Created by yangxixi on 16/11/21.
- */
-
-public abstract class BaseCaptureActivity extends Activity implements SurfaceHolder.Callback {
+public abstract class BaseCaptureActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
     private static final String TAG = BaseCaptureActivity.class.getSimpleName();
 
@@ -68,7 +65,6 @@ public abstract class BaseCaptureActivity extends Activity implements SurfaceHol
     private Collection<BarcodeFormat> decodeFormats;
     private Map<DecodeHintType, ?> decodeHints;
     private String characterSet;
-    private IntentSource source;
 
     public ViewfinderView getViewfinderView() {
         return viewfinderView;
@@ -118,7 +114,6 @@ public abstract class BaseCaptureActivity extends Activity implements SurfaceHol
             String action = intent.getAction();
             if (Intents.Scan.ACTION.equals(action)) {
                 // Scan the formats the intent requested, and return the result to the calling activity.
-                source = IntentSource.NATIVE_APP_INTENT;
                 decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
                 decodeHints = DecodeHintManager.parseDecodeHints(intent);
 
@@ -206,7 +201,7 @@ public abstract class BaseCaptureActivity extends Activity implements SurfaceHol
             Message message = Message.obtain(handler, R.id.pub_decode_succeeded, result);
             handler.sendMessage(message);
         } else {
-//            Log.i(TAG, "decodeOrStoreSavedBitmap ~~~~~~~ not yet have ");
+            Log.i(TAG, "decodeOrStoreSavedBitmap ~~~~~~~ not yet have ");
         }
     }
 
@@ -260,7 +255,7 @@ public abstract class BaseCaptureActivity extends Activity implements SurfaceHol
      * 调用系统InstalledAppDetails界面显示已安装应用程序的详细信息。
      * 对于Android 2.3（Api Level9）以上，使用SDK提供的接口； 2.3以下，使用非公开的接口（查看InstalledAppDetails源码）。
      *
-     * @param context
+     * @param context     Context
      * @param packageName 应用程序的包名
      */
 
@@ -359,11 +354,12 @@ public abstract class BaseCaptureActivity extends Activity implements SurfaceHol
 
     /**
      * 播放声音，执行振动
-     * @param playBeep
-     * @param vibrate
+     *
+     * @param playBeep 是否播放
+     * @param vibrate  是否震动
      */
     public void playBeepSoundAndVibrate(boolean playBeep, boolean vibrate) {
-        if(beepManager == null)
+        if (beepManager == null)
             return;
         beepManager.playBeepSoundAndVibrate(playBeep, vibrate);
     }
@@ -372,7 +368,7 @@ public abstract class BaseCaptureActivity extends Activity implements SurfaceHol
      * 重新开始扫描，因为扫描成功以后是不会再扫描
      */
     public void reScan() {
-        if(hasSurface) {
+        if (hasSurface) {
             Handler handler = getHandler();
             if (handler != null) {
                 Message message = Message.obtain(handler, R.id.pub_decode_failed);
@@ -384,14 +380,14 @@ public abstract class BaseCaptureActivity extends Activity implements SurfaceHol
     /**
      * 获取SurfaceView，用于展示相机的画面，返回null直接报错，必填项。
      *
-     * @return
+     * @return SurfaceView
      */
     public abstract SurfaceView getSurfaceView();
 
     /**
      * 获取此视图，可以显示中间限定框，可返回null，返回null，则不显示。
      *
-     * @return
+     * @return ViewfinderView
      */
     public ViewfinderView getViewfinderHolder() {
         return null;
@@ -400,9 +396,9 @@ public abstract class BaseCaptureActivity extends Activity implements SurfaceHol
     /**
      * chu
      *
-     * @param rawResult
-     * @param barcode
-     * @param scaleFactor
+     * @param rawResult   Result
+     * @param barcode     Bitmap
+     * @param scaleFactor float
      */
     public abstract void dealDecode(Result rawResult, Bitmap barcode, float scaleFactor);
 }

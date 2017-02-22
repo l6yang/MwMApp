@@ -1,5 +1,7 @@
 package com.mwm.loyal.utils;
 
+import com.mwm.loyal.beans.WeatherBean;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -25,18 +27,18 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static com.mwm.loyal.imp.ResListener.Str.Server_BaseUrl;
-import static com.mwm.loyal.imp.ResListener.Str.Server_Method;
-import static com.mwm.loyal.imp.ResListener.Str.action_account_locked;
-import static com.mwm.loyal.imp.ResListener.Str.action_apkVerCheck;
-import static com.mwm.loyal.imp.ResListener.Str.action_feedBack;
-import static com.mwm.loyal.imp.ResListener.Str.action_login;
-import static com.mwm.loyal.imp.ResListener.Str.action_register;
-import static com.mwm.loyal.imp.ResListener.Str.action_scan;
-import static com.mwm.loyal.imp.ResListener.Str.action_showIcon;
-import static com.mwm.loyal.imp.ResListener.Str.action_ucrop_test;
-import static com.mwm.loyal.imp.ResListener.Str.action_update;
-import static com.mwm.loyal.imp.ResListener.Str.action_update_icon;
+import static com.mwm.loyal.imp.Contact.Str.Server_BaseUrl;
+import static com.mwm.loyal.imp.Contact.Str.Server_Method;
+import static com.mwm.loyal.imp.Contact.Str.action_account_locked;
+import static com.mwm.loyal.imp.Contact.Str.action_apkVerCheck;
+import static com.mwm.loyal.imp.Contact.Str.action_feedBack;
+import static com.mwm.loyal.imp.Contact.Str.action_login;
+import static com.mwm.loyal.imp.Contact.Str.action_register;
+import static com.mwm.loyal.imp.Contact.Str.action_scan;
+import static com.mwm.loyal.imp.Contact.Str.action_showIcon;
+import static com.mwm.loyal.imp.Contact.Str.action_ucrop_test;
+import static com.mwm.loyal.imp.Contact.Str.action_update;
+import static com.mwm.loyal.imp.Contact.Str.action_update_icon;
 
 public class RetrofitManage {
     private static RetrofitManage mInstance;
@@ -152,6 +154,9 @@ public class RetrofitManage {
 
         @GET
         Call<ResponseBody> doDownLoadApk(@Url String url);
+
+        @GET
+        Call<String> getWeather(@Url String url);
     }
 
     public interface ObservableServer {
@@ -202,5 +207,8 @@ public class RetrofitManage {
 
         @GET
         Observable<ResponseBody> doDownLoadApk(@Url String url);
+
+        @GET
+        Observable<WeatherBean> getWeather(@Url String url);
     }
 }

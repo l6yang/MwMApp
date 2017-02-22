@@ -29,6 +29,7 @@ import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.StringUtil;
 import com.mwm.loyal.utils.ToastUtil;
+import com.mwm.loyal.utils.TransManage;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -57,6 +58,7 @@ public class PersonalActivity extends BaseSwipeActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_personal);
         ButterKnife.bind(this);
+        TransManage.setTranslucentStatus(this);
         binding.setDrawable(ResUtil.getBackground(this));
         binding.setClick(new PersonalHandler(this));
         loginBean = new LoginBean();
