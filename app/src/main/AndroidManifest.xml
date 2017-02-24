@@ -199,7 +199,10 @@
         <activity
             android:name=".activity.CityActivity"
             android:theme="@style/BaseSwipeTheme"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity
+            android:name=".activity.VoiceActivity"
+            android:theme="@style/BaseSwipeTheme" />
 
         <service
             android:name=".service.LocationService"

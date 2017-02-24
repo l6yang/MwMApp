@@ -18,6 +18,7 @@ public class FileUtil {
     public static final String path_local = path_main + "local" + File.separator;
     public static final String path_icon = path_main + "icon" + File.separator;
     public static final String path_temp = path_main + "temp" + File.separator;
+    public static final String path_voice = path_main + "voice" + File.separator;
     public static final String pic_UCrop = "UCrop.jpg";
     public static final String pic_temp = "temp.jpg";
     public static final String pic_tmp = "tmp.jpg";
@@ -38,6 +39,8 @@ public class FileUtil {
         file = new File(path_apk);
         createFiles(file);
         file = new File(path_temp);
+        createFiles(file);
+        file = new File(path_voice);
         createFiles(file);
     }
 

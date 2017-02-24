@@ -81,4 +81,5 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile files('libs/AMap3D_SDK_V4.1.2_20161104.jar')
     compile files('libs/AMap_Location_V3.3.0_20170118.jar')
+    compile files('libs/com.baidu.tts_2.3.0.jar')
 }

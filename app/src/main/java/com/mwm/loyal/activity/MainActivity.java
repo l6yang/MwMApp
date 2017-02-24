@@ -116,6 +116,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_scan:
                 initPermission(Int.permissionCamera, Manifest.permission.CAMERA);
                 break;
+            case R.id.nav_voice:
+                 IntentUtil.toStartActivity(this,VoiceActivity.class);
+                break;
             case R.id.nav_settings:
                 IntentUtil.toStartActivityForResult(this, SettingsActivity.class, Int.reqCode_Main_Setting);
         }
@@ -293,8 +296,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 city = PreferencesUtil.getString(getApplicationContext(), Str.KEY_CITY, Str.defaultCity);
             } else {
                 PreferencesUtil.putString(getApplicationContext(), Str.KEY_CITY, city);
-                if (city.endsWith("市"))
-                    city = city.substring(0, city.length() - "市".length());
             }
             binding.setCity(city);
             WeatherUtil.getCityWeather(city, mHandler);

@@ -15,6 +15,7 @@
     <string name="hint_new_mm">请输入新密码</string>
     <string name="hint_nickname">昵称</string>
     <string name="repeat_yhmm">再次输入密码</string>
+    <string name="action_voice">语音合成</string>
     <string name="action_settings">设置</string>
     <string name="empty"> </string>
     <string name="digits">0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM_</string>

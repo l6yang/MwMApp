@@ -1,0 +1,50 @@
+[
+  {
+    "cityName": "北京",
+    "cityCode": "010"
+  },
+  {
+    "cityName": "上海",
+    "cityCode": "021"
+  },
+  {
+    "cityName": "广州",
+    "cityCode": "020"
+  },
+  {
+    "cityName": "深圳",
+    "cityCode": "0755"
+  },
+  {
+    "cityName": "成都",
+    "cityCode": "028"
+  },
+  {
+    "cityName": "重庆",
+    "cityCode": "023"
+  },
+  {
+    "cityName": "天津",
+    "cityCode": "022"
+  },
+  {
+    "cityName": "杭州",
+    "cityCode": "0571"
+  },
+  {
+    "cityName": "南京",
+    "cityCode": "025"
+  },
+  {
+    "cityName": "苏州",
+    "cityCode": "0512"
+  },
+  {
+    "cityName": "西安",
+    "cityCode": "029"
+  },
+  {
+    "cityName": "桂林",
+    "cityCode": "0773"
+  }
+]

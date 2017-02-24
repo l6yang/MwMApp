@@ -78,7 +78,7 @@ public class ResUtil {
     }
 
     public static Drawable getBackground(Context context) {
-        return getBackground(context, R.mipmap.img_bg_login, true);
+        return getBackground(context, R.mipmap.img_blue_background, true);
     }
 
     public static Drawable getBackground(Context context, int resId, boolean scale) {

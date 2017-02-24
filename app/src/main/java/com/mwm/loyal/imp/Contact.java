@@ -7,6 +7,9 @@ import com.mwm.loyal.utils.PreferencesUtil;
 public interface Contact {
 
     class Str {
+        public static final String appId = "9319579";
+        public static final String appKey = "QAZQ5Gh8H6nAG2GOuPM0THDZ";
+        public static final String secretKey = "c4f7e878acdb1314a1b5fe3ae502d645";
         public static final String TIME_ALL = "yyyy-MM-dd HH:mm:ss";
         public static final String TIME_WEEK = "yyyy-MM-dd EEEE";
         public static final String TIME_YEAR_MONTH_DAY = "yyyy-MM-dd";
