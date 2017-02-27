@@ -72,7 +72,7 @@ public class RegisterHandler {
             ToastUtil.showToast(registerActivity, "两次输入密码不一致");
             return;
         }
-        doAsyncTask(nickname, new LoginBean(account, password, nickname, registerActivity));
+        doAsyncTask(nickname, new LoginBean(account, password, false,  nickname));
     }
 
     private void doResetPassWord(String account, String nickname, String password, String repeat) {
@@ -92,7 +92,7 @@ public class RegisterHandler {
             ToastUtil.showToast(registerActivity, "两次输入密码不一致");
             return;
         }
-        doAsyncTask(nickname, new LoginBean(account, password, registerActivity));
+        doAsyncTask(nickname, new LoginBean(account, password));
     }
 
     private void doAsyncTask(String nickname, LoginBean loginBean) {

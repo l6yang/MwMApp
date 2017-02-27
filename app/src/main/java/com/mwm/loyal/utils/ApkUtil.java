@@ -1,6 +1,5 @@
 package com.mwm.loyal.utils;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -9,20 +8,13 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.io.Reader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -75,7 +67,7 @@ public class ApkUtil {
     /**
      * 检查手机上是否安装了指定的软件
      */
-    public static boolean isAvailable(Context context, String packageName) {
+    private static boolean isAvailable(Context context, String packageName) {
 
         try {// 获取packageManager
             final PackageManager packageManager = context.getPackageManager();
@@ -111,7 +103,7 @@ public class ApkUtil {
     /**
      * 根据文件路径获取包名
      */
-    public static String getPackageName(Context context, String filePath) {
+    private static String getPackageName(Context context, String filePath) {
         try {
             PackageManager packageManager = context.getPackageManager();
             PackageInfo info = packageManager.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
@@ -184,7 +176,7 @@ public class ApkUtil {
     }
 
     // 获得屏幕界面的尺寸
-    public static int getSize_X(Activity context) {
+    public static int getScreenWidth(Activity context) {
         try {
             Point size = new Point();
             context.getWindowManager().getDefaultDisplay().getSize(size);
@@ -194,7 +186,7 @@ public class ApkUtil {
         }
     }
 
-    public static int getSize_Y(Activity context) {
+    public static int getScreenHeight(Activity context) {
         try {
             Point size = new Point();
             context.getWindowManager().getDefaultDisplay().getSize(size);
@@ -204,75 +196,42 @@ public class ApkUtil {
         }
     }
 
-    private static String getMacAddress() {
-        String macSerial = "";
+    public static String getMacAddressFromIp() {
+        String hostName = getIpAddress();
+        if (TextUtils.isEmpty(hostName))
+            return "";
         try {
-            String str = "";
-            Process pp = Runtime.getRuntime().exec("cat /sys/class/net/wlan0/address");
-            InputStreamReader ir = new InputStreamReader(pp.getInputStream());
-            LineNumberReader input = new LineNumberReader(ir);
-            for (; null != str; ) {
-                str = input.readLine();
-                if (str != null) {
-                    macSerial = str.trim();// 去空格
-                    break;
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        if (TextUtils.isEmpty(macSerial)) {
-            String mac = loadFileAsString("/sys/class/net/eth0/address").toUpperCase();
-            if (TextUtils.isEmpty(mac))
-                return "02:00:00:00:00:00";
-            else
-                return mac.substring(0, 17);
-        } else
-            return macSerial;
-    }
-
-    @SuppressLint("HardwareIds")
-    private static String getMacAddress(Context context) {
-        try {
-            WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-            WifiInfo info = wifi.getConnectionInfo();
-            return info.getMacAddress();
+            NetworkInterface ne = NetworkInterface.getByInetAddress(InetAddress.getByName(hostName));
+            byte[] mac = ne.getHardwareAddress();
+            return byte2hex(mac).toUpperCase();
         } catch (Exception e) {
-            return "02:00:00:00:00:00";
-        }
-    }
-
-    private static String loadFileAsString(String fileName) {
-        try {
-            FileReader reader = new FileReader(fileName);
-            String text = loadReaderAsString(reader);
-            reader.close();
-            return text;
-        } catch (Exception e) {
+            e.printStackTrace();
             return "";
         }
     }
 
-    private static String loadReaderAsString(Reader reader) {
-        try {
-            StringBuilder builder = new StringBuilder();
-            char[] buffer = new char[4096];
-            int readLength = reader.read(buffer);
-            while (readLength >= 0) {
-                builder.append(buffer, 0, readLength);
-                readLength = reader.read(buffer);
+    private static String byte2hex(byte[] byteArray) {
+        StringBuffer buffer = new StringBuffer(byteArray.length);
+        String temp;
+        for (byte aByte : byteArray) {
+            temp = Integer.toHexString(aByte & 0xFF);
+            if (temp.length() == 1)
+                buffer = buffer.append("0").append(temp).append(":");
+            else {
+                buffer = buffer.append(temp).append(":");
             }
-            return builder.toString();
-        } catch (Exception e) {
-            return "";
         }
+        String macAddress = buffer.toString();
+        if (macAddress.endsWith(":")) {
+            macAddress = macAddress.substring(0, macAddress.length() - ":".length());
+        }
+        return macAddress;
     }
 
     public static int getSimState(Context con) {
         try {
             // 取得相关系统服务
-            TelephonyManager tm = (TelephonyManager) con
-                    .getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager tm = (TelephonyManager) con.getSystemService(Context.TELEPHONY_SERVICE);
             return tm.getSimState();
         } catch (Exception e) {
             return 0;
@@ -283,22 +242,11 @@ public class ApkUtil {
         return Build.MANUFACTURER + "(" + Build.MODEL + ")";
     }
 
-    public static String getMAC(Context context) {
-        String mac = getMacAddress(context);
-        System.out.println("getMacAddress(context)::"+mac);
-        if (TextUtils.isEmpty(mac) || TextUtils.equals(mac, "02:00:00:00:00:00")) {
-            mac = getMacAddress();
-            System.out.println("getMacAddress::" + mac);
-        }
-        return mac;
-    }
-
     //不过我自己在做项目过程中，用另外一种方法也解决了android4.0获取IP错误的问题:
     //获取本地IP
-    public static String getLocalIpAddress123() {
+    private static String getIpAddress() {
         try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface
-                    .getNetworkInterfaces(); en.hasMoreElements(); ) {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface inter = en.nextElement();
                 for (Enumeration<InetAddress> addresses = inter
                         .getInetAddresses(); addresses.hasMoreElements(); ) {
@@ -308,9 +256,10 @@ public class ApkUtil {
                     }
                 }
             }
-        } catch (SocketException ex) {
-            Log.e("WifiPreference", ex.toString());
+        } catch (SocketException e) {
+            e.printStackTrace();
+            return "";
         }
-        return "192.168.xxx.xxx";
+        return "";
     }
 }

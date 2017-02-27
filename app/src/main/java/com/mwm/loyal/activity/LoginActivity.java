@@ -6,7 +6,9 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseActivity;
@@ -32,7 +34,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 
-public class LoginActivity extends BaseActivity implements RationaleListener {
+public class LoginActivity extends BaseActivity implements RationaleListener, TextView.OnEditorActionListener {
     private ActivityLoginBinding binding;
 
     @Override
@@ -61,6 +63,7 @@ public class LoginActivity extends BaseActivity implements RationaleListener {
         binding.account.addTextChangedListener(new TextChangedListener(binding.accountClear));
         binding.password.addTextChangedListener(new TextChangedListener(binding.passwordClear));
         binding.server.addTextChangedListener(new TextChangedListener(binding.serverClear));
+        binding.password.setOnEditorActionListener(this);
         String arr[] = getResources().getStringArray(R.array.server);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Arrays.asList(arr));//配置Adaptor
         binding.server.setAdapter(adapter);
@@ -125,5 +128,17 @@ public class LoginActivity extends BaseActivity implements RationaleListener {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        System.out.println("onEditorAction"+actionId);
+        System.out.println(actionId == R.id.login);
+        if (actionId == R.id.login || actionId == EditorInfo.IME_NULL) {
+            System.out.println("回车键已按下");
+            // attemptLogin();
+            return true;
+        }
+        return false;
     }
 }

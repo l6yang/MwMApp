@@ -65,16 +65,16 @@
                 app:menu="@menu/activity_main_drawer">
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
+                    android:layout_gravity="bottom|end"
                     android:paddingBottom="10dp"
                     android:paddingLeft="@dimen/activity_horizontal_margin"
                     android:paddingRight="@dimen/activity_horizontal_margin">
 
                     <TextView
                         android:id="@+id/text_city"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:gravity="end"
@@ -88,13 +88,14 @@
 
                     <TextView
                         android:id="@+id/text_weather"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_above="@id/text_city"
                         android:gravity="end"
                         android:maxLength="4"
                         android:maxLines="1"
                         android:paddingTop="4dp"
+                        android:layout_centerHorizontal="true"
                         android:paddingBottom="4dp"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"

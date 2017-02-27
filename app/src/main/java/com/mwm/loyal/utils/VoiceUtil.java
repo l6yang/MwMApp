@@ -1,6 +1,7 @@
 package com.mwm.loyal.utils;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import com.baidu.tts.client.SpeechSynthesizer;
 import com.mwm.loyal.imp.Contact;
@@ -18,6 +19,7 @@ public class VoiceUtil {
     public static final String ENGLISH_SPEECH_MALE_MODEL_NAME = "bd_etts_speech_male_en.dat";
     public static final String ENGLISH_TEXT_MODEL_NAME = "bd_etts_text_en.dat";
     private SpeechSynthesizer mSpeechSynthesizer;
+    private CopyAsync mCopyAuth;
 
     public VoiceUtil(Context context) {
         copyAssetsFile(context);
@@ -49,12 +51,16 @@ public class VoiceUtil {
     }
 
     private void copyAssetsFile(Context context) {
-        copyFromAssetsToSdcard(context, SPEECH_FEMALE_MODEL_NAME);
+       /* copyFromAssetsToSdcard(context, SPEECH_FEMALE_MODEL_NAME);
         copyFromAssetsToSdcard(context, SPEECH_MALE_MODEL_NAME);
         copyFromAssetsToSdcard(context, TEXT_MODEL_NAME);
         copyFromAssetsToSdcard(context, "english/" + ENGLISH_SPEECH_FEMALE_MODEL_NAME);
         copyFromAssetsToSdcard(context, "english/" + ENGLISH_SPEECH_MALE_MODEL_NAME);
-        copyFromAssetsToSdcard(context, "english/" + ENGLISH_TEXT_MODEL_NAME);
+        copyFromAssetsToSdcard(context, "english/" + ENGLISH_TEXT_MODEL_NAME);*/
+        if (mCopyAuth != null)
+            return;
+        mCopyAuth = new CopyAsync(context);
+        mCopyAuth.execute();
     }
 
     /**
@@ -82,6 +88,25 @@ public class VoiceUtil {
                 IOUtil.closeStream(fos);
                 IOUtil.closeStream(is);
             }
+        }
+    }
+
+    private class CopyAsync extends AsyncTask<Void, Void, Void> {
+        private Context mContext;
+
+        CopyAsync(Context context) {
+            this.mContext = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            copyFromAssetsToSdcard(mContext, SPEECH_FEMALE_MODEL_NAME);
+            copyFromAssetsToSdcard(mContext, SPEECH_MALE_MODEL_NAME);
+            copyFromAssetsToSdcard(mContext, TEXT_MODEL_NAME);
+            copyFromAssetsToSdcard(mContext, "english/" + ENGLISH_SPEECH_FEMALE_MODEL_NAME);
+            copyFromAssetsToSdcard(mContext, "english/" + ENGLISH_SPEECH_MALE_MODEL_NAME);
+            copyFromAssetsToSdcard(mContext, "english/" + ENGLISH_TEXT_MODEL_NAME);
+            return null;
         }
     }
 }

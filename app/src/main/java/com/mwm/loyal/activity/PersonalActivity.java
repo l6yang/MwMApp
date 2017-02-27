@@ -120,8 +120,6 @@ public class PersonalActivity extends BaseSwipeActivity implements View.OnClickL
             Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateAccount(loginBean.toString(), "personal", "");
             try {
                 return RetrofitManage.doExecuteStr(call);
-                //RequestBody body = new FormBody.Builder().add("json_update", loginBean.toString()).add("update_state", "personal").build();
-                //return OkHttpClientManager.getInstance().post_jsonDemo(StringUtil.getServiceUrl(Str.action_update), body);
             } catch (IOException e) {
                 e.printStackTrace();
                 return e.toString();

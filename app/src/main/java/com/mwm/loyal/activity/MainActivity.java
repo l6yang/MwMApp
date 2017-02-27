@@ -101,28 +101,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.nav_camera:
-                initPermission(Int.permissionCamera, Manifest.permission.CAMERA);
-                break;
-            case R.id.nav_gallery:
-                initPermission(Int.permissionCamera, Manifest.permission.CAMERA);
-                break;
-            case R.id.nav_slideshow:
-                IntentUtil.toStartActivity(this, TestImageActivity.class);
-                break;
-            case R.id.nav_manage:
-                break;
-            case R.id.nav_scan:
-                initPermission(Int.permissionCamera, Manifest.permission.CAMERA);
-                break;
-            case R.id.nav_voice:
-                 IntentUtil.toStartActivity(this,VoiceActivity.class);
-                break;
-            case R.id.nav_settings:
-                IntentUtil.toStartActivityForResult(this, SettingsActivity.class, Int.reqCode_Main_Setting);
-        }
         drawer.closeDrawer(GravityCompat.START);
+        Message message = new Message();
+        message.what = Int.delayed2Activity;
+        message.arg1 = id;
+        mHandler.sendMessageDelayed(message, 380);
         return true;
     }
 
@@ -167,6 +150,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case Int.reqCode_Main_icon:
                 updateIcon();
                 break;
+            case Int.reqCode_Main_weather:
+                String city = "";
+                if (data == null || TextUtils.isEmpty(data.getStringExtra("city")))
+                    city = PreferencesUtil.getString(getApplicationContext(), Str.KEY_CITY, Str.defaultCity);
+                else city = data.getStringExtra("city");
+                resetCity(StringUtil.replaceNull(city));
+                break;
         }
         if (RESULT_OK != resultCode)
             return;
@@ -182,10 +172,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case Int.permissionCamera:
                 ToastUtil.showToast(this, "用户从设置回来了");
-                break;
-            case Int.reqCode_Main_weather:
-                String city = data.getStringExtra("city");
-                resetCity(StringUtil.replaceNull(city));
                 break;
         }
     }
@@ -269,6 +255,26 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             super.handleMessage(msg);
             MainActivity activity = weakReference.get();
             switch (msg.what) {
+                case Int.delayed2Activity:
+                    int id = msg.arg1;
+                    switch (id) {
+                        case R.id.nav_camera:
+                            activity.initPermission(Int.permissionCamera, Manifest.permission.CAMERA);
+                            break;
+                        case R.id.nav_gallery:
+                            activity.initPermission(Int.permissionCamera, Manifest.permission.CAMERA);
+                            break;
+                        case R.id.nav_scan:
+                            activity.initPermission(Int.permissionCamera, Manifest.permission.CAMERA);
+                            break;
+                        case R.id.nav_voice:
+                            IntentUtil.toStartActivity(activity, VoiceActivity.class);
+                            break;
+                        case R.id.nav_settings:
+                            IntentUtil.toStartActivityForResult(activity, SettingsActivity.class, Int.reqCode_Main_Setting);
+                            break;
+                    }
+                    break;
                 case Int.async2Null:
                     activity.mScanAuth = null;
                     break;
@@ -284,7 +290,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     } catch (Exception e) {
                         activity.resetWeather("");
                     }
-                    System.out.println(weatherBean);
                     break;
             }
         }

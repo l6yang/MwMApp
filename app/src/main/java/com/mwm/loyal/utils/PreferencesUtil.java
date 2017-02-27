@@ -7,7 +7,7 @@ import android.content.SharedPreferences.Editor;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.imp.Contact;
 
-import static com.mwm.loyal.utils.StringUtil.*;
+import static com.mwm.loyal.utils.StringUtil.replaceNull;
 
 public class PreferencesUtil implements Contact {
 
@@ -59,7 +59,7 @@ public class PreferencesUtil implements Contact {
         String account = settings.getString(Str.KEY_ACCOUNT, "");
         String password = settings.getString(Str.KEY_PASSWORD, "");
         String server = settings.getString(Str.KEY_SERVER, "");
-        return new LoginBean(replaceNull(account), replaceNull(password), replaceNull(server));
+        return new LoginBean(replaceNull(account), replaceNull(password), true, replaceNull(server));
     }
 
     /**

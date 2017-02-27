@@ -79,5 +79,6 @@ public interface Contact {
         public static final int rx2Weather = 106;
         //异步
         public static final int async2Null = -102;
+        public static final int delayed2Activity = -103;
     }
 }

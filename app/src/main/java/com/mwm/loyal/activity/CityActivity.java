@@ -126,7 +126,6 @@ public class CityActivity extends BaseSwipeActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.text_city_query:
-                System.out.println("Im pub_id!");
                 changeInput(true);
                 break;
             case R.id.query_cancel:
@@ -204,5 +203,11 @@ public class CityActivity extends BaseSwipeActivity implements View.OnClickListe
         intent.putExtra("cityName", cityName);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

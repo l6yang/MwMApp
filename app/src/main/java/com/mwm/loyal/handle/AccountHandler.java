@@ -42,7 +42,7 @@ public class AccountHandler implements Progress.SubscribeListener<String> {
                 loginBean.account.set(accountActivity.getIntent().getStringExtra("account"));
                 loginBean.lock.set(TextUtils.equals(StringUtil.replaceNull(des), "off") ? "1" : "0");
                 loginBean.device.set(ApkUtil.getDeviceID());
-                loginBean.mac.set(ApkUtil.getMAC(accountActivity));
+                loginBean.mac.set(ApkUtil.getMacAddressFromIp());
                 Observable<String> observable = RetrofitManage.getInstance().getObservableServer().doUpdateAccount(loginBean.toString(), "lock", "");
                 BaseProgressSubscriber<String> subscriber = new BaseProgressSubscriber<>(accountActivity, "doing...", true, false, true);
                 subscriber.setSubscribeListener(this);

@@ -1,39 +1,55 @@
 package com.mwm.loyal.activity;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.baidu.tts.auth.AuthInfo;
 import com.baidu.tts.client.SpeechError;
 import com.baidu.tts.client.SpeechSynthesizer;
 import com.baidu.tts.client.SpeechSynthesizerListener;
-import com.baidu.tts.client.SynthesizerTool;
 import com.baidu.tts.client.TtsMode;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.base.BaseSwipeActivity;
+import com.mwm.loyal.databinding.ActivityVoiceBinding;
 import com.mwm.loyal.utils.FileUtil;
+import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.ToastUtil;
+import com.mwm.loyal.utils.TransManage;
 import com.mwm.loyal.utils.VoiceUtil;
 
 import java.lang.ref.WeakReference;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.mwm.loyal.utils.VoiceUtil.*;
+import static com.mwm.loyal.utils.VoiceUtil.ENGLISH_SPEECH_FEMALE_MODEL_NAME;
+import static com.mwm.loyal.utils.VoiceUtil.ENGLISH_TEXT_MODEL_NAME;
 
-public class VoiceActivity extends BaseSwipeActivity implements SpeechSynthesizerListener {
+public class VoiceActivity extends BaseSwipeActivity implements SpeechSynthesizerListener, View.OnClickListener {
+    @BindView(R.id.pub_title)
+    TextView pubTitle;
+    @BindView(R.id.pub_back)
+    ImageView pubBack;
+    @BindView(R.id.pub_menu)
+    ImageView pubMenu;
     private HandlerClass mHandler;
     private SpeechSynthesizer mSpeechSynthesizer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_voice);
+        ActivityVoiceBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_voice);
         ButterKnife.bind(this);
+        TransManage.setTranslucentStatus(this);
+        binding.setDrawable(ResUtil.getBackground(this));
+        mHandler = new HandlerClass(this);
         initView();
         initPresenter();
     }
@@ -45,9 +61,11 @@ public class VoiceActivity extends BaseSwipeActivity implements SpeechSynthesize
 
     private void initView() {
         FileUtil.createFiles();
-        mHandler = new HandlerClass(this);
-        VoiceUtil voiceUtil=new VoiceUtil(this);
-        mSpeechSynthesizer=voiceUtil.getSpeechSynthesizer();
+        pubBack.setOnClickListener(this);
+        pubMenu.setVisibility(View.GONE);
+        pubTitle.setText(R.string.action_voice);
+        VoiceUtil voiceUtil = new VoiceUtil(this);
+        mSpeechSynthesizer = voiceUtil.getSpeechSynthesizer();
     }
 
     private void initPresenter() {
@@ -74,6 +92,10 @@ public class VoiceActivity extends BaseSwipeActivity implements SpeechSynthesize
 
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.pub_back:
+                finish();
+                System.gc();
+                break;
             case R.id.button:
                 speak();
                 break;
@@ -199,7 +221,7 @@ public class VoiceActivity extends BaseSwipeActivity implements SpeechSynthesize
         String message = (String) msg.obj;
         if (message != null) {
             Log.w("TAG", message);
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, message);
             scrollLog(message);
         }
     }
@@ -224,12 +246,12 @@ public class VoiceActivity extends BaseSwipeActivity implements SpeechSynthesize
      * 打印引擎so库版本号及基本信息和model文件的基本信息
      */
     private void printEngineInfo() {
-        toPrint("EngineVersioin=" + SynthesizerTool.getEngineVersion());
+      /*  toPrint("EngineVersioin=" + SynthesizerTool.getEngineVersion());
         toPrint("EngineInfo=" + SynthesizerTool.getEngineInfo());
         String textModelInfo = SynthesizerTool.getModelInfo(FileUtil.path_voice + TEXT_MODEL_NAME);
         toPrint("textModelInfo=" + textModelInfo);
         String speechModelInfo = SynthesizerTool.getModelInfo(FileUtil.path_voice + SPEECH_FEMALE_MODEL_NAME);
-        toPrint("speechModelInfo=" + speechModelInfo);
+        toPrint("speechModelInfo=" + speechModelInfo);*/
     }
 
     private void toPrint(String str) {

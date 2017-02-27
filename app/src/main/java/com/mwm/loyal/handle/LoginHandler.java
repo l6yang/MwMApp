@@ -54,7 +54,7 @@ public class LoginHandler {
                     ToastUtil.showToast(loginActivity, "密码长度格式错误");
                     return;
                 }
-                LoginBean bean = new LoginBean(account, password, loginActivity);
+                LoginBean bean = new LoginBean(account, password);
                 if (mLoginAuth != null)
                     return;
                 mLoginAuth = new LoginAsync(bean);
