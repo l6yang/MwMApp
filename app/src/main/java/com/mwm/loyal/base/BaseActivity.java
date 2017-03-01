@@ -1,6 +1,7 @@
 package com.mwm.loyal.base;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -18,10 +21,26 @@ import com.mwm.loyal.service.UpdateService;
 
 public abstract class BaseActivity extends AppCompatActivity implements Contact {
     private UpdateReceiver updateReceiver;
+    protected ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initDialog();
+    }
+
+    private void initDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("");
+        Window window = progressDialog.getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.alpha = 0.7f;// 透明度
+            lp.dimAmount = 0.8f;// 黑暗度
+            window.setAttributes(lp);
+        }
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     @Override

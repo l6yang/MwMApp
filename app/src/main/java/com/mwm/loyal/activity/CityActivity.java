@@ -204,10 +204,4 @@ public class CityActivity extends BaseSwipeActivity implements View.OnClickListe
         setResult(RESULT_OK, intent);
         finish();
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
 }

@@ -13,7 +13,6 @@ import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.utils.ApkUtil;
 import com.mwm.loyal.utils.FileUtil;
-import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.IOUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.StringUtil;
@@ -25,6 +24,9 @@ import java.io.InputStream;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class UpdateService extends IntentService implements Contact {
     private static final String NOTIFY_TAG = "Update";
@@ -55,22 +57,31 @@ public class UpdateService extends IntentService implements Contact {
     }
 
     private void handleActionUpdate() {
-        Call<String> call = RetrofitManage.getInstance().getRequestServer().doApkVer(ApkUtil.getApkVersion(this));
-        try {
-            String json = RetrofitManage.doExecuteStr(call);
-            ResultBean resultBean = GsonUtil.getBeanFromJson(json, ResultBean.class);
-            if (resultBean.getResultCode() == 1) {
-                String url = StringUtil.replaceNull(resultBean.getExceptMsg());
-                //发送广播，showPopWindowForDownLoad
-                Intent intent = new Intent();
-                intent.setAction(Str.action_apkVerCheck);
-                intent.putExtra("apkUrl", url);
-                sendBroadcast(intent);
-            }
-            System.out.println("json::" + json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        RetrofitManage.ObservableServer server = RetrofitManage.getInstance().getObservableServer();
+        server.doApkVer(ApkUtil.getApkVersion(this))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ResultBean>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(ResultBean resultBean) {
+                        if (resultBean != null && resultBean.getResultCode() == 1) {
+                            String url = StringUtil.replaceNull(resultBean.getExceptMsg());
+                            //发送广播，showPopWindowForDownLoad
+                            Intent intent = new Intent();
+                            intent.setAction(Str.action_apkVerCheck);
+                            intent.putExtra("apkUrl", url);
+                            sendBroadcast(intent);
+                        }
+                    }
+                });
     }
 
     private Notification.Builder initNotifyBuild() {
@@ -119,7 +130,6 @@ public class UpdateService extends IntentService implements Contact {
     }
 
     private void doInstallApk(String path) {
-        System.out.println("doInstallApk==" + path);
         if (!StringUtil.showErrorToast(UpdateService.this, path)) {
             if (!TextUtils.isEmpty(path)) {
                 ApkUtil.install(UpdateService.this, new File(path));

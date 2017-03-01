@@ -142,7 +142,7 @@ public class CipherUtil {
      * @return
      */
 
-    public static String parseByte2HexStr(byte buf[]) {
+    private static String parseByte2HexStr(byte buf[]) {
         String sb = "";
         for (byte b : buf) {
             String hex = Integer.toHexString(b & 0xFF);
@@ -159,7 +159,7 @@ public class CipherUtil {
      *
      * @param hexStr 16进制字符串
      */
-    public static byte[] parseHexStr2Byte(String hexStr) {
+    private static byte[] parseHexStr2Byte(String hexStr) {
         if (hexStr.length() < 1)
             return null;
         byte[] result = new byte[hexStr.length() / 2];

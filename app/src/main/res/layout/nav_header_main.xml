@@ -6,6 +6,7 @@
     android:background="@color/pub_color_title"
     android:gravity="bottom"
     android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -15,40 +16,44 @@
         android:id="@+id/nav_icon"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
         fresco:actualImageScaleType="centerInside"
         fresco:placeholderImage="@mipmap/icon_1"
         fresco:roundAsCircle="true"
         fresco:roundingBorderColor="@color/white"
         fresco:roundingBorderWidth="2dp" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="100dp"
+        android:orientation="vertical"
+        android:layout_alignBaseline="@id/nav_icon"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:background="@null"
+        android:gravity="center|end"
+        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
         android:layout_toEndOf="@id/nav_icon"
-        android:layout_toRightOf="@id/nav_icon"
-        android:paddingTop="@dimen/nav_header_vertical_spacing">
+        android:layout_toRightOf="@id/nav_icon">
 
         <ImageView
             android:id="@+id/nav_zxing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:contentDescription="@string/empty"
             android:src="@drawable/src_qr_img" />
-    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/nav_account"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nav_icon"
-        android:maxLines="1"
-        android:padding="8dp"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_sp_18" />
+        <TextView
+            android:id="@+id/nav_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|end"
+            android:maxLines="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_sp_18" />
+    </LinearLayout>
 
 </RelativeLayout>

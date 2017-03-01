@@ -103,7 +103,6 @@ public class AccountActivity extends BaseSwipeActivity implements View.OnClickLi
 
     @Override
     public void onError(Throwable e) {
-
         System.out.println(TAG + e.toString());
     }
 

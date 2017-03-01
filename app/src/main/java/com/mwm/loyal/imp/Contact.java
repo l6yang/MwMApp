@@ -63,20 +63,21 @@ public interface Contact {
     }
 
     class Int {
+        public static final int reqCode_Main_noRequest = 100;
         public static final int reqCode_Main_Setting = 102;
         public static final int reqCode_Main_Zing = 103;
         public static final int reqCode_Main_UCrop = 104;
-        public static final int reqCode_Main_Preview = 200;
-        public static final int reqCode_Main_icon = 201;
-        public static final int reqCode_Main_weather = 202;
-        public static final int reqCode_Weather_city = 203;
-        public static final int reqCode_Settings_account = 500;
-        public static final int reqCode_Account_UpdateMM = 601;
-        public static final int reqCode_Main_noRequest = 5000;
-        public static final int permissionMemory = 100;
-        public static final int permissionCamera = 101;
-        public static final int permissionLocation = 105;
-        public static final int rx2Weather = 106;
+        public static final int reqCode_Main_Preview = 105;
+        public static final int reqCode_Main_icon = 106;
+        public static final int reqCode_Main_weather = 107;
+        public static final int reqCode_Weather_city = 108;
+        public static final int reqCode_Settings_account = 109;
+        public static final int reqCode_UpdateMM = 110;
+        public static final int reqCode_register = 111;
+        public static final int permissionMemory = 600;
+        public static final int permissionCamera = 601;
+        public static final int permissionLocation = 603;
+        public static final int rx2Weather = 706;
         //异步
         public static final int async2Null = -102;
         public static final int delayed2Activity = -103;

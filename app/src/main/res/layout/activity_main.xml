@@ -37,21 +37,32 @@
                 android:fitsSystemWindows="true">
 
                 <android.support.design.widget.AppBarLayout
+                    android:id="@+id/appBarLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:theme="@style/AppTheme.AppBarOverlay">
 
-                    <android.support.v7.widget.Toolbar
-                        android:id="@id/pub_toolbar"
+                    <android.support.design.widget.CollapsingToolbarLayout
+                        android:id="@+id/collapsing_toolbar"
                         android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:background="?attr/colorPrimary"
-                        app:popupTheme="@style/AppTheme.PopupOverlay" />
+                        android:layout_height="match_parent"
+                        android:fitsSystemWindows="true"
+                        app:contentScrim="?attr/colorPrimary"
+                        app:expandedTitleMarginEnd="64dp"
+                        app:expandedTitleMarginStart="48dp"
+                        app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
+                        <android.support.v7.widget.Toolbar
+                            android:id="@id/pub_toolbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            android:background="?attr/colorPrimary"
+                            app:layout_collapseMode="pin"
+                            app:popupTheme="@style/AppTheme.PopupOverlay" />
+                    </android.support.design.widget.CollapsingToolbarLayout>
                 </android.support.design.widget.AppBarLayout>
 
                 <include layout="@layout/content_main" />
-
             </android.support.design.widget.CoordinatorLayout>
 
             <android.support.design.widget.NavigationView
@@ -91,16 +102,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_above="@id/text_city"
+                        android:layout_centerHorizontal="true"
                         android:gravity="end"
                         android:maxLength="4"
                         android:maxLines="1"
-                        android:paddingTop="4dp"
-                        android:layout_centerHorizontal="true"
+                        android:onClick="onClick"
                         android:paddingBottom="4dp"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingTop="4dp"
                         android:text="@{weather}"
-                        android:onClick="onClick"
                         android:textColor="@color/text_color_normal"
                         android:textSize="28sp" />
                 </RelativeLayout>

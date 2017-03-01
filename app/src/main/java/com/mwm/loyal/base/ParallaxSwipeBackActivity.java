@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.widget.SlidingPaneLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 
-public class ParallaxSwipeBackActivity extends AppCompatActivity implements SlidingPaneLayout.PanelSlideListener {
+public class ParallaxSwipeBackActivity extends BaseActivity implements SlidingPaneLayout.PanelSlideListener {
 
     private final static String TAG = ParallaxSwipeBackActivity.class.getSimpleName();
     private final static String WINDOWBITMAP = "screenshots.jpg";

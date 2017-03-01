@@ -64,15 +64,15 @@ public class LoginBean extends BaseObservable {
 
     @Override
     public String toString() {
-        return "{\"account\":" + (account.get() == null ? null : "\"" + account.get() + "\"") +
-                ",\"password\":" + (password.get() == null ? null : "\"" + password.get() + "\"") +
-                ",\"nickname\":" + (nickname.get() == null ? null : "\"" + nickname.get() + "\"") +
-                ",\"icon\":" + (icon.get() == null ? null : "\"" + icon.get() + "\"") +
-                ",\"signature\":" + (signature.get() == null ? null : "\"" + signature.get() + "\"") +
-                ",\"device\":" + (device.get() == null ? null : "\"" + device.get() + "\"") +
-                ",\"lock\":" + (lock.get() == null ? "\"0\"" : "\"" + lock.get() + "\"") +
-                ",\"mac\":" + (mac.get() == null ? null : "\"" + mac.get() + "\"") +
-                ",\"server\":" + (server.get() == null ? null : "\"" + server.get() + "\"") +
+        return "{\"account\":" + (null == account.get() ? null : "\"" + account.get() + "\"") +
+                ",\"password\":" + (null == password.get() ? null : "\"" + password.get() + "\"") +
+                ",\"nickname\":" + (null == nickname.get() ? null : "\"" + nickname.get() + "\"") +
+                ",\"icon\":" + (null == icon.get() ? null : "\"" + icon.get() + "\"") +
+                ",\"signature\":" + (null == signature.get() ? null : "\"" + signature.get() + "\"") +
+                ",\"device\":" + (null == device.get() ? null : "\"" + device.get() + "\"") +
+                ",\"lock\":" + (null == lock.get() ? "\"0\"" : "\"" + lock.get() + "\"") +
+                ",\"mac\":" + (null == mac.get() ? null : "\"" + mac.get() + "\"") +
+                ",\"server\":" + (null == server.get() ? null : "\"" + server.get() + "\"") +
                 "}";
     }
 }

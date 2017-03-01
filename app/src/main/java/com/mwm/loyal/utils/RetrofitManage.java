@@ -1,9 +1,9 @@
 package com.mwm.loyal.utils;
 
+import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.beans.WeatherBean;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -167,19 +167,20 @@ public class RetrofitManage {
 
         @FormUrlEncoded
         @POST(Server_Method + action_register)
-        Observable<String> doRegister(@Field("json_register") String json);
+        Observable<ResultBean> doRegister(@Field("json_register") String json);
 
         @FormUrlEncoded
         @POST(Server_Method + action_login)
-        Observable<String> doLogin(@Field("json_login") String json);
+        Observable<ResultBean> doLogin(@Field("json_login") String json);
 
         @FormUrlEncoded
+        @Streaming
         @POST(Server_Method + action_showIcon)
-        Observable<InputStream> doShowIcon(@Field("account") String account);
+        Observable<ResponseBody> doShowIcon(@Field("account") String account);
 
         @FormUrlEncoded
         @POST(Server_Method + action_update)
-        Observable<String> doUpdateAccount(@Field("json_update") String json, @Field("update_state") String state, @Field("old_data") String old);
+        Observable<ResultBean> doUpdateAccount(@Field("json_update") String json, @Field("update_state") String state, @Field("old_data") String old);
 
         @FormUrlEncoded
         @POST(Server_Method + action_account_locked)
@@ -199,11 +200,11 @@ public class RetrofitManage {
 
         @FormUrlEncoded
         @POST(Server_Method + action_scan)
-        Observable<String> doScanQuery(@Field("json_scan") String json);
+        Observable<ResultBean> doScan(@Field("json_scan") String json, @Field("param") String param);
 
         @FormUrlEncoded
         @POST(Server_Method + action_apkVerCheck)
-        Observable<String> doApkVer(@Field("json_ver") String json);
+        Observable<ResultBean> doApkVer(@Field("apkVer") String apkVer);
 
         @GET
         Observable<ResponseBody> doDownLoadApk(@Url String url);

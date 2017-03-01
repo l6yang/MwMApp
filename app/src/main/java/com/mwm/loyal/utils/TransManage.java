@@ -11,6 +11,8 @@ import android.view.WindowManager;
 
 import com.mwm.loyal.R;
 
+import java.lang.reflect.Field;
+
 // 通知栏和标题栏颜色一致
 public class TransManage {
     public static void setTranslucentStatus(Activity context) {
@@ -62,12 +64,18 @@ public class TransManage {
         compat(activity, INVALID_VAL);
     }
 
-    private static int getStatusBarHeight(Context context) {
-        int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
+    public static int getStatusBarHeight(Context context) {
+        int statusBarHeight = 0;
+        try {
+            Class<?> c = Class.forName("com.android.internal.R$dimen");
+            Object obj = c.newInstance();
+            Field field = c.getField("status_bar_height");
+            int x = Integer.parseInt(field.get(obj).toString());
+            statusBarHeight = context.getResources().getDimensionPixelSize(x);
+            return statusBarHeight;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return result;
+        return statusBarHeight;
     }
 }

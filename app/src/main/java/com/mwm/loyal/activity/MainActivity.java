@@ -6,11 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -24,9 +27,9 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.mwm.loyal.R;
-import com.mwm.loyal.asynctask.ScanAsync;
 import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.beans.ContactBean;
+import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.beans.WeatherBean;
 import com.mwm.loyal.databinding.ActivityMainBinding;
 import com.mwm.loyal.service.LocationService;
@@ -35,6 +38,7 @@ import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.StringUtil;
 import com.mwm.loyal.utils.TimeUtil;
 import com.mwm.loyal.utils.ToastUtil;
@@ -52,14 +56,22 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, RationaleListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, RationaleListener, AppBarLayout.OnOffsetChangedListener {
     @BindView(R.id.pub_toolbar)
     Toolbar toolbar;
     @BindView(R.id.pub_drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.pub_nav_view)
     NavigationView navigationView;
+    @BindView(R.id.appBarLayout)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsing_toolbar;
     private SimpleDraweeView mSimple_Icon;
     private String account = "";
     private HandlerClass mHandler;
@@ -95,7 +107,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             mSimple_Icon.setOnClickListener(this);
         }
         TextView text_account = (TextView) view.findViewById(R.id.nav_account);
-        text_account.setText(String.format("账号：%s", account));
+        text_account.setText(account);
+        appBarLayout.addOnOffsetChangedListener(this);
     }
 
     @Override
@@ -124,7 +137,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 IntentUtil.toStartActivityForResult(this, PersonalActivity.class, Int.reqCode_Main_icon);
                 break;
             case R.id.nav_zxing:
-                IntentUtil.toStartActivity(this, QrCodeActivity.class);
+                IntentUtil.toStartActivityForResult(this, QrCodeActivity.class, Int.reqCode_Main_Zing);
                 break;
             case R.id.text_weather:
                 if (!TextUtils.isEmpty(binding.getWeather().trim())) {
@@ -151,7 +164,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 updateIcon();
                 break;
             case Int.reqCode_Main_weather:
-                String city = "";
+                String city;
                 if (data == null || TextUtils.isEmpty(data.getStringExtra("city")))
                     city = PreferencesUtil.getString(getApplicationContext(), Str.KEY_CITY, Str.defaultCity);
                 else city = data.getStringExtra("city");
@@ -176,18 +189,40 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    private ScanAsync mScanAuth;
-
     //扫描并查询
     private void doScanQuery(String scanStr) {
         if (StringUtil.isEmpty(scanStr)) {
             ToastUtil.showToast(this, "未扫描到信息");
             return;
         }
-        if (mScanAuth != null)
-            return;
-        mScanAuth = new ScanAsync(this, new ContactBean(account, scanStr, TimeUtil.getDateTime()), mHandler);
-        mScanAuth.execute();
+        progressDialog.setMessage("处理中...");
+        ContactBean contactBean = new ContactBean(account, scanStr, TimeUtil.getDateTime());
+        Observable<ResultBean> observable = RetrofitManage.getInstance().getObservableServer().doScan(contactBean.toString(), getPackageName());
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ResultBean>() {
+                    @Override
+                    public void onCompleted() {
+                        if (progressDialog != null)
+                            progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (progressDialog != null)
+                            progressDialog.dismiss();
+                        StringUtil.showErrorDialog(MainActivity.this, e.toString(), false);
+                    }
+
+                    @Override
+                    public void onNext(ResultBean resultBean) {
+                        if (resultBean != null && resultBean.getResultCode() == 1) {
+                            ToastUtil.showDialog(MainActivity.this, resultBean.getResultMsg(), false);
+                        } else {
+                            ToastUtil.showToast(MainActivity.this, null == resultBean ? "解析异常" : StringUtil.replaceNull(resultBean.getResultMsg()));
+                        }
+                    }
+                });
     }
 
     @Override
@@ -243,6 +278,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        int height = appBarLayout.getHeight() - (getSupportActionBar() == null ? 0 : getSupportActionBar().
+                getHeight()) - TransManage.getStatusBarHeight(MainActivity.this);
+        int alpha = 255 * (0 - verticalOffset) / height;
+        collapsing_toolbar.setExpandedTitleColor(Color.argb(0, 255, 255, 255));
+        collapsing_toolbar.setCollapsedTitleTextColor(Color.argb(alpha, 255, 255, 255));
+    }
+
     private static class HandlerClass extends Handler {
         private WeakReference<MainActivity> weakReference;
 
@@ -274,9 +318,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                             IntentUtil.toStartActivityForResult(activity, SettingsActivity.class, Int.reqCode_Main_Setting);
                             break;
                     }
-                    break;
-                case Int.async2Null:
-                    activity.mScanAuth = null;
                     break;
                 case Int.rx2Weather:
                     WeatherBean weatherBean = (WeatherBean) msg.obj;

@@ -16,11 +16,24 @@ public class BaseProgressSubscriber<T> extends Subscriber<T> implements Progress
     private boolean showDialog = true;
     private Progress.SubscribeListener<T> subscribeListener;
 
+    public BaseProgressSubscriber(Context context) {
+        dialogHandler = new DialogHandler(context, this);
+        setShowDialog(false);
+        setDialogMessage(null);
+        setCancelable(true);
+        setCanceledOnTouchOutside(false);
+    }
+
     public BaseProgressSubscriber(Context context, String message) {
         dialogHandler = new DialogHandler(context, this);
+        setShowDialog(false);
         setDialogMessage(message);
         setCancelable(true);
         setCanceledOnTouchOutside(false);
+    }
+
+    public void setShowDialog(boolean showDialog) {
+        this.showDialog = showDialog;
     }
 
     /**
@@ -31,7 +44,7 @@ public class BaseProgressSubscriber<T> extends Subscriber<T> implements Progress
     }
 
     /**
-     * @param context
+     * @param context Context
      * @param message dialog提示
      * @param params  0:是否显示dialog，1:setCancelable，2:setCanceledOnTouchOutside
      */
@@ -39,8 +52,8 @@ public class BaseProgressSubscriber<T> extends Subscriber<T> implements Progress
         dialogHandler = new DialogHandler(context, this);
         setDialogMessage(message);
         showDialog = (params[0]);
-        setCancelable(params[1]);
-        setCanceledOnTouchOutside(params[2]);
+        setCancelable(params.length >= 2 && params[1]);
+        setCanceledOnTouchOutside(params.length >= 3 && params[2]);
     }
 
     public void setDialogMessage(CharSequence sequence) {

@@ -112,6 +112,13 @@ public class LoginActivity extends BaseActivity implements RationaleListener, Te
                 ToastUtil.showToast(this, "用户从设置回来了");
                 break;
         }
+        if (resultCode != RESULT_OK)
+            return;
+        switch (requestCode) {
+            case Int.reqCode_register:
+                binding.account.setText(data.getStringExtra("account"));
+                break;
+        }
     }
 
     private long lastTime = 0;
@@ -132,7 +139,7 @@ public class LoginActivity extends BaseActivity implements RationaleListener, Te
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        System.out.println("onEditorAction"+actionId);
+        System.out.println("onEditorAction" + actionId);
         System.out.println(actionId == R.id.login);
         if (actionId == R.id.login || actionId == EditorInfo.IME_NULL) {
             System.out.println("回车键已按下");
