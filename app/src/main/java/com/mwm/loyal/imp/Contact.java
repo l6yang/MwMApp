@@ -22,44 +22,39 @@ public interface Contact {
         public static final String KEY_WEATHER = "weather";
         public static final String KEY_PASSWORD = "password";
         public static final String KEY_SERVER = "server";
-        public static final String SERVICE_ACTION_home = "com.mwm.loyal.service.action.home";
-        public static final String SERVICE_ACTION_empty = "com.mwm.loyal.service.action.empty";
-        public static final String SERVICE_ACTION_restart = "com.mwm.loyal.service.action.restart";
         public static final String service_action_loc = "com.mwm.loyal.service.action.loc";
         public static final String ACTION_UPDATE = "com.mwm.loyal.activity.action.update";
         public static final String ACTION_DOWN = "com.mwm.loyal.activity.action.downLoad";
-        public static final String action_register = "doRegister";
-        public static final String action_login = "doLogin";
-        public static final String action_queryAccount = "doQueryAccount";
-        public static final String action_showIcon = "doShowIconByIO";
-        public static final String action_update = "doUpdateAccount";
-        public static final String action_account_locked = "doAccountLocked";
-        public static final String action_update_icon = "doUpdateIcon";
-        public static final String action_feedBack = "doFeedBack";
-        public static final String action_ucrop_test = "doUCropTest";
-        public static final String action_scan = "doScan";
-        public static final String action_apkVerCheck = "doCheckApkVer";
-        public static final String action_downApk = "doDownLoadApk";
+        public static final String method_register = "doRegister";
+        public static final String method_login = "doLogin";
+        public static final String method_queryAccount = "doQueryAccount";
+        public static final String method_showIcon = "doShowIconByIO";
+        public static final String method_update = "doUpdateAccount";
+        public static final String method_account_locked = "doAccountLocked";
+        public static final String method_update_icon = "doUpdateIcon";
+        public static final String method_feedBack = "doFeedBack";
+        public static final String method_ucrop_test = "doUCropTest";
+        public static final String method_scan = "doScan";
+        public static final String method_apkVerCheck = "doCheckApkVer";
+        public static final String method_downApk = "doDownLoadApk";
         public static final String KAY_ENCRYPT_DECODE = "com.mwm.forLoyal";
-        public static final String Server_IpAdd = "192.168.0.66";
-        public static final String Server_Port = ":8080";
-        private static final String Server_Http = "http://";
-        public static final String Server_Https = "https://";
-        public static final String Server_BaseUrl = Server_Http + Server_IpAdd + Server_Port + "/mwm/";
-        public static final String Server_Method = "action.do?method=";
-        public static final String ACTION_LOCATION_START = "com.server.service.action.locationStart";
-        public static final String ACTION_LOCATION_STOP = "com.server.service.action.locationStop";
+        public static final String ipAdd = "192.168.0.66";
+        public static final String port = ":8080";
+        private static final String http = "http://";
+        public static final String https = "https://";
+        public static final String baseUrl = http + ipAdd + port + "/mwm/";
+        public static final String action = "action.do?method=";
         public static final String defaultCity = "西安";
         public static final String defaultWeather = "0";
         public static final String share = "share";
 
         public static String getServerUrl(String method) {
-            return Server_BaseUrl + Server_Method + method;
+            return baseUrl + action + method;
         }
 
         static String getIpAddress(Activity activity) {
             if (activity != null)
-                return Server_Http + PreferencesUtil.getString(activity.getApplicationContext(), KEY_IP, Server_IpAdd) + Server_Port;
+                return http + PreferencesUtil.getString(activity.getApplicationContext(), KEY_IP, ipAdd) + port;
             else return "";
         }
     }

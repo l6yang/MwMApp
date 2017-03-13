@@ -158,7 +158,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         ImageUtil.clearFrescoTemp();
         if (navIcon == null)
             return;
-        navIcon.setImageURI(Uri.parse(Str.getServerUrl(Str.action_showIcon) + "&account=" + getIntent().getStringExtra("account")));
+        navIcon.setImageURI(Uri.parse(Str.getServerUrl(Str.method_showIcon) + "&account=" + getIntent().getStringExtra("account")));
     }
 
     @Override

@@ -31,7 +31,7 @@ public class SimpleTestActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_test);
         ButterKnife.bind(this);
-        String url = Str.getServerUrl(Str.action_showIcon+"&account=");
+        String url = Str.getServerUrl(Str.method_showIcon+"&account=");
         simple_io.setImageURI(Uri.parse(url + "admin"));
         simple_b.setImageURI(Uri.parse(url + "loyal"));
         simple_admin_ib.setImageURI(Uri.parse(url + "l6yang"));

@@ -290,7 +290,7 @@ public class PersonalActivity extends BaseSwipeActivity implements View.OnClickL
                         .addFormDataPart(loginBean.account.get(), path, RequestBody.create(MediaType.parse("image/jpeg"), file))
                         .setType(MultipartBody.FORM)
                         .build();*/
-                //return OkHttpClientManager.getInstance().post_jsonDemo(StringUtil.getServiceUrl(Str.action_update_icon), body);
+                //return OkHttpClientManager.getInstance().post_jsonDemo(StringUtil.getServiceUrl(Str.method_update_icon), body);
                 RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), file);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(loginBean.account.get(), file.getName(), body);
                 Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateIcon(body, part);
@@ -333,7 +333,7 @@ public class PersonalActivity extends BaseSwipeActivity implements View.OnClickL
     private void showIcon() {
         if (binding.simplePersonalIcon == null)
             return;
-        binding.simplePersonalIcon.setImageURI(Uri.parse(Str.getServerUrl(Str.action_showIcon) + "&account=" + loginBean.account.get()));
+        binding.simplePersonalIcon.setImageURI(Uri.parse(Str.getServerUrl(Str.method_showIcon) + "&account=" + loginBean.account.get()));
     }
 
     @Override

@@ -21,7 +21,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-import static com.mwm.loyal.imp.Contact.Str.Server_BaseUrl;
+import static com.mwm.loyal.imp.Contact.Str.baseUrl;
 
 public class DownLoadAPI {
     private static final int DEFAULT_TIMEOUT = 15;
@@ -39,7 +39,7 @@ public class DownLoadAPI {
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .build();
         retrofit = new Retrofit.Builder()
-                .baseUrl(Server_BaseUrl)
+                .baseUrl(baseUrl)
                 .client(client)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
     }

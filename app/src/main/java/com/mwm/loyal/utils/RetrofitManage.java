@@ -35,7 +35,7 @@ public class RetrofitManage {
 
     private Retrofit.Builder getBuild() {
         return new Retrofit.Builder()
-                .baseUrl(Server_BaseUrl)
+                .baseUrl(baseUrl)
                 //增加返回值为String的支持
                 .addConverterFactory(ScalarsConverterFactory.create())
                 //增加返回值为Gson的支持(以实体类返回)
@@ -101,48 +101,44 @@ public class RetrofitManage {
     public interface RequestServer {
 
         @FormUrlEncoded
-        @POST(Server_Method + "doLoginTest")
-        Call<String> doTestLogin(@Field("account") String account, @Field("password") String password);
-
-        @FormUrlEncoded
-        @POST(Server_Method + action_register)
+        @POST(action + method_register)
         Call<String> doRegister(@Field("json_register") String json);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_login)
+        @POST(action + method_login)
         Call<String> doLogin(@Field("json_login") String json);
 
         @FormUrlEncoded
         @Streaming
-        @POST(Server_Method + action_showIcon)
+        @POST(action + method_showIcon)
         Call<ResponseBody> doShowIcon(@Field("account") String account);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_update)
+        @POST(action + method_update)
         Call<String> doUpdateAccount(@Field("json_update") String json, @Field("update_state") String state, @Field("old_data") String old);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_account_locked)
+        @POST(action + method_account_locked)
         Call<String> doAccountLocked(@Field("account") String account);
 
         @Multipart
-        @POST(Server_Method + action_update_icon)
+        @POST(action + method_update_icon)
         Call<String> doUpdateIcon(@Part("description") RequestBody description, @Part MultipartBody.Part iconFile);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_feedBack)
+        @POST(action + method_feedBack)
         Call<String> doFeedBack(@Field("json_feed") String json);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_ucrop_test)
+        @POST(action + method_ucrop_test)
         Call<String> doUCropTest(@Field("account") String account, @Field("password") String password);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_scan)
+        @POST(action + method_scan)
         Call<String> doScan(@Field("json_scan") String json, @Field("param") String param);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_apkVerCheck)
+        @POST(action + method_apkVerCheck)
         Call<String> doApkVer(@Field("apkVer") String apkVer);
 
         @GET
@@ -155,52 +151,52 @@ public class RetrofitManage {
     public interface ObservableServer {
 
         @FormUrlEncoded
-        @POST(Server_Method + "doLoginTest")
+        @POST(action + "doLoginTest")
         Observable<String> doTestLogin(@Field("account") String account, @Field("password") String password);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_register)
+        @POST(action + method_register)
         Observable<ResultBean> doRegister(@Field("json_register") String json);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_queryAccount)
+        @POST(action + method_queryAccount)
         Observable<ResultBean> doQueryAccount(@Field("account") String account);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_login)
+        @POST(action + method_login)
         Observable<ResultBean> doLogin(@Field("json_login") String json);
 
         @FormUrlEncoded
         @Streaming
-        @POST(Server_Method + action_showIcon)
+        @POST(action + method_showIcon)
         Observable<ResponseBody> doShowIcon(@Field("account") String account);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_update)
+        @POST(action + method_update)
         Observable<ResultBean> doUpdateAccount(@Field("json_update") String json, @Field("update_state") String state, @Field("old_data") String old);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_account_locked)
+        @POST(action + method_account_locked)
         Observable<String> doAccountLocked(@Field("account") String account);
 
         @Multipart
-        @POST(Server_Method + action_update_icon)
+        @POST(action + method_update_icon)
         Observable<String> doUpdateIcon(@Part("description") RequestBody description, @Part MultipartBody.Part iconFile);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_feedBack)
+        @POST(action + method_feedBack)
         Observable<String> doFeedBack(@Field("json_feed") String json);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_ucrop_test)
+        @POST(action + method_ucrop_test)
         Observable<String> doUCropTest(@Field("account") String account, @Field("password") String password);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_scan)
+        @POST(action + method_scan)
         Observable<ResultBean> doScan(@Field("json_scan") String json, @Field("param") String param);
 
         @FormUrlEncoded
-        @POST(Server_Method + action_apkVerCheck)
+        @POST(action + method_apkVerCheck)
         Observable<ResultBean> doApkVer(@Field("apkVer") String apkVer);
 
         @Streaming

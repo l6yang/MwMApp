@@ -55,7 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Contact 
         super.onResume();
         updateReceiver = new UpdateReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Str.action_apkVerCheck);
+        intentFilter.addAction(Str.method_apkVerCheck);
         registerReceiver(updateReceiver, intentFilter);
     }
 
@@ -93,7 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Contact 
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             String apkUrl = intent.getStringExtra("apkUrl");
-            if (TextUtils.equals(action, Str.action_apkVerCheck)) {
+            if (TextUtils.equals(action, Str.method_apkVerCheck)) {
                 if (!TextUtils.isEmpty(apkUrl) && apkUrl.endsWith(".apk")) {
                     showUpdateDialog("检测到有新的版本，是否更新?", apkUrl);
                 }

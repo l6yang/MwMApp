@@ -68,7 +68,7 @@ public class FeedBackHandler extends BaseActivityHandler implements Contact {
             try {
                 //RequestBody body = new FormBody.Builder()
                 //.add("json_feed", feedBackBean.toString()).build();
-                //return OkHttpClientManager.getInstance().post_jsonDemo(StringUtil.getServiceUrl(Str.action_feedBack), body);
+                //return OkHttpClientManager.getInstance().post_jsonDemo(StringUtil.getServiceUrl(Str.method_feedBack), body);
                 return RetrofitManage.doExecuteStr(call);
             } catch (IOException e) {
                 return e.toString();

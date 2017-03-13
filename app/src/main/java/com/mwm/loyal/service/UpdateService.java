@@ -83,7 +83,7 @@ public class UpdateService extends IntentService implements Contact {
                                 String url = StringUtil.replaceNull(resultBean.getExceptMsg());
                                 //发送广播，showPopWindowForDownLoad
                                 Intent intent = new Intent();
-                                intent.setAction(Str.action_apkVerCheck);
+                                intent.setAction(Str.method_apkVerCheck);
                                 intent.putExtra("apkUrl", url);
                                 sendBroadcast(intent);
                             }
