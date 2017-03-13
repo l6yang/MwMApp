@@ -68,7 +68,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             public void onClick(View view) {
                 UtilsApp.copyFile(appBean);
                 Intent shareIntent = UtilsApp.getShareIntent(UtilsApp.getOutputFilename(appBean));
-                context.startActivity(Intent.createChooser(shareIntent, String.format(context.getResources().getString(R.string.send_to), appBean.getName())));
+                context.startActivity(Intent.createChooser(shareIntent, String.format(context.getString(R.string.send_to), appBean.getName())));
             }
         });
     }
