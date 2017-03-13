@@ -41,7 +41,6 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera.flash" />
 
-
     <application
         android:name=".app.MwMApplication"
         android:allowBackup="true"
@@ -169,9 +168,7 @@
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         -->
-        <service
-            android:name=".service.UpdateService"
-            android:exported="false" />
+        <service android:name=".service.UpdateService" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -204,6 +201,10 @@
         <service
             android:name=".service.LocationService"
             android:exported="false" />
+
+        <activity
+            android:name=".activity.ShareActivity"
+            android:theme="@style/BaseSwipeTheme" />
     </application>
 
 </manifest>

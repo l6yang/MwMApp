@@ -10,7 +10,6 @@ import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.utils.ApkUtil;
 import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.RetrofitManage;
-import com.mwm.loyal.utils.StringUtil;
 
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -52,15 +51,17 @@ public class AboutHandler extends BaseActivityHandler {
                     public void onError(Throwable e) {
                         if (progressDialog != null)
                             progressDialog.dismiss();
-                        StringUtil.showErrorDialog(getActivity(), e.toString(), false);
+                        showErrorDialog(e.toString(), false);
                     }
 
                     @Override
                     public void onNext(ResultBean resultBean) {
-                        if (resultBean != null && resultBean.getResultCode() == 1) {
-                            showToast(resultBean.getResultMsg());
+                        if (resultBean != null) {
+                            if (resultBean.getResultCode() == 1) {
+                                getActivity().showUpdateDialog(resultBean.getResultMsg(), resultBean.getExceptMsg());
+                            } else showDialog(resultBean.getResultMsg(), false);
                         } else {
-                            showErrorDialog(null == resultBean ? "解析失败" : resultBean.getResultMsg());
+                            showErrorDialog("解析失败", false);
                         }
                     }
                 });

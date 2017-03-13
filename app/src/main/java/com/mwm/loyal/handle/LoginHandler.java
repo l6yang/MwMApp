@@ -100,21 +100,23 @@ public class LoginHandler extends BaseActivityHandler {
                     public void onError(Throwable e) {
                         if (progressDialog != null)
                             progressDialog.dismiss();
-                        showErrorDialog(e.toString());
+                        showErrorDialog(e.toString(), false);
                     }
 
                     @Override
                     public void onNext(ResultBean resultBean) {
-                        if (resultBean != null && resultBean.getResultCode() == 1) {
-                            PreferencesUtil.putLoginBean(loginActivity, loginBean);
-                            Intent intent = new Intent(loginActivity, MainActivity.class);
-                            intent.putExtra("account", loginBean.account.get());
-                            intent.putExtra("nickname", resultBean.getResultMsg());
-                            intent.putExtra("signature", resultBean.getExceptMsg());
-                            loginActivity.startActivity(intent);
-                            loginActivity.finish();
+                        if (resultBean != null) {
+                            if (resultBean.getResultCode() == 1) {
+                                PreferencesUtil.putLoginBean(loginActivity, loginBean);
+                                Intent intent = new Intent(loginActivity, MainActivity.class);
+                                intent.putExtra("account", loginBean.account.get());
+                                intent.putExtra("nickname", resultBean.getResultMsg());
+                                intent.putExtra("signature", resultBean.getExceptMsg());
+                                loginActivity.startActivity(intent);
+                                loginActivity.finish();
+                            } else showDialog(resultBean.getResultMsg(), false);
                         } else
-                            showErrorDialog(null == resultBean ? "解析失败" : resultBean.getResultMsg());
+                            showErrorDialog("解析失败", false);
                     }
                 });
     }

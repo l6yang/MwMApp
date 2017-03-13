@@ -16,7 +16,6 @@ import com.mwm.loyal.imp.Progress;
 import com.mwm.loyal.utils.ApkUtil;
 import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.RetrofitManage;
-import com.mwm.loyal.utils.StringUtil;
 
 import rx.Observable;
 
@@ -38,7 +37,7 @@ public class AccountHandler extends BaseActivityHandler implements Progress.Subs
                 System.out.println(des);
                 LoginBean loginBean = new LoginBean();
                 loginBean.account.set(getActivity().getIntent().getStringExtra("account"));
-                loginBean.lock.set(TextUtils.equals(StringUtil.replaceNull(des), "off") ? "1" : "0");
+                loginBean.lock.set(TextUtils.equals(getStrWithNull(des), "off") ? "1" : "0");
                 loginBean.device.set(ApkUtil.getDeviceID());
                 loginBean.mac.set(ApkUtil.getMacAddressFromIp());
                 Observable<ResultBean> observable = RetrofitManage.getInstance().getObservableServer().doUpdateAccount(loginBean.toString(), "lock", "");
@@ -51,11 +50,11 @@ public class AccountHandler extends BaseActivityHandler implements Progress.Subs
 
     @Override
     public void onResult(ResultBean resultBean) {
-        if (TextUtils.equals(StringUtil.replaceNull(resultBean.getResultMsg()), "lock")) {
+        if (TextUtils.equals(getStrWithNull(resultBean.getResultMsg()), "lock")) {
             showToast("该账号已与此设备绑定");
             binding.accountDeviceLock.setContentDescription(getString(R.string.on));
             binding.accountDeviceLock.setImageResource(R.mipmap.switch_on);
-        } else if (TextUtils.equals(StringUtil.replaceNull(resultBean.getResultMsg()), "unlock")) {
+        } else if (TextUtils.equals(getStrWithNull(resultBean.getResultMsg()), "unlock")) {
             showToast("已取消与此设备绑定");
             binding.accountDeviceLock.setImageResource(R.mipmap.switch_off);
             binding.accountDeviceLock.setContentDescription(getString(R.string.off));
@@ -64,11 +63,10 @@ public class AccountHandler extends BaseActivityHandler implements Progress.Subs
 
     @Override
     public void onError(Throwable e) {
-        showErrorDialog(e.toString());
+        showErrorDialog(e.toString(),false);
     }
 
     @Override
     public void onCompleted() {
-
     }
 }

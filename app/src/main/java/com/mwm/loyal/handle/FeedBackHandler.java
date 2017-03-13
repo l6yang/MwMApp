@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.FeedBackActivity;
+import com.mwm.loyal.base.BaseActivityHandler;
 import com.mwm.loyal.base.BaseAsyncTask;
 import com.mwm.loyal.beans.FeedBackBean;
 import com.mwm.loyal.beans.ResultBean;
@@ -22,13 +23,12 @@ import java.io.IOException;
 
 import retrofit2.Call;
 
-public class FeedBackHandler implements Contact {
-    private FeedBackActivity feedBackActivity;
+public class FeedBackHandler extends BaseActivityHandler implements Contact {
     private final ActivityFeedBackBinding binding;
     private FeedBackAsync mFeedAuth;
 
     public FeedBackHandler(FeedBackActivity activity, ActivityFeedBackBinding binding) {
-        feedBackActivity = activity;
+        super(activity);
         this.binding = binding;
     }
 
@@ -37,10 +37,10 @@ public class FeedBackHandler implements Contact {
             case R.id.pub_submit:
                 String content = binding.editFeedBack.getText().toString().trim();
                 if (TextUtils.isEmpty(content)) {
-                    ToastUtil.showToast(feedBackActivity, "请填写反馈内容");
+                    ToastUtil.showToast(getActivity(), "请填写反馈内容");
                     return;
                 }
-                String account = feedBackActivity.getIntent().getStringExtra("account");
+                String account = getActivity().getIntent().getStringExtra("account");
                 FeedBackBean backBean = new FeedBackBean(account, content, TimeUtil.getDateTime());
                 if (mFeedAuth != null)
                     return;
@@ -55,7 +55,7 @@ public class FeedBackHandler implements Contact {
         private final FeedBackBean feedBackBean;
 
         FeedBackAsync(FeedBackBean backBean) {
-            super(feedBackActivity);
+            super(getActivity());
             feedBackBean = backBean;
             setDialogMessage("反馈中...稍等");
             setCancelable(true);
@@ -80,18 +80,18 @@ public class FeedBackHandler implements Contact {
             super.onPostExecute(result);
             cancelDialog();
             mFeedAuth = null;
-            if (StringUtil.showErrorToast(feedBackActivity, result)) return;
+            if (StringUtil.showErrorToast(getActivity(), result)) return;
             ResultBean bean = GsonUtil.getBeanFromJson(result, ResultBean.class);
             if (bean.getResultCode() == 1) {
-                ToastUtil.showToast(feedBackActivity, "感谢您的反馈");
+                ToastUtil.showToast(getActivity(), "感谢您的反馈");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        feedBackActivity.finish();
+                        getActivity().finish();
                     }
                 }, 1000);
             } else {
-                ToastUtil.showToast(feedBackActivity, StringUtil.replaceNull(bean.getResultMsg()));
+                ToastUtil.showToast(getActivity(), getStrWithNull(bean.getResultMsg()));
             }
         }
 

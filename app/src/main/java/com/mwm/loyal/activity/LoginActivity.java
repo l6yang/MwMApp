@@ -48,13 +48,13 @@ public class LoginActivity extends BaseActivity implements RationaleListener, Te
         binding.setClick(new LoginHandler(this, binding));
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();
-        initPermission();
+        initPermission(Int.permissionReadPhone, Manifest.permission.READ_PHONE_STATE);
     }
 
-    private void initPermission() {
+    private void initPermission(int reqCode, String... permission) {
         AndPermission.with(this)
-                .requestCode(Int.permissionMemory)
-                .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .requestCode(reqCode)
+                .permission(permission)
                 .rationale(this)
                 .send();
     }
@@ -82,8 +82,26 @@ public class LoginActivity extends BaseActivity implements RationaleListener, Te
             case Int.permissionMemory:
                 tips = "为确保程序的正常使用，请开启存储权限，否则导致程序更新异常";
                 break;
+            case Int.permissionReadPhone:
+                tips = "为确保程序的正常使用，请开启电话权限(获取本机识别码等)";
+                break;
         }
         ToastUtil.permissionDialog(this, tips, rationale);
+    }
+
+    @PermissionYes(Int.permissionReadPhone)
+    private void onReadPhoneSuccess(List<String> grantedPermissions) {
+        initPermission(Int.permissionMemory, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE);
+    }
+
+    @PermissionNo(Int.permissionReadPhone)
+    private void onReadPhoneFail(List<String> deniedPermissions) {
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            // 第一种：用默认的提示语。
+            AndPermission.defaultSettingDialog(this, Int.permissionReadPhone).show();
+        } else {
+            ToastUtil.showDialog(this, "您已拒绝开启电话权限，程序将退出", true);
+        }
     }
 
     @PermissionYes(Int.permissionMemory)

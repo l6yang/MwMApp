@@ -49,9 +49,9 @@ public class RegisterHandler extends BaseActivityHandler {
                 String nickname = mBinding.nickname.getText().toString().trim();
                 String password = mBinding.password.getText().toString().trim();
                 String repeat = mBinding.repeatMm.getText().toString().trim();
-                if (fromLogin)
+                if (fromLogin) {
                     doRegister(account, nickname, password, repeat);
-                else doResetPassWord(account, nickname, password, repeat);
+                } else doResetPassWord(account, nickname, password, repeat);
                 break;
         }
     }
@@ -63,6 +63,10 @@ public class RegisterHandler extends BaseActivityHandler {
         }
         if (!isValue(password)) {
             showToast("密码长度少于6位");
+            return;
+        }
+        if (TextUtils.isEmpty(nickname)) {
+            showToast("请填写您的昵称");
             return;
         }
         if (!TextUtils.equals(password, repeat)) {
@@ -110,26 +114,28 @@ public class RegisterHandler extends BaseActivityHandler {
                     public void onError(Throwable e) {
                         if (progressDialog != null)
                             progressDialog.dismiss();
-                        showErrorDialog(e.toString());
+                        showErrorDialog(e.toString(), false);
                     }
 
                     @Override
                     public void onNext(ResultBean resultBean) {
-                        if (resultBean != null && resultBean.getResultCode() == 1) {
-                            showToast(fromLogin ? "注册成功,请牢记用户名和密码" : "修改成功，请重新登录");
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Intent intent = new Intent();
-                                    intent.putExtra("account", loginBean.account.get());
-                                    if (!fromLogin) {
-                                        getActivity().setResult(Activity.RESULT_OK, intent);
+                        if (resultBean != null) {
+                            if (resultBean.getResultCode() == 1) {
+                                showToast(fromLogin ? "注册成功,请牢记用户名和密码" : "修改成功，请重新登录");
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent intent = new Intent();
+                                        intent.putExtra("account", loginBean.account.get());
+                                        if (!fromLogin) {
+                                            getActivity().setResult(Activity.RESULT_OK, intent);
+                                        }
+                                        getActivity().finish();
                                     }
-                                    getActivity().finish();
-                                }
-                            }, 1000);
+                                }, 1000);
+                            } else showDialog(resultBean.getResultMsg(), false);
                         } else
-                            showToast(null == resultBean ? "解析异常" : resultBean.getResultMsg());
+                            showErrorDialog("解析异常", false);
                     }
                 });
     }

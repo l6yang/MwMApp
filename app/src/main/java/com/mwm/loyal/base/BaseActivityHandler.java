@@ -43,15 +43,23 @@ public class BaseActivityHandler<T> implements Contact {
     }
 
     public final void showToast(CharSequence sequence) {
-        ToastUtil.showToast(baseActivity, StringUtil.replaceNull(sequence));
+        ToastUtil.showToast(baseActivity, getStrWithNull(sequence));
     }
 
     public final void showToast(String text) {
-        ToastUtil.showToast(baseActivity, StringUtil.replaceNull(text));
+        ToastUtil.showToast(baseActivity, getStrWithNull(text));
     }
 
-    public final void showErrorDialog(String text) {
-        StringUtil.showErrorDialog(baseActivity, StringUtil.replaceNull(text), false);
+    public final void showErrorDialog(String text, boolean finish) {
+        StringUtil.showErrorDialog(baseActivity, getStrWithNull(text), finish);
+    }
+
+    public final void showDialog(String text, boolean finish) {
+        ToastUtil.showDialog(baseActivity, getStrWithNull(text), finish);
+    }
+
+    protected final String getStrWithNull(Object object) {
+        return StringUtil.replaceNull(object);
     }
 
     private void initDialog(BaseActivity baseActivity) {

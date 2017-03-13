@@ -7,6 +7,9 @@ import android.content.SharedPreferences.Editor;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.imp.Contact;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static com.mwm.loyal.utils.StringUtil.replaceNull;
 
 public class PreferencesUtil implements Contact {
@@ -242,5 +245,17 @@ public class PreferencesUtil implements Contact {
     public static boolean getBoolean(Context context, String key, boolean defaultValue) {
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         return settings.getBoolean(key, defaultValue);
+    }
+
+    public static Set<String> getHiddenApps(Context context) {
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        return settings.getStringSet("KeyHiddenApps", new HashSet<String>());
+    }
+
+    public static boolean setHiddenApps(Context context, Set<String> hiddenApps) {
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        Editor editor = settings.edit();
+        editor.putStringSet("KeyHiddenApps", hiddenApps);
+        return editor.commit();
     }
 }

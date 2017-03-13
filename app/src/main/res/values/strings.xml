@@ -102,4 +102,10 @@
     <string name="city_query_hint">输入城市名或首字母查询</string>
     <string name="cancel">取消</string>
     <string name="action_sign_in">Sign in</string>
+    <string name="button_extract">Extract</string>
+    <string name="button_share">Share</string>
+    <string name="dialog_saved_description">\"%1$s\"程序文件已保存至 \"com.mwm.loyal\share\" 文件夹下，文件名是: %2$s</string>
+    <string name="dialog_extract_fail">提取失败</string>
+    <string name="dialog_extract_fail_description">提取APK文件失败，请重启之后再试.</string>
+    <string name="send_to">Send \"%s\" using</string>
 </resources>

@@ -240,7 +240,6 @@
                     android:layout_marginTop="48dp"
                     android:onClick="@{click.onClick}"
                     fresco:actualImageScaleType="centerInside"
-                    fresco:placeholderImage="@mipmap/icon_1"
                     fresco:roundAsCircle="true"
                     fresco:roundingBorderColor="@color/white"
                     fresco:roundingBorderWidth="2dp" />

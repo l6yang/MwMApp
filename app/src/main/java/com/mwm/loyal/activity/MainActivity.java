@@ -72,8 +72,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsing_toolbar;
-    private SimpleDraweeView mSimple_Icon;
-    private String account = "";
+    private SimpleDraweeView navIcon;
+    private TextView navSignature, navNickName;
     private HandlerClass mHandler;
     private ActivityMainBinding binding;
 
@@ -99,15 +99,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         View view = navigationView.getHeaderView(0);
-        account = getIntent().getStringExtra("account");
-        mSimple_Icon = (SimpleDraweeView) view.findViewById(R.id.nav_icon);
-        updateIcon();
+        navIcon = (SimpleDraweeView) view.findViewById(R.id.nav_icon);
         view.findViewById(R.id.nav_zxing).setOnClickListener(this);
-        if (mSimple_Icon != null) {
-            mSimple_Icon.setOnClickListener(this);
+        if (navIcon != null) {
+            navIcon.setOnClickListener(this);
         }
-        TextView text_account = (TextView) view.findViewById(R.id.nav_account);
-        text_account.setText(account);
+        navNickName = (TextView) view.findViewById(R.id.nav_nickName);
+        navSignature = (TextView) view.findViewById(R.id.nav_signature);
+        updateAccount();
         appBarLayout.addOnOffsetChangedListener(this);
     }
 
@@ -149,19 +148,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
+    private void updateAccount() {
+        updateIcon();
+        doUpdateAccount(getIntent().getStringExtra("account"));
+    }
+
     //更新头像
     private void updateIcon() {
         ImageUtil.clearFrescoTemp();
-        if (mSimple_Icon == null)
+        if (navIcon == null)
             return;
-        mSimple_Icon.setImageURI(Uri.parse(Str.getServerUrl(Str.action_showIcon) + "&account=" + account));
+        navIcon.setImageURI(Uri.parse(Str.getServerUrl(Str.action_showIcon) + "&account=" + getIntent().getStringExtra("account")));
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case Int.reqCode_Main_icon:
-                updateIcon();
+                updateAccount();
                 break;
             case Int.reqCode_Main_weather:
                 String city;
@@ -184,7 +188,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 doScanQuery(data.getStringExtra("mwm_id"));
                 break;
             case Int.permissionCamera:
-                ToastUtil.showToast(this, "用户从设置回来了");
+                showToast("用户从设置回来了");
                 break;
         }
     }
@@ -196,7 +200,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             return;
         }
         progressDialog.setMessage("处理中...");
-        ContactBean contactBean = new ContactBean(account, scanStr, TimeUtil.getDateTime());
+        ContactBean contactBean = new ContactBean(getIntent().getStringExtra("account"), scanStr, TimeUtil.getDateTime());
         Observable<ResultBean> observable = RetrofitManage.getInstance().getObservableServer().doScan(contactBean.toString(), getPackageName());
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -211,15 +215,55 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     public void onError(Throwable e) {
                         if (progressDialog != null)
                             progressDialog.dismiss();
-                        StringUtil.showErrorDialog(MainActivity.this, e.toString(), false);
+                        showErrorDialog(e.toString(), false);
                     }
 
                     @Override
                     public void onNext(ResultBean resultBean) {
-                        if (resultBean != null && resultBean.getResultCode() == 1) {
-                            ToastUtil.showDialog(MainActivity.this, resultBean.getResultMsg(), false);
+                        if (resultBean != null) {
+                            if (resultBean.getResultCode() == 1)
+                                showToast(resultBean.getResultMsg());
+                            else
+                                showDialog(resultBean.getResultMsg(), false);
                         } else {
-                            ToastUtil.showToast(MainActivity.this, null == resultBean ? "解析异常" : StringUtil.replaceNull(resultBean.getResultMsg()));
+                            showErrorDialog("解析异常", false);
+                        }
+                    }
+                });
+    }
+
+    private void doUpdateAccount(String account) {
+        if (StringUtil.isEmpty(account)) {
+            return;
+        }
+        progressDialog.setMessage("处理中...");
+        Observable<ResultBean> observable = RetrofitManage.getInstance().getObservableServer().doQueryAccount(account);
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ResultBean>() {
+                    @Override
+                    public void onCompleted() {
+                        if (progressDialog != null)
+                            progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (progressDialog != null)
+                            progressDialog.dismiss();
+                        showErrorDialog(e.toString(), false);
+                    }
+
+                    @Override
+                    public void onNext(ResultBean resultBean) {
+                        if (resultBean != null) {
+                            if (resultBean.getResultCode() == 1) {
+                                navNickName.setText(replaceNull(resultBean.getResultMsg()));
+                                navSignature.setText(replaceNull(resultBean.getExceptMsg()));
+                            } else
+                                showDialog(resultBean.getResultMsg(), false);
+                        } else {
+                            showErrorDialog("解析异常", false);
                         }
                     }
                 });
@@ -307,6 +351,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                             break;
                         case R.id.nav_gallery:
                             activity.initPermission(Int.permissionCamera, Manifest.permission.CAMERA);
+                            break;
+                        case R.id.nav_share:
+                            IntentUtil.toStartActivity(activity, ShareActivity.class);
                             break;
                         case R.id.nav_scan:
                             activity.initPermission(Int.permissionCamera, Manifest.permission.CAMERA);

@@ -64,7 +64,7 @@
                     android:paddingRight="8dp"
                     android:paddingStart="8dp"
                     android:paddingTop="5dp"
-                    android:src="@drawable/src_filter_img" />
+                    android:src="@drawable/src_menu_img" />
             </RelativeLayout>
         </RelativeLayout>
     </android.support.design.widget.AppBarLayout>

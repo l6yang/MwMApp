@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.service.UpdateService;
+import com.mwm.loyal.utils.StringUtil;
+import com.mwm.loyal.utils.ToastUtil;
 
 public abstract class BaseActivity extends AppCompatActivity implements Contact {
     private UpdateReceiver updateReceiver;
@@ -57,6 +59,21 @@ public abstract class BaseActivity extends AppCompatActivity implements Contact 
         registerReceiver(updateReceiver, intentFilter);
     }
 
+    public void showToast(String text) {
+        ToastUtil.showToast(this, text);
+    }
+
+    public void showErrorDialog(String text, boolean finish) {
+        StringUtil.showErrorDialog(this, replaceNull(text), finish);
+    }
+
+    public void showDialog(String text, boolean finish) {
+        ToastUtil.showDialog(this, replaceNull(text), finish);
+    }
+    public String replaceNull(Object t) {
+        return StringUtil.replaceNull(t);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -78,17 +95,21 @@ public abstract class BaseActivity extends AppCompatActivity implements Contact 
             String apkUrl = intent.getStringExtra("apkUrl");
             if (TextUtils.equals(action, Str.action_apkVerCheck)) {
                 if (!TextUtils.isEmpty(apkUrl) && apkUrl.endsWith(".apk")) {
-                    showUpdateDialog(context, "检测到有新的版本，是否更新?", apkUrl);
+                    showUpdateDialog("检测到有新的版本，是否更新?", apkUrl);
                 }
             }
         }
     }
 
+    protected final String getStrWithNull(Object object) {
+        return StringUtil.replaceNull(object);
+    }
+
     /**
      * 更新提示
      */
-    private void showUpdateDialog(final Context context, String content, final String apkUrl) {
-        final AlertDialog myDialog = new AlertDialog.Builder(context).create();
+    public void showUpdateDialog(String content, final String apkUrl) {
+        final AlertDialog myDialog = new AlertDialog.Builder(this).create();
         if (myDialog.isShowing())
             myDialog.dismiss();
         myDialog.show();
@@ -97,7 +118,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Contact 
         if (myDialog.getWindow() != null)
             myDialog.getWindow().setContentView(R.layout.dialog_permission);
         TextView mContent = (TextView) myDialog.getWindow().findViewById(R.id.dialog_tv_content);
-        mContent.setText(content);
+        mContent.setText(getStrWithNull(content));
         Button btn_ok = (Button) myDialog.getWindow().findViewById(R.id.dialog_btn_ok);
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -6,11 +6,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import com.mwm.loyal.R;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-
-import com.mwm.loyal.R;
 
 public class ResUtil {
     /**

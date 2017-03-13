@@ -24,6 +24,7 @@ public class FileUtil {
     public static final String pic_tmp = "tmp.jpg";
     // apk更新下载的更新文件存放的目录
     public static final String path_apk = path_main + "apk" + File.separator;
+    public static final String path_share = path_main + "share" + File.separator;
     public static final String apkFileName = "mwm.apk";
 
     public static boolean fileCreated(String path) {
@@ -41,6 +42,8 @@ public class FileUtil {
         file = new File(path_temp);
         createFiles(file);
         file = new File(path_voice);
+        createFiles(file);
+        file = new File(path_share);
         createFiles(file);
     }
 
@@ -61,6 +64,26 @@ public class FileUtil {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+    }
+
+    public static void writeFile(InputStream in, File file) {
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+            byte[] buffer = new byte[1024 * 128];
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                fos.write(buffer, 0, len);
+            }
+            fos.flush();
+            fos.close();
+            in.close();
+        } catch (IOException e) {
+            //
+        } finally {
+            IOUtil.closeStream(fos);
+            IOUtil.closeStream(in);
+        }
     }
 
     public static String createIcons(String path, String fileName, InputStream inputStream) {

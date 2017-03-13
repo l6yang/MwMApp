@@ -27,25 +27,14 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static com.mwm.loyal.imp.Contact.Str.Server_BaseUrl;
-import static com.mwm.loyal.imp.Contact.Str.Server_Method;
-import static com.mwm.loyal.imp.Contact.Str.action_account_locked;
-import static com.mwm.loyal.imp.Contact.Str.action_apkVerCheck;
-import static com.mwm.loyal.imp.Contact.Str.action_feedBack;
-import static com.mwm.loyal.imp.Contact.Str.action_login;
-import static com.mwm.loyal.imp.Contact.Str.action_register;
-import static com.mwm.loyal.imp.Contact.Str.action_scan;
-import static com.mwm.loyal.imp.Contact.Str.action_showIcon;
-import static com.mwm.loyal.imp.Contact.Str.action_ucrop_test;
-import static com.mwm.loyal.imp.Contact.Str.action_update;
-import static com.mwm.loyal.imp.Contact.Str.action_update_icon;
+import static com.mwm.loyal.imp.Contact.Str.*;
 
 public class RetrofitManage {
     private static RetrofitManage mInstance;
     private static Retrofit.Builder retrofit;
 
-    private RetrofitManage() {
-        retrofit = new Retrofit.Builder()
+    private Retrofit.Builder getBuild() {
+        return new Retrofit.Builder()
                 .baseUrl(Server_BaseUrl)
                 //增加返回值为String的支持
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -53,6 +42,10 @@ public class RetrofitManage {
                 .addConverterFactory(GsonConverterFactory.create())
                 //增加返回值为Observable<T>的支持
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
+    }
+
+    private RetrofitManage() {
+        retrofit = getBuild();
     }
 
     public static RetrofitManage getInstance() {
@@ -170,6 +163,10 @@ public class RetrofitManage {
         Observable<ResultBean> doRegister(@Field("json_register") String json);
 
         @FormUrlEncoded
+        @POST(Server_Method + action_queryAccount)
+        Observable<ResultBean> doQueryAccount(@Field("account") String account);
+
+        @FormUrlEncoded
         @POST(Server_Method + action_login)
         Observable<ResultBean> doLogin(@Field("json_login") String json);
 
@@ -206,6 +203,7 @@ public class RetrofitManage {
         @POST(Server_Method + action_apkVerCheck)
         Observable<ResultBean> doApkVer(@Field("apkVer") String apkVer);
 
+        @Streaming
         @GET
         Observable<ResponseBody> doDownLoadApk(@Url String url);
 

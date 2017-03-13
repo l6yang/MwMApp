@@ -142,7 +142,7 @@ public class CityActivity extends BaseSwipeActivity implements View.OnClickListe
         textCity.setVisibility(isQuery ? View.GONE : View.VISIBLE);
         textCancel.setVisibility(isQuery ? View.VISIBLE : View.GONE);
         viewQuery.setVisibility(isQuery ? View.VISIBLE : View.GONE);
-        /**adjustPan时不需要，adjustResize需要设置如下*/
+        /*adjustPan时不需要，adjustResize需要设置如下*/
         //sideBar.setVisibility(isQuery ? View.GONE : View.VISIBLE);
         if (isQuery) {
             ToastUtil.showInputPan(this);
@@ -176,8 +176,7 @@ public class CityActivity extends BaseSwipeActivity implements View.OnClickListe
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             List<CityBean> filterList = completeAdapter.getFilterList();
             CityBean cityBean = filterList.get(position);
-            //back2Last(cityBean);
-            System.out.println("onItemClick::" + cityBean.getCityName());
+            back2Last(cityBean);
         }
     };
 
@@ -186,7 +185,6 @@ public class CityActivity extends BaseSwipeActivity implements View.OnClickListe
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int section, int position, long id) {
             CityBean cityBean = (CityBean) pinnedCityAdapter.getItem(section, position);
-            System.out.println("onItemClick::" + cityBean.getCityName());
             back2Last(cityBean);
         }
 
@@ -198,10 +196,16 @@ public class CityActivity extends BaseSwipeActivity implements View.OnClickListe
     private void back2Last(CityBean cityBean) {
         if (null == cityBean || TextUtils.isEmpty(cityBean.getCityName()))
             return;
-        String cityName = cityBean.getCityName();
-        Intent intent = new Intent();
-        intent.putExtra("cityName", cityName);
-        setResult(RESULT_OK, intent);
-        finish();
+        final String cityName = cityBean.getCityName();
+        editCity.setText(cityName);
+        editCity.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent();
+                intent.putExtra("cityName", cityName);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        },500);
     }
 }

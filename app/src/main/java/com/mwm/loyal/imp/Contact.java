@@ -27,9 +27,10 @@ public interface Contact {
         public static final String SERVICE_ACTION_restart = "com.mwm.loyal.service.action.restart";
         public static final String service_action_loc = "com.mwm.loyal.service.action.loc";
         public static final String ACTION_UPDATE = "com.mwm.loyal.activity.action.update";
-        public static final String ACTION_DOWN = "com.mwm.loyal.activity.action.download";
+        public static final String ACTION_DOWN = "com.mwm.loyal.activity.action.downLoad";
         public static final String action_register = "doRegister";
         public static final String action_login = "doLogin";
+        public static final String action_queryAccount = "doQueryAccount";
         public static final String action_showIcon = "doShowIconByIO";
         public static final String action_update = "doUpdateAccount";
         public static final String action_account_locked = "doAccountLocked";
@@ -50,6 +51,7 @@ public interface Contact {
         public static final String ACTION_LOCATION_STOP = "com.server.service.action.locationStop";
         public static final String defaultCity = "西安";
         public static final String defaultWeather = "0";
+        public static final String share = "share";
 
         public static String getServerUrl(String method) {
             return Server_BaseUrl + Server_Method + method;
@@ -76,6 +78,7 @@ public interface Contact {
         public static final int reqCode_register = 111;
         public static final int permissionMemory = 600;
         public static final int permissionCamera = 601;
+        public static final int permissionReadPhone = 602;
         public static final int permissionLocation = 603;
         public static final int rx2Weather = 706;
         //异步

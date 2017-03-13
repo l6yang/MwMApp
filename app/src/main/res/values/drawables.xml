@@ -6,4 +6,5 @@
     <item name="ic_menu_scan" type="drawable">@mipmap/ic_menu_scan</item>
     <item name="ic_menu_settings" type="drawable">@mipmap/ic_menu_settings</item>
     <item name="ic_menu_voice" type="drawable">@mipmap/ic_menu_voice</item>
+    <item name="ic_menu_share" type="drawable">@mipmap/ic_menu_share</item>
 </resources>
