@@ -20,8 +20,8 @@ import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.Low2UpCase;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.SortCity;
+import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.ToastUtil;
-import com.mwm.loyal.utils.TransManage;
 import com.mwm.loyal.views.PinnedHeaderListView;
 import com.mwm.loyal.views.SideBar;
 
@@ -69,7 +69,7 @@ public class CityActivity extends BaseSwipeActivity implements View.OnClickListe
         ActivityCityBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_city);
         binding.setDrawable(ResUtil.getBackground(this));
         ButterKnife.bind(this);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         initViews();
         initData();
     }

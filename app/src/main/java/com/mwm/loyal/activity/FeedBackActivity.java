@@ -6,14 +6,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityFeedBackBinding;
 import com.mwm.loyal.handle.FeedBackHandler;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.TransManage;
+import com.mwm.loyal.utils.StateBarUtil;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class FeedBackActivity extends BaseSwipeActivity implements View.OnClickListener {
     @BindView(R.id.pub_back)
@@ -27,7 +28,7 @@ public class FeedBackActivity extends BaseSwipeActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityFeedBackBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_feed_back);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         ButterKnife.bind(this);
         binding.setClick(new FeedBackHandler(this, binding));
         binding.setDrawable(ResUtil.getBackground(this));

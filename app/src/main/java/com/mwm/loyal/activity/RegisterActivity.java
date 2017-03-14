@@ -14,7 +14,7 @@ import com.mwm.loyal.databinding.ActivityRegisterBinding;
 import com.mwm.loyal.handle.RegisterHandler;
 import com.mwm.loyal.imp.TextChangedListener;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.TransManage;
+import com.mwm.loyal.utils.StateBarUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +33,7 @@ public class RegisterActivity extends BaseSwipeActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register);
         ButterKnife.bind(this);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         LoginBean loginBean = new LoginBean();
         binding.setLoginBean(loginBean);
         String account = getIntent().getStringExtra("account");

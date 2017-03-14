@@ -19,7 +19,7 @@ import com.mwm.loyal.libs.manager.AppAdapter;
 import com.mwm.loyal.libs.manager.AppBean;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.TransManage;
+import com.mwm.loyal.utils.StateBarUtil;
 import com.yalantis.phoenix.PullToRefreshView;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class ShareActivity extends BaseSwipeActivity implements View.OnClickList
         ActivityShareBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_share);
         binding.setDrawable(ResUtil.getBackground(this));
         ButterKnife.bind(this);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         initViews();
         appAdapter = new AppAdapter(this, appList);
         recyclerView.setAdapter(appAdapter);

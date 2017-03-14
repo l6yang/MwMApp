@@ -39,10 +39,10 @@ import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.StringUtil;
 import com.mwm.loyal.utils.TimeUtil;
 import com.mwm.loyal.utils.ToastUtil;
-import com.mwm.loyal.utils.TransManage;
 import com.mwm.loyal.utils.WeatherUtil;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         ButterKnife.bind(this);
         toolbar.setTitle("测试");
         setSupportActionBar(toolbar);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         mHandler = new HandlerClass(this);
         initViews();
         initPermission(Int.permissionLocation, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
@@ -325,7 +325,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         int height = appBarLayout.getHeight() - (getSupportActionBar() == null ? 0 : getSupportActionBar().
-                getHeight()) - TransManage.getStatusBarHeight(MainActivity.this);
+                getHeight()) - StateBarUtil.getStatusBarHeight(MainActivity.this);
         int alpha = 255 * (0 - verticalOffset) / height;
         collapsing_toolbar.setExpandedTitleColor(Color.argb(0, 255, 255, 255));
         collapsing_toolbar.setCollapsedTitleTextColor(Color.argb(alpha, 255, 255, 255));

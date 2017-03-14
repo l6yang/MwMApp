@@ -14,7 +14,7 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.libs.zxing.AutoScannerView;
 import com.mwm.loyal.libs.zxing.BaseCaptureActivity;
 import com.mwm.loyal.libs.zxing.ViewfinderView;
-import com.mwm.loyal.utils.TransManage;
+import com.mwm.loyal.utils.StateBarUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,7 +48,7 @@ public class CaptureActivity extends BaseCaptureActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture);
         ButterKnife.bind(this);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         autoScan = getIntent().getBooleanExtra("auto", false);
         pubBack.setOnClickListener(this);
         pubTitle.setText(getIntent().getStringExtra("title"));

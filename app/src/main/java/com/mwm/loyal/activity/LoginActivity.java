@@ -20,8 +20,8 @@ import com.mwm.loyal.service.UpdateService;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.ToastUtil;
-import com.mwm.loyal.utils.TransManage;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
 import com.yanzhenjie.permission.PermissionYes;
@@ -41,7 +41,7 @@ public class LoginActivity extends BaseActivity implements RationaleListener, Te
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         ButterKnife.bind(this);
         LoginBean bean = PreferencesUtil.getLoginBean(this);
         binding.setLoginbean(bean);

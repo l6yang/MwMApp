@@ -12,20 +12,22 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityQrCodeBinding;
-import com.mwm.loyal.utils.QRCodeUtil;
 import com.mwm.loyal.utils.CipherUtil;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ImageUtil;
+import com.mwm.loyal.utils.QRCodeUtil;
 import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.ToastUtil;
-import com.mwm.loyal.utils.TransManage;
 
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.mwm.loyal.imp.Contact.Str.*;
+import static com.mwm.loyal.imp.Contact.Str.action;
+import static com.mwm.loyal.imp.Contact.Str.baseUrl;
+import static com.mwm.loyal.imp.Contact.Str.method_scan;
 
 public class QrCodeActivity extends BaseSwipeActivity implements View.OnClickListener {
     @BindView(R.id.pub_back)
@@ -52,7 +54,7 @@ public class QrCodeActivity extends BaseSwipeActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         ActivityQrCodeBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_qr_code);
         ButterKnife.bind(this);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();
     }

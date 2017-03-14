@@ -18,8 +18,8 @@ import com.mwm.loyal.imp.Progress;
 import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.StringUtil;
-import com.mwm.loyal.utils.TransManage;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +39,7 @@ public class AccountActivity extends BaseSwipeActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_account);
         ButterKnife.bind(this);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         binding.setClick(new AccountHandler(this, binding));
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();

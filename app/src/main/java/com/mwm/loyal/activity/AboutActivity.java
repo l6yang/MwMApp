@@ -14,7 +14,7 @@ import com.mwm.loyal.databinding.ActivityAboutBinding;
 import com.mwm.loyal.handle.AboutHandler;
 import com.mwm.loyal.utils.ApkUtil;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.TransManage;
+import com.mwm.loyal.utils.StateBarUtil;
 
 public class AboutActivity extends BaseSwipeActivity implements View.OnClickListener {
     @BindView(R.id.pub_title)
@@ -28,7 +28,7 @@ public class AboutActivity extends BaseSwipeActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityAboutBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_about);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         ButterKnife.bind(this);
         binding.setVersion(ApkUtil.getApkVersion(this));
         binding.setDrawable(ResUtil.getBackground(this));

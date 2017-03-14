@@ -7,15 +7,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivitySettingsBinding;
 import com.mwm.loyal.handle.SettingsHandler;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.TransManage;
+import com.mwm.loyal.utils.StateBarUtil;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class SettingsActivity extends BaseSwipeActivity implements View.OnClickListener {
     @BindView(R.id.pub_back)
@@ -30,7 +30,7 @@ public class SettingsActivity extends BaseSwipeActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         ActivitySettingsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_settings);
         ButterKnife.bind(this);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         binding.setDrawable(ResUtil.getBackground(this));
         binding.setClick(new SettingsHandler(this));
         initViews();

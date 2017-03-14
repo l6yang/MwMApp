@@ -8,7 +8,7 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.databinding.ActivityTestImageBinding;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.TransManage;
+import com.mwm.loyal.utils.StateBarUtil;
 
 import butterknife.ButterKnife;
 
@@ -18,7 +18,7 @@ public class TestImageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityTestImageBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_test_image);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         ButterKnife.bind(this);
         binding.setDrawable(ResUtil.getBackground(this));
     }

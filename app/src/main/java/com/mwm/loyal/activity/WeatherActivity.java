@@ -19,8 +19,8 @@ import com.mwm.loyal.databinding.ActivityWeatherBinding;
 import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.TimeUtil;
-import com.mwm.loyal.utils.TransManage;
 import com.mwm.loyal.utils.WeatherUtil;
 
 import java.io.UnsupportedEncodingException;
@@ -50,7 +50,7 @@ public class WeatherActivity extends BaseSwipeActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_weather);
         binding.setDrawable(ResUtil.getBackground(this));
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         ButterKnife.bind(this);
         mHandler = new HandlerClass(this);
         initViews();

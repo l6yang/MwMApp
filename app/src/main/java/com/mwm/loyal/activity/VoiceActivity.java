@@ -20,8 +20,8 @@ import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityVoiceBinding;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.ToastUtil;
-import com.mwm.loyal.utils.TransManage;
 import com.mwm.loyal.utils.VoiceUtil;
 
 import java.lang.ref.WeakReference;
@@ -47,7 +47,7 @@ public class VoiceActivity extends BaseSwipeActivity implements SpeechSynthesize
         super.onCreate(savedInstanceState);
         ActivityVoiceBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_voice);
         ButterKnife.bind(this);
-        TransManage.setTranslucentStatus(this);
+        StateBarUtil.setTranslucentStatus(this);
         binding.setDrawable(ResUtil.getBackground(this));
         mHandler = new HandlerClass(this);
         initView();
