@@ -133,7 +133,7 @@ public class ShareActivity extends BaseSwipeActivity implements View.OnClickList
                             AppBean tempApp = new AppBean(packageManager.getApplicationLabel(packageInfo.applicationInfo).toString(), packageInfo.packageName, packageInfo.versionName, packageInfo.applicationInfo.sourceDir, packageInfo.applicationInfo.dataDir, packageManager.getApplicationIcon(packageInfo.applicationInfo), false);
                             appList.add(tempApp);
                         } catch (OutOfMemoryError e) {
-                            AppBean tempApp = new AppBean(packageManager.getApplicationLabel(packageInfo.applicationInfo).toString(), packageInfo.packageName, packageInfo.versionName, packageInfo.applicationInfo.sourceDir, packageInfo.applicationInfo.dataDir, getDrawable(R.mipmap.ic_launcher_round), false);
+                            AppBean tempApp = new AppBean(packageManager.getApplicationLabel(packageInfo.applicationInfo).toString(), packageInfo.packageName, packageInfo.versionName, packageInfo.applicationInfo.sourceDir, packageInfo.applicationInfo.dataDir, getDrawable(R.mipmap.icon), false);
                             appList.add(tempApp);
                         } catch (Exception e) {
                             e.printStackTrace();
