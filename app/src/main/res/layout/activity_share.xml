@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,8 +9,7 @@
             type="android.graphics.drawable.Drawable" />
     </data>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@{drawable}"
@@ -21,10 +21,10 @@
             layout="@layout/pub_title" />
 
         <com.yalantis.phoenix.PullToRefreshView
-            android:layout_below="@id/pub_layout_title"
             android:id="@+id/pull_to_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/pub_layout_title">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_list"
