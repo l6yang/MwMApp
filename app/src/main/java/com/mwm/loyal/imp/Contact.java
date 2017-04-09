@@ -36,7 +36,6 @@ public interface Contact {
         public static final String method_ucrop_test = "doUCropTest";
         public static final String method_scan = "doScan";
         public static final String method_apkVerCheck = "doCheckApkVer";
-        public static final String method_downApk = "doDownLoadApk";
         public static final String KAY_ENCRYPT_DECODE = "com.mwm.forLoyal";
         public static final String ipAdd = "192.168.31.96";
         public static final String port = ":8080";
