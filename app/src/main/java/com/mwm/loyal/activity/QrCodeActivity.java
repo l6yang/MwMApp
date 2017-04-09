@@ -26,7 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.mwm.loyal.imp.Contact.Str.action;
-import static com.mwm.loyal.imp.Contact.Str.baseUrl;
 import static com.mwm.loyal.imp.Contact.Str.method_scan;
 
 public class QrCodeActivity extends BaseSwipeActivity implements View.OnClickListener {
@@ -66,7 +65,7 @@ public class QrCodeActivity extends BaseSwipeActivity implements View.OnClickLis
         pubBack.setOnClickListener(this);
         account = getIntent().getStringExtra("account");
         Bitmap logoBitmap = BitmapFactory.decodeFile(FileUtil.path_icon + "icon_" + account + ".jpg");
-        String str = baseUrl + action + method_scan +"&k=" + CipherUtil.encodeStr(account);
+        String str = Str.getBaseUrl() + action + method_scan + "&k=" + CipherUtil.encodeStr(account);
         pubMenuSave.setOnClickListener(this);
         pubMenuScan.setOnClickListener(this);
         pubMenuShare.setOnClickListener(this);

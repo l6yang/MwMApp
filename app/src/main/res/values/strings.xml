@@ -108,4 +108,5 @@
     <string name="dialog_extract_fail">提取失败</string>
     <string name="dialog_extract_fail_description">提取APK文件失败，请重启之后再试.</string>
     <string name="send_to">Send \"%s\" using</string>
+    <string name="skip">跳过丨%1$ds</string>
 </resources>

@@ -52,7 +52,7 @@ public class CaptureActivity extends BaseCaptureActivity implements View.OnClick
         autoScan = getIntent().getBooleanExtra("auto", false);
         pubBack.setOnClickListener(this);
         pubTitle.setText(getIntent().getStringExtra("title"));
-        pubMenu.setImageResource(R.drawable.sg_off_on);
+        pubMenu.setImageResource(R.drawable.src_flash_img);
         pubLayout.setBackgroundResource(R.color.pub_color_title);
         autoScannerView.setVisibility(autoScan ? View.VISIBLE : View.GONE);
         viewfinderView.setVisibility(autoScan ? View.GONE : View.VISIBLE);

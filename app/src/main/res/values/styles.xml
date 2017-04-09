@@ -22,7 +22,10 @@
     <style name="BaseSwipeTheme" parent="@style/SwipeTheme">
         <item name="android:windowIsTranslucent">true</item>
     </style>
-
+    <style name="BaseFullScreen" parent="@style/BaseSwipeTheme">
+        <item name="android:windowNoTitle">true</item> <!-- 设置无标题 -->
+        <item name="android:windowFullscreen">?android:windowNoTitle</item>
+    </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

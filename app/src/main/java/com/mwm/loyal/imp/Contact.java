@@ -38,24 +38,27 @@ public interface Contact {
         public static final String method_apkVerCheck = "doCheckApkVer";
         public static final String method_downApk = "doDownLoadApk";
         public static final String KAY_ENCRYPT_DECODE = "com.mwm.forLoyal";
-        public static final String ipAdd = "192.168.0.66";
+        public static final String ipAdd = "192.168.31.96";
         public static final String port = ":8080";
         private static final String http = "http://";
         public static final String https = "https://";
-        public static final String baseUrl = http + ipAdd + port + "/mwm/";
         public static final String action = "action.do?method=";
         public static final String defaultCity = "西安";
         public static final String defaultWeather = "0";
         public static final String share = "share";
 
         public static String getServerUrl(String method) {
-            return baseUrl + action + method;
+            return getBaseUrl() + action + method;
         }
 
-        static String getIpAddress(Activity activity) {
+        public static String getIpAddress(Activity activity) {
             if (activity != null)
                 return http + PreferencesUtil.getString(activity.getApplicationContext(), KEY_IP, ipAdd) + port;
             else return "";
+        }
+
+        public static String getBaseUrl() {
+            return http + ipAdd + port + "/mwm/";
         }
     }
 

@@ -44,7 +44,7 @@ public class LoginActivity extends BaseActivity implements RationaleListener, Te
         StateBarUtil.setTranslucentStatus(this);
         ButterKnife.bind(this);
         LoginBean bean = PreferencesUtil.getLoginBean(this);
-        binding.setLoginbean(bean);
+        binding.setLoginBean(bean);
         binding.setClick(new LoginHandler(this, binding));
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();
@@ -91,7 +91,7 @@ public class LoginActivity extends BaseActivity implements RationaleListener, Te
 
     @PermissionYes(Int.permissionReadPhone)
     private void onReadPhoneSuccess(List<String> grantedPermissions) {
-        initPermission(Int.permissionMemory, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE);
+        initPermission(Int.permissionMemory, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
     @PermissionNo(Int.permissionReadPhone)
@@ -119,7 +119,7 @@ public class LoginActivity extends BaseActivity implements RationaleListener, Te
             // 第一种：用默认的提示语。
             AndPermission.defaultSettingDialog(this, Int.permissionMemory).show();
         } else {
-            ToastUtil.showDialog(this, "您已拒绝开启存储权限，程序将退出", true);
+            showDialog("您已拒绝开启存储权限，程序将退出", true);
         }
     }
 
@@ -127,7 +127,7 @@ public class LoginActivity extends BaseActivity implements RationaleListener, Te
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case Int.permissionMemory:
-                ToastUtil.showToast(this, "用户从设置回来了");
+                showToast("用户从设置回来了");
                 break;
         }
         if (resultCode != RESULT_OK)
@@ -147,7 +147,7 @@ public class LoginActivity extends BaseActivity implements RationaleListener, Te
             if (System.currentTimeMillis() - lastTime <= 2000) {
                 finish();
             } else {
-                ToastUtil.showToast(this, "再次点击返回键退出");
+                showToast("再次点击返回键退出");
                 lastTime = System.currentTimeMillis();
             }
             return true;

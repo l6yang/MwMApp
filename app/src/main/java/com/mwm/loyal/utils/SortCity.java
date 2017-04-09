@@ -2,7 +2,9 @@ package com.mwm.loyal.utils;
 
 import com.mwm.loyal.beans.CityBean;
 
-public class SortCity implements java.util.Comparator<CityBean> {
+import java.util.Comparator;
+
+public class SortCity implements Comparator<CityBean> {
 
     @Override
     public int compare(CityBean o1, CityBean o2) {

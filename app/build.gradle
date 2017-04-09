@@ -64,12 +64,12 @@ dependencies {
     compile files('libs/AMap3D_SDK_V4.1.2_20161104.jar')
     compile files('libs/AMap_Location_V3.3.0_20170118.jar')
     compile files('libs/com.baidu.tts_2.3.0.jar')
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.jakewharton:butterknife:8.5.1'
-    compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.android.support:recyclerview-v7:25.2.0'
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:support-vector-drawable:25.2.0'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:support-vector-drawable:25.3.1'
     compile 'com.facebook.fresco:fresco:0.14.1'
     compile 'com.yanzhenjie:permission:1.0.4'
     compile 'com.google.zxing:core:3.3.0'

@@ -4,7 +4,7 @@
     <data>
 
         <variable
-            name="loginbean"
+            name="loginBean"
             type="com.mwm.loyal.beans.LoginBean" />
 
         <variable
@@ -72,7 +72,7 @@
                         android:inputType="textEmailAddress"
                         android:maxLength="16"
                         android:padding="10dp"
-                        android:text="@{loginbean.account}"
+                        android:text="@{loginBean.account}"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey"
                         android:textSize="@dimen/text_sp_18" />
@@ -115,7 +115,7 @@
                         android:inputType="textPassword"
                         android:maxLength="16"
                         android:padding="10dp"
-                        android:text="@{loginbean.password}"
+                        android:text="@{loginBean.password}"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey"
                         android:textSize="@dimen/text_sp_18" />
@@ -156,7 +156,7 @@
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:padding="10dp"
-                        android:text="@{loginbean.server}"
+                        android:text="@{loginBean.server}"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey"
                         android:textSize="@dimen/text_sp_18" />

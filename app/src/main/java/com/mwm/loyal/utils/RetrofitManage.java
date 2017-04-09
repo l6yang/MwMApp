@@ -2,6 +2,7 @@ package com.mwm.loyal.utils;
 
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.beans.WeatherBean;
+import com.mwm.loyal.imp.Contact;
 
 import java.io.IOException;
 
@@ -29,13 +30,13 @@ import rx.schedulers.Schedulers;
 
 import static com.mwm.loyal.imp.Contact.Str.*;
 
-public class RetrofitManage {
+public class RetrofitManage implements Contact {
     private static RetrofitManage mInstance;
     private static Retrofit.Builder retrofit;
 
     private Retrofit.Builder getBuild() {
         return new Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(Str.getBaseUrl())
                 //增加返回值为String的支持
                 .addConverterFactory(ScalarsConverterFactory.create())
                 //增加返回值为Gson的支持(以实体类返回)

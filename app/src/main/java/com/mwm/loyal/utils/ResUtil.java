@@ -30,7 +30,7 @@ public class ResUtil {
     /**
      * @param fileName json/index.json
      */
-    public static InputStream openAssetFile(Context context, String fileName) {
+    private static InputStream openAssetFile(Context context, String fileName) {
         try {
             return context.getAssets().open(fileName);
         } catch (IOException e) {
