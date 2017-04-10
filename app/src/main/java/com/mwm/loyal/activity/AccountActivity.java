@@ -1,8 +1,6 @@
 package com.mwm.loyal.activity;
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,28 +16,26 @@ import com.mwm.loyal.imp.Progress;
 import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
-import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.StringUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import rx.Observable;
 
-public class AccountActivity extends BaseSwipeActivity implements View.OnClickListener, Progress.SubscribeListener<String> {
+public class AccountActivity extends BaseSwipeActivity<ActivityAccountBinding> implements View.OnClickListener, Progress.SubscribeListener<String> {
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_menu)
     ImageView pubFilter;
-    private ActivityAccountBinding binding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_account);
-        ButterKnife.bind(this);
-        StateBarUtil.setTranslucentStatus(this);
+    protected int getLayoutRes() {
+        return R.layout.activity_account;
+    }
+
+    @Override
+    public void afterOnCreate() {
         binding.setClick(new AccountHandler(this, binding));
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();
@@ -103,13 +99,11 @@ public class AccountActivity extends BaseSwipeActivity implements View.OnClickLi
 
     @Override
     public void onError(Throwable e) {
-        System.out.println(TAG + e.toString());
+        System.out.println("onError::"+ e.toString());
     }
 
     @Override
     public void onCompleted() {
 
     }
-
-    private final String TAG = "Account";
 }

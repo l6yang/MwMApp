@@ -1,8 +1,6 @@
 package com.mwm.loyal.activity;
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,25 +10,24 @@ import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivitySettingsBinding;
 import com.mwm.loyal.handle.SettingsHandler;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.StateBarUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class SettingsActivity extends BaseSwipeActivity implements View.OnClickListener {
+public class SettingsActivity extends BaseSwipeActivity<ActivitySettingsBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_menu)
-    ImageView pubFilter;
+    ImageView pubMenu;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivitySettingsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_settings);
-        ButterKnife.bind(this);
-        StateBarUtil.setTranslucentStatus(this);
+    protected int getLayoutRes() {
+        return R.layout.activity_settings;
+    }
+
+    @Override
+    public void afterOnCreate() {
         binding.setDrawable(ResUtil.getBackground(this));
         binding.setClick(new SettingsHandler(this));
         initViews();
@@ -38,7 +35,7 @@ public class SettingsActivity extends BaseSwipeActivity implements View.OnClickL
 
     private void initViews() {
         pubTitle.setText("设置");
-        pubFilter.setVisibility(View.GONE);
+        pubMenu.setVisibility(View.GONE);
         pubBack.setOnClickListener(this);
     }
 

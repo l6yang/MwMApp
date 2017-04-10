@@ -3,10 +3,8 @@ package com.mwm.loyal.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -27,7 +25,6 @@ import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
-import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.StringUtil;
 import com.mwm.loyal.utils.ToastUtil;
 import com.yalantis.ucrop.UCrop;
@@ -36,13 +33,12 @@ import java.io.File;
 import java.io.IOException;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 
-public class PersonalActivity extends BaseSwipeActivity implements View.OnClickListener {
+public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_menu)
@@ -51,14 +47,14 @@ public class PersonalActivity extends BaseSwipeActivity implements View.OnClickL
     TextView pubTitle;
     private LoginBean loginBean;
     private UpdateAccount mUpdateAuth;
-    private ActivityPersonalBinding binding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_personal);
-        ButterKnife.bind(this);
-        StateBarUtil.setTranslucentStatus(this);
+    protected int getLayoutRes() {
+        return R.layout.activity_personal;
+    }
+
+    @Override
+    public void afterOnCreate() {
         binding.setDrawable(ResUtil.getBackground(this));
         binding.setClick(new PersonalHandler(this));
         loginBean = new LoginBean();

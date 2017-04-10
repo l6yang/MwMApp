@@ -70,4 +70,14 @@ public class BaseuCropActivity extends BaseActivity {
         builder.setNegativeButton(negativeText, onNegativeButtonClickListener);
         mAlertDialog = builder.show();
     }
+
+    @Override
+    protected int getLayoutRes() {
+        return 0;
+    }
+
+    @Override
+    public void afterOnCreate() {
+
+    }
 }

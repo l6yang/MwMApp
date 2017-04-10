@@ -1,6 +1,5 @@
 package com.mwm.loyal.activity;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,19 +12,20 @@ import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.ResUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
     @BindView(R.id.pub_id)
     TextView mContentView;
     private final SplashRunnable runnable = new SplashRunnable(3);
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivitySplashBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
+    protected int getLayoutRes() {
+        return R.layout.activity_splash;
+    }
+
+    @Override
+    public void afterOnCreate() {
         binding.setDrawable(ResUtil.getBackground(this));
-        ButterKnife.bind(this);
     }
 
     public void onClick(View view) {

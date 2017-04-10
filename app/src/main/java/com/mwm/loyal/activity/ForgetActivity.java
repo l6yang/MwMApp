@@ -1,7 +1,5 @@
 package com.mwm.loyal.activity;
 
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,14 +12,12 @@ import com.mwm.loyal.databinding.ActivityForgetBinding;
 import com.mwm.loyal.imp.Progress;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
-import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.StringUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import rx.Observable;
 
-public class ForgetActivity extends BaseSwipeActivity implements View.OnClickListener, Progress.SubscribeListener<String> {
+public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> implements View.OnClickListener, Progress.SubscribeListener<String> {
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_title)
@@ -32,11 +28,12 @@ public class ForgetActivity extends BaseSwipeActivity implements View.OnClickLis
     Button button;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivityForgetBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_forget);
-        ButterKnife.bind(this);
-        StateBarUtil.setTranslucentStatus(this);
+    protected int getLayoutRes() {
+        return R.layout.activity_forget;
+    }
+
+    @Override
+    public void afterOnCreate() {
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();
     }

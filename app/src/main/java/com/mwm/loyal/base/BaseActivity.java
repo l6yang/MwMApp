@@ -6,7 +6,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,22 +21,43 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.service.UpdateService;
+import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.StringUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
-public abstract class BaseActivity extends AppCompatActivity implements Contact {
+import butterknife.ButterKnife;
+
+public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity implements Contact {
     private UpdateReceiver updateReceiver;
     protected ProgressDialog progressDialog;
+    protected T binding;
+
+    /**
+     * 绑定布局文件
+     *
+     * @return LayoutRes
+     */
+    protected abstract
+    @LayoutRes
+    int getLayoutRes();
+
+    /**
+     * 初始化控件
+     */
+    public abstract void afterOnCreate();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, getLayoutRes());
+        StateBarUtil.setTranslucentStatus(this);//沉浸式状态栏
+        ButterKnife.bind(this);
         initDialog();
+        afterOnCreate();
     }
 
     private void initDialog() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("");
         Window window = progressDialog.getWindow();
         if (window != null) {
             WindowManager.LayoutParams lp = window.getAttributes();
@@ -43,6 +67,24 @@ public abstract class BaseActivity extends AppCompatActivity implements Contact 
         }
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
+    }
+
+    public void showDialog() {
+        showDialog(null);
+    }
+
+    public void showDialog(CharSequence message) {
+        if (null != progressDialog) {
+            progressDialog.setMessage(replaceNull(message));
+            progressDialog.show();
+        }
+    }
+
+    public void disMissDialog() {
+        if (null != progressDialog) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
     }
 
     @Override
@@ -70,6 +112,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Contact 
     public void showDialog(String text, boolean finish) {
         ToastUtil.showDialog(this, replaceNull(text), finish);
     }
+
     public String replaceNull(Object t) {
         return StringUtil.replaceNull(t);
     }

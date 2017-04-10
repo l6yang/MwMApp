@@ -1,8 +1,6 @@
 package com.mwm.loyal.activity;
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -19,7 +17,6 @@ import com.mwm.loyal.databinding.ActivityWeatherBinding;
 import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.TimeUtil;
 import com.mwm.loyal.utils.WeatherUtil;
 
@@ -29,9 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class WeatherActivity extends BaseSwipeActivity implements View.OnClickListener {
+public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> implements View.OnClickListener {
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_back)
@@ -40,18 +36,18 @@ public class WeatherActivity extends BaseSwipeActivity implements View.OnClickLi
     ImageView pubMenu;
     @BindView(R.id.grid_weather)
     GridView gridWeather;
-    private ActivityWeatherBinding binding;
     private HandlerClass mHandler;
     private List<WeatherBean.DataBean.ForecastBean> beanList = new ArrayList<>();
     private WeatherAdapter weatherAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_weather);
+    protected int getLayoutRes() {
+        return R.layout.activity_weather;
+    }
+
+    @Override
+    public void afterOnCreate() {
         binding.setDrawable(ResUtil.getBackground(this));
-        StateBarUtil.setTranslucentStatus(this);
-        ButterKnife.bind(this);
         mHandler = new HandlerClass(this);
         initViews();
     }

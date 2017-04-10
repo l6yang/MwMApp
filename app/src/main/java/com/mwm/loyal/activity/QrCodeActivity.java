@@ -1,9 +1,7 @@
 package com.mwm.loyal.activity;
 
-import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,18 +15,16 @@ import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.QRCodeUtil;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
 import java.io.File;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 import static com.mwm.loyal.imp.Contact.Str.action;
 import static com.mwm.loyal.imp.Contact.Str.method_scan;
 
-public class QrCodeActivity extends BaseSwipeActivity implements View.OnClickListener {
+public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_menu)
@@ -49,11 +45,12 @@ public class QrCodeActivity extends BaseSwipeActivity implements View.OnClickLis
     private String account;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivityQrCodeBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_qr_code);
-        ButterKnife.bind(this);
-        StateBarUtil.setTranslucentStatus(this);
+    protected int getLayoutRes() {
+        return R.layout.activity_qr_code;
+    }
+
+    @Override
+    public void afterOnCreate() {
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();
     }

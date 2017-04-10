@@ -1,16 +1,13 @@
 package com.mwm.loyal.activity;
 
 import android.net.Uri;
-import android.os.Bundle;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseActivity;
-import com.mwm.loyal.utils.StringUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class SimpleTestActivity extends BaseActivity {
     @BindView(R.id.simple_ii)
@@ -27,10 +24,12 @@ public class SimpleTestActivity extends BaseActivity {
     SimpleDraweeView simple_b;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_test);
-        ButterKnife.bind(this);
+    protected int getLayoutRes() {
+        return R.layout.activity_simple_test;
+    }
+
+    @Override
+    public void afterOnCreate() {
         String url = Str.getServerUrl(Str.method_showIcon+"&account=");
         simple_io.setImageURI(Uri.parse(url + "admin"));
         simple_b.setImageURI(Uri.parse(url + "loyal"));

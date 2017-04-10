@@ -1,6 +1,5 @@
 package com.mwm.loyal.activity;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,19 +19,17 @@ import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityVoiceBinding;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.ToastUtil;
 import com.mwm.loyal.utils.VoiceUtil;
 
 import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 import static com.mwm.loyal.utils.VoiceUtil.ENGLISH_SPEECH_FEMALE_MODEL_NAME;
 import static com.mwm.loyal.utils.VoiceUtil.ENGLISH_TEXT_MODEL_NAME;
 
-public class VoiceActivity extends BaseSwipeActivity implements SpeechSynthesizerListener, View.OnClickListener {
+public class VoiceActivity extends BaseSwipeActivity<ActivityVoiceBinding> implements SpeechSynthesizerListener, View.OnClickListener {
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_back)
@@ -43,14 +40,16 @@ public class VoiceActivity extends BaseSwipeActivity implements SpeechSynthesize
     private SpeechSynthesizer mSpeechSynthesizer;
 
     @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_voice;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityVoiceBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_voice);
-        ButterKnife.bind(this);
-        StateBarUtil.setTranslucentStatus(this);
         binding.setDrawable(ResUtil.getBackground(this));
         mHandler = new HandlerClass(this);
-        initView();
+        afterOnCreate();
         initPresenter();
     }
 
@@ -59,19 +58,22 @@ public class VoiceActivity extends BaseSwipeActivity implements SpeechSynthesize
         return LEFT;
     }
 
-    private void initView() {
+    @Override
+    public void afterOnCreate() {
+        binding.setDrawable(ResUtil.getBackground(this));
+        mHandler = new HandlerClass(this);
         FileUtil.createFiles();
         pubBack.setOnClickListener(this);
         pubMenu.setVisibility(View.GONE);
         pubTitle.setText(R.string.action_voice);
         VoiceUtil voiceUtil = new VoiceUtil(this);
         mSpeechSynthesizer = voiceUtil.getSpeechSynthesizer();
+        initPresenter();
     }
 
     private void initPresenter() {
         mSpeechSynthesizer.setSpeechSynthesizerListener(this);
         AuthInfo authInfo = mSpeechSynthesizer.auth(TtsMode.MIX);
-
         if (authInfo.isSuccess()) {
             toPrint("auth success");
         } else {

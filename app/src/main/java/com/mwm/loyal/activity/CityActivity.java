@@ -1,8 +1,6 @@
 package com.mwm.loyal.activity;
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,7 +18,6 @@ import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.Low2UpCase;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.SortCity;
-import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.ToastUtil;
 import com.mwm.loyal.views.PinnedHeaderListView;
 import com.mwm.loyal.views.SideBar;
@@ -33,12 +30,11 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
-public class CityActivity extends BaseSwipeActivity implements View.OnClickListener, SideBar.OnTouchingLetterChangedListener {
+public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> implements View.OnClickListener, SideBar.OnTouchingLetterChangedListener {
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_back)
@@ -64,12 +60,13 @@ public class CityActivity extends BaseSwipeActivity implements View.OnClickListe
     private AutoCompleteAdapter completeAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivityCityBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_city);
+    protected int getLayoutRes() {
+        return R.layout.activity_city;
+    }
+
+    @Override
+    public void afterOnCreate() {
         binding.setDrawable(ResUtil.getBackground(this));
-        ButterKnife.bind(this);
-        StateBarUtil.setTranslucentStatus(this);
         initViews();
         initData();
     }
@@ -206,6 +203,6 @@ public class CityActivity extends BaseSwipeActivity implements View.OnClickListe
                 setResult(RESULT_OK, intent);
                 finish();
             }
-        },500);
+        }, 500);
     }
 }

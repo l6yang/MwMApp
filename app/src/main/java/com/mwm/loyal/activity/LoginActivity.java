@@ -2,8 +2,6 @@ package com.mwm.loyal.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
@@ -20,7 +18,6 @@ import com.mwm.loyal.service.UpdateService;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.ToastUtil;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
@@ -32,17 +29,15 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.ButterKnife;
-
-public class LoginActivity extends BaseActivity implements RationaleListener, TextView.OnEditorActionListener {
-    private ActivityLoginBinding binding;
+public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements RationaleListener, TextView.OnEditorActionListener {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        StateBarUtil.setTranslucentStatus(this);
-        ButterKnife.bind(this);
+    protected int getLayoutRes() {
+        return R.layout.activity_login;
+    }
+
+    @Override
+    public void afterOnCreate() {
         LoginBean bean = PreferencesUtil.getLoginBean(this);
         binding.setLoginBean(bean);
         binding.setClick(new LoginHandler(this, binding));

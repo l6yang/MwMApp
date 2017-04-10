@@ -1,7 +1,5 @@
 package com.mwm.loyal.activity;
 
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,26 +12,24 @@ import com.mwm.loyal.databinding.ActivityRegisterBinding;
 import com.mwm.loyal.handle.RegisterHandler;
 import com.mwm.loyal.imp.TextChangedListener;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.StateBarUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class RegisterActivity extends BaseSwipeActivity implements View.OnClickListener {
+public class RegisterActivity extends BaseSwipeActivity<ActivityRegisterBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_menu)
     ImageView pubMenu;
-    private ActivityRegisterBinding binding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_register);
-        ButterKnife.bind(this);
-        StateBarUtil.setTranslucentStatus(this);
+    protected int getLayoutRes() {
+        return R.layout.activity_register;
+    }
+
+    @Override
+    public void afterOnCreate() {
         LoginBean loginBean = new LoginBean();
         binding.setLoginBean(loginBean);
         String account = getIntent().getStringExtra("account");

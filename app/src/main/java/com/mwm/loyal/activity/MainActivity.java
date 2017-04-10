@@ -5,10 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -55,13 +53,12 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, RationaleListener, AppBarLayout.OnOffsetChangedListener {
+public class MainActivity extends BaseActivity<ActivityMainBinding> implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, RationaleListener, AppBarLayout.OnOffsetChangedListener {
     @BindView(R.id.pub_toolbar)
     Toolbar toolbar;
     @BindView(R.id.pub_drawer_layout)
@@ -75,18 +72,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private SimpleDraweeView navIcon;
     private TextView navSignature, navNickName;
     private HandlerClass mHandler;
-    private ActivityMainBinding binding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected int getLayoutRes() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public void afterOnCreate() {
         DisplayUtil.initScreen(this);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setDrawable(ResUtil.getBackground(this));
-        ButterKnife.bind(this);
         toolbar.setTitle("测试");
         setSupportActionBar(toolbar);
-        StateBarUtil.setTranslucentStatus(this);
         mHandler = new HandlerClass(this);
         initViews();
         initPermission(Int.permissionLocation, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
@@ -199,7 +196,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             ToastUtil.showToast(this, "未扫描到信息");
             return;
         }
-        progressDialog.setMessage("处理中...");
+        showDialog("处理中...");
         ContactBean contactBean = new ContactBean(getIntent().getStringExtra("account"), scanStr, TimeUtil.getDateTime());
         Observable<ResultBean> observable = RetrofitManage.getInstance().getObservableServer().doScan(contactBean.toString(), getPackageName());
         observable.subscribeOn(Schedulers.newThread())
@@ -207,14 +204,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 .subscribe(new Observer<ResultBean>() {
                     @Override
                     public void onCompleted() {
-                        if (progressDialog != null)
-                            progressDialog.dismiss();
+                        disMissDialog();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        if (progressDialog != null)
-                            progressDialog.dismiss();
+                        disMissDialog();
                         showErrorDialog(e.toString(), false);
                     }
 
@@ -236,21 +231,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (StringUtil.isEmpty(account)) {
             return;
         }
-        progressDialog.setMessage("处理中...");
+        showDialog("处理中...");
         Observable<ResultBean> observable = RetrofitManage.getInstance().getObservableServer().doQueryAccount(account);
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ResultBean>() {
                     @Override
                     public void onCompleted() {
-                        if (progressDialog != null)
-                            progressDialog.dismiss();
+                        disMissDialog();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        if (progressDialog != null)
-                            progressDialog.dismiss();
+                        disMissDialog();
                         showErrorDialog(e.toString(), false);
                     }
 

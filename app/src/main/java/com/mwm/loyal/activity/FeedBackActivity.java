@@ -1,7 +1,5 @@
 package com.mwm.loyal.activity;
 
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,12 +9,10 @@ import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityFeedBackBinding;
 import com.mwm.loyal.handle.FeedBackHandler;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.StateBarUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class FeedBackActivity extends BaseSwipeActivity implements View.OnClickListener {
+public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedBackBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_title)
@@ -25,11 +21,12 @@ public class FeedBackActivity extends BaseSwipeActivity implements View.OnClickL
     ImageView pubFilter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivityFeedBackBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_feed_back);
-        StateBarUtil.setTranslucentStatus(this);
-        ButterKnife.bind(this);
+    protected int getLayoutRes() {
+        return R.layout.activity_feed_back;
+    }
+
+    @Override
+    public void afterOnCreate() {
         binding.setClick(new FeedBackHandler(this, binding));
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();

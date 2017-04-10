@@ -1,25 +1,21 @@
 package com.mwm.loyal.activity;
 
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.view.View;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.databinding.ActivityTestImageBinding;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.StateBarUtil;
 
-import butterknife.ButterKnife;
-
-public class TestImageActivity extends BaseActivity {
+public class TestImageActivity extends BaseActivity<ActivityTestImageBinding> {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivityTestImageBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_test_image);
-        StateBarUtil.setTranslucentStatus(this);
-        ButterKnife.bind(this);
+    protected int getLayoutRes() {
+        return R.layout.activity_test_image;
+    }
+
+    @Override
+    public void afterOnCreate() {
         binding.setDrawable(ResUtil.getBackground(this));
     }
 

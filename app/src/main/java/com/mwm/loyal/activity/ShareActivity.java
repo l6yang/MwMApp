@@ -3,9 +3,7 @@ package com.mwm.loyal.activity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,7 +17,6 @@ import com.mwm.loyal.libs.manager.AppAdapter;
 import com.mwm.loyal.libs.manager.AppBean;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.StateBarUtil;
 import com.yalantis.phoenix.PullToRefreshView;
 
 import java.util.ArrayList;
@@ -29,9 +26,8 @@ import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class ShareActivity extends BaseSwipeActivity implements View.OnClickListener, PullToRefreshView.OnRefreshListener {
+public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> implements View.OnClickListener, PullToRefreshView.OnRefreshListener {
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_back)
@@ -47,12 +43,13 @@ public class ShareActivity extends BaseSwipeActivity implements View.OnClickList
     private AppAdapter appAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivityShareBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_share);
+    protected int getLayoutRes() {
+        return R.layout.activity_share;
+    }
+
+    @Override
+    public void afterOnCreate() {
         binding.setDrawable(ResUtil.getBackground(this));
-        ButterKnife.bind(this);
-        StateBarUtil.setTranslucentStatus(this);
         initViews();
         appAdapter = new AppAdapter(this, appList);
         recyclerView.setAdapter(appAdapter);
@@ -109,7 +106,7 @@ public class ShareActivity extends BaseSwipeActivity implements View.OnClickList
         private int actualApps;
 
         QueryAppAsync() {
-            progressDialog.show();
+            showDialog();
             actualApps = 0;
         }
 
@@ -149,13 +146,14 @@ public class ShareActivity extends BaseSwipeActivity implements View.OnClickList
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-            progressDialog.setProgress(values[0]);
+            if (null != progressDialog)
+                progressDialog.setProgress(values[0]);
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            progressDialog.dismiss();
+            disMissDialog();
             mQueryAuth = null;
             appAdapter.refreshData(appList);
             pullToRefreshView.setEnabled(true);

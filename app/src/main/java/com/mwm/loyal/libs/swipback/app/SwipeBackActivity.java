@@ -1,5 +1,6 @@
 package com.mwm.loyal.libs.swipback.app;
 
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,7 +9,7 @@ import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.libs.swipback.utils.SwipeBackLayout;
 import com.mwm.loyal.libs.swipback.utils.SwipeBackUtil;
 
-public class SwipeBackActivity extends BaseActivity implements SwipeBackActivityBase {
+public abstract class SwipeBackActivity<T extends ViewDataBinding> extends BaseActivity<T> implements SwipeBackActivityBase {
     private SwipeBackActivityHelper mHelper;
 
     @Override
