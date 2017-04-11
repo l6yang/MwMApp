@@ -72,6 +72,11 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
     }
 
     @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
+    @Override
     public int setEdgePosition() {
         return LEFT;
     }

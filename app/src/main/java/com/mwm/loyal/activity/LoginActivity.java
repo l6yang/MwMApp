@@ -46,6 +46,11 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         initPermission(Int.permissionReadPhone, Manifest.permission.READ_PHONE_STATE);
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     private void initPermission(int reqCode, String... permission) {
         AndPermission.with(this)
                 .requestCode(reqCode)

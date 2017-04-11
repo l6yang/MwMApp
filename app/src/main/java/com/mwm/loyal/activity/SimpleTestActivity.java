@@ -38,6 +38,11 @@ public class SimpleTestActivity extends BaseActivity {
     }
 
     @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         Fresco.getImagePipeline().clearCaches();

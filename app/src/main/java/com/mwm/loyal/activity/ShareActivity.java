@@ -56,6 +56,11 @@ public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> imple
         queryList();
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     private void queryList() {
         if (mQueryAuth != null)
             return;

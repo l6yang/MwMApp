@@ -89,6 +89,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         initPermission(Int.permissionLocation, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     private void initViews() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);

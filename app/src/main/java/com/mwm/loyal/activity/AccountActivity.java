@@ -42,6 +42,11 @@ public class AccountActivity extends BaseSwipeActivity<ActivityAccountBinding> i
         checkLocked();
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     private void initViews() {
         pubTitle.setText("账号与安全");
         pubFilter.setVisibility(View.GONE);

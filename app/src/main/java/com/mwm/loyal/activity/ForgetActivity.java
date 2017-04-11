@@ -38,6 +38,11 @@ public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> imp
         initViews();
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     private void initViews() {
         pubTitle.setText("重置密码");
         pubBack.setOnClickListener(this);

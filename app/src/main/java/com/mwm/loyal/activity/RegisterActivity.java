@@ -41,6 +41,11 @@ public class RegisterActivity extends BaseSwipeActivity<ActivityRegisterBinding>
         initViews(fromLogin);
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     private void initViews(boolean fromLogin) {
         pubBack.setOnClickListener(this);
         pubTitle.setText(fromLogin ? "快速注册" : "修改密码");

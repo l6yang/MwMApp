@@ -4,14 +4,21 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.mwm.loyal.R;
+
 public class StateBarUtil {
 
     public static void setTranslucentStatus(Activity activity) {
+        setTranslucentStatus(activity, false);
+    }
+
+    public static void setTranslucentStatus(Activity activity, boolean trans) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//4.4 全透明状态栏
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
@@ -23,12 +30,12 @@ public class StateBarUtil {
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);//calculateStatusColor(Color.WHITE, (int) alphaValue)
+            window.setStatusBarColor(trans ? Color.TRANSPARENT : activity.getResources().getColor(R.color.statusBar));//calculateStatusColor(Color.WHITE, (int) alphaValue)
         }
-        setStateBarColor(activity, android.R.color.transparent);
+        setStateBarColor(activity, trans ? Color.TRANSPARENT : activity.getResources().getColor(R.color.statusBar));
     }
 
-    private static void setStateBarColor(Activity activity, int color) {
+    private static void setStateBarColor(Activity activity, @ColorInt int color) {
         // 设置状态栏颜色
         ViewGroup contentLayout = (ViewGroup) activity.findViewById(android.R.id.content);
         setupStatusBarView(activity, contentLayout, color);//Color.parseColor("#FF5677FC"));
@@ -37,12 +44,12 @@ public class StateBarUtil {
         contentChild.setFitsSystemWindows(true);
     }
 
-    private static void setupStatusBarView(Activity activity, ViewGroup contentLayout, int color) {
+    private static void setupStatusBarView(Activity activity, ViewGroup contentLayout, @ColorInt int color) {
         View statusBarView = new View(activity);
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(activity));
         contentLayout.addView(statusBarView, lp);
-        statusBarView.setBackgroundResource(color);
+        statusBarView.setBackgroundColor(color);
     }
 
     /**

@@ -32,6 +32,11 @@ public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedBackBinding>
         initViews();
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     private void initViews() {
         pubFilter.setVisibility(View.GONE);
         pubBack.setOnClickListener(this);

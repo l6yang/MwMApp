@@ -46,11 +46,13 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
      */
     public abstract void afterOnCreate();
 
+    public abstract boolean isTransStatus();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, getLayoutRes());
-        StateBarUtil.setTranslucentStatus(this);//沉浸式状态栏
+        StateBarUtil.setTranslucentStatus(this, isTransStatus());//沉浸式状态栏
         ButterKnife.bind(this);
         initDialog();
         afterOnCreate();

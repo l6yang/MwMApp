@@ -80,4 +80,9 @@ public class BaseuCropActivity extends BaseActivity {
     public void afterOnCreate() {
 
     }
+
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
 }

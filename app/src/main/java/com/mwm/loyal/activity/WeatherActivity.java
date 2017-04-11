@@ -52,6 +52,11 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
         initViews();
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     private void initViews() {
         String city = getIntent().getStringExtra("city");
         binding.setCity(city);

@@ -71,6 +71,11 @@ public class VoiceActivity extends BaseSwipeActivity<ActivityVoiceBinding> imple
         initPresenter();
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     private void initPresenter() {
         mSpeechSynthesizer.setSpeechSynthesizerListener(this);
         AuthInfo authInfo = mSpeechSynthesizer.auth(TtsMode.MIX);

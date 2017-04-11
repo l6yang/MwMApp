@@ -55,6 +55,11 @@ public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> imp
         initViews();
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     private void initViews() {
         pubTitle.setText("我的二维码");
         pubMenu.setImageResource(R.drawable.src_menu_img);

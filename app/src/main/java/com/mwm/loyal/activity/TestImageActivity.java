@@ -19,6 +19,11 @@ public class TestImageActivity extends BaseActivity<ActivityTestImageBinding> {
         binding.setDrawable(ResUtil.getBackground(this));
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     public void onClick(View view) {
     }
 }

@@ -66,6 +66,11 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
         initViews();
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     private void initViews() {
         pubTitle.setText("个人资料");
         pubFilter.setImageResource(R.drawable.src_edit_img);

@@ -28,6 +28,11 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
         binding.setDrawable(ResUtil.getBackground(this));
     }
 
+    @Override
+    public boolean isTransStatus() {
+        return false;
+    }
+
     public void onClick(View view) {
         mContentView.removeCallbacks(runnable);
         IntentUtil.toStartActivity(this, LoginActivity.class);
