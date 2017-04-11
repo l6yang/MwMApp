@@ -9,10 +9,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.mwm.loyal.R;
-
-import java.lang.reflect.Field;
-
 public class StateBarUtil {
 
     public static void setTranslucentStatus(Activity activity) {
@@ -27,9 +23,9 @@ public class StateBarUtil {
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#051728"));//calculateStatusColor(Color.WHITE, (int) alphaValue)
+            window.setStatusBarColor(Color.TRANSPARENT);//calculateStatusColor(Color.WHITE, (int) alphaValue)
         }
-        setStateBarColor(activity, R.color.statusBar);
+        setStateBarColor(activity, android.R.color.transparent);
     }
 
     private static void setStateBarColor(Activity activity, int color) {

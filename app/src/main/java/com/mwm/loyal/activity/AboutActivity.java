@@ -1,20 +1,17 @@
 package com.mwm.loyal.activity;
 
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityAboutBinding;
 import com.mwm.loyal.handle.AboutHandler;
 import com.mwm.loyal.utils.ApkUtil;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.StateBarUtil;
+
+import butterknife.BindView;
 
 public class AboutActivity extends BaseSwipeActivity<ActivityAboutBinding> implements View.OnClickListener {
     @BindView(R.id.pub_title)
