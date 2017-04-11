@@ -7,12 +7,11 @@ import android.view.View;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.FeedBackActivity;
-import com.mwm.loyal.base.BaseClickHandler;
 import com.mwm.loyal.base.BaseAsyncTask;
+import com.mwm.loyal.base.BaseClickHandler;
 import com.mwm.loyal.beans.FeedBackBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityFeedBackBinding;
-import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.StringUtil;
@@ -23,7 +22,7 @@ import java.io.IOException;
 
 import retrofit2.Call;
 
-public class FeedBackHandler extends BaseClickHandler implements Contact {
+public class FeedBackHandler extends BaseClickHandler  {
     private final ActivityFeedBackBinding binding;
     private FeedBackAsync mFeedAuth;
 

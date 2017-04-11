@@ -27,22 +27,18 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class LoginHandler extends BaseClickHandler {
-    private final LoginActivity loginActivity;
-    private final ActivityLoginBinding mBinding;
+public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> {
 
     public LoginHandler(LoginActivity activity, ActivityLoginBinding binding) {
-        super(activity);
-        loginActivity = activity;
-        mBinding = binding;
+        super(activity,binding);
         progressDialog.setMessage("处理中...");
     }
 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.pub_submit:
-                String account = mBinding.account.getText().toString().trim();
-                String password = mBinding.password.getText().toString().trim();
+                String account = binding.account.getText().toString().trim();
+                String password = binding.password.getText().toString().trim();
                 if (TextUtils.isEmpty(account)) {
                     showToast("用户名不能为空");
                     return;
@@ -54,17 +50,17 @@ public class LoginHandler extends BaseClickHandler {
                 login2MainActivity(new LoginBean(account, password));
                 break;
             case R.id.account_clear:
-                mBinding.account.getText().clear();
+                binding.account.getText().clear();
                 break;
             case R.id.password_clear:
-                mBinding.password.getText().clear();
+                binding.password.getText().clear();
                 break;
             case R.id.server_clear:
-                mBinding.server.getText().clear();
+                binding.server.getText().clear();
                 break;
             case R.id.mm_forget:
-                Intent intent = new Intent(loginActivity, ForgetActivity.class);
-                loginActivity.startActivity(intent);
+                Intent intent = new Intent(activity, ForgetActivity.class);
+                activity.startActivity(intent);
                 break;
             case R.id.register:
                 toRegister(R.id.pub_submit);
@@ -107,13 +103,13 @@ public class LoginHandler extends BaseClickHandler {
                     public void onNext(ResultBean resultBean) {
                         if (resultBean != null) {
                             if (resultBean.getResultCode() == 1) {
-                                PreferencesUtil.putLoginBean(loginActivity, loginBean);
-                                Intent intent = new Intent(loginActivity, MainActivity.class);
+                                PreferencesUtil.putLoginBean(activity, loginBean);
+                                Intent intent = new Intent(activity, MainActivity.class);
                                 intent.putExtra("account", loginBean.account.get());
                                 intent.putExtra("nickname", resultBean.getResultMsg());
                                 intent.putExtra("signature", resultBean.getExceptMsg());
-                                loginActivity.startActivity(intent);
-                                loginActivity.finish();
+                                activity.startActivity(intent);
+                                activity.finish();
                             } else showDialog(resultBean.getResultMsg(), false);
                         } else
                             showErrorDialog("解析失败", false);
@@ -122,9 +118,9 @@ public class LoginHandler extends BaseClickHandler {
     }
 
     private void toRegister(int resId) {
-        Intent intent = new Intent(loginActivity, RegisterActivity.class);
+        Intent intent = new Intent(activity, RegisterActivity.class);
         intent.putExtra("resId", resId);
         intent.putExtra("account", "");
-        loginActivity.startActivityForResult(intent, Int.reqCode_register);
+        activity.startActivityForResult(intent, Int.reqCode_register);
     }
 }
