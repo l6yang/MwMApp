@@ -11,7 +11,7 @@ import com.mwm.loyal.base.BaseProgressSubscriber;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAccountBinding;
-import com.mwm.loyal.handle.AccountHandler;
+import com.mwm.loyal.handler.AccountHandler;
 import com.mwm.loyal.imp.Progress;
 import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.ResUtil;

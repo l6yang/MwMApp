@@ -9,7 +9,7 @@
 
         <variable
             name="click"
-            type="com.mwm.loyal.handle.LoginHandler" />
+            type="com.mwm.loyal.handler.LoginHandler" />
 
         <variable
             name="drawable"

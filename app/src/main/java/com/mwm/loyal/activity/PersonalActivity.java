@@ -19,7 +19,7 @@ import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityPersonalBinding;
-import com.mwm.loyal.handle.PersonalHandler;
+import com.mwm.loyal.handler.PersonalHandler;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.ImageUtil;

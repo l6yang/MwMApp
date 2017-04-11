@@ -12,7 +12,7 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.databinding.ActivityLoginBinding;
-import com.mwm.loyal.handle.LoginHandler;
+import com.mwm.loyal.handler.LoginHandler;
 import com.mwm.loyal.imp.TextChangedListener;
 import com.mwm.loyal.service.UpdateService;
 import com.mwm.loyal.utils.FileUtil;

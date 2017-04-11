@@ -9,7 +9,7 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.databinding.ActivityRegisterBinding;
-import com.mwm.loyal.handle.RegisterHandler;
+import com.mwm.loyal.handler.RegisterHandler;
 import com.mwm.loyal.imp.TextChangedListener;
 import com.mwm.loyal.utils.ResUtil;
 

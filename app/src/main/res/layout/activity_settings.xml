@@ -9,7 +9,7 @@
 
         <variable
             name="click"
-            type="com.mwm.loyal.handle.SettingsHandler" />
+            type="com.mwm.loyal.handler.SettingsHandler" />
     </data>
 
     <RelativeLayout

@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityAboutBinding;
-import com.mwm.loyal.handle.AboutHandler;
+import com.mwm.loyal.handler.AboutHandler;
 import com.mwm.loyal.utils.ApkUtil;
 import com.mwm.loyal.utils.ResUtil;
 

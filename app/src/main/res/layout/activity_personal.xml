@@ -13,7 +13,7 @@
 
         <variable
             name="click"
-            type="com.mwm.loyal.handle.PersonalHandler" />
+            type="com.mwm.loyal.handler.PersonalHandler" />
 
         <variable
             name="drawable"

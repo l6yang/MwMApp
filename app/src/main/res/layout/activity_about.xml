@@ -9,7 +9,7 @@
 
         <variable
             name="click"
-            type="com.mwm.loyal.handle.AboutHandler" />
+            type="com.mwm.loyal.handler.AboutHandler" />
 
         <variable
             name="drawable"

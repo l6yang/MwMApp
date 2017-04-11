@@ -10,52 +10,43 @@ import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.utils.StringUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
-public class BaseActivityHandler<T> implements Contact {
+public abstract class BaseClickHandler<V extends ViewDataBinding> implements Contact {
     protected ProgressDialog progressDialog;
-    private BaseActivity baseActivity;
-    private ViewDataBinding binding;
+    protected BaseActivity activity;
+    protected V binding;
 
-    public BaseActivityHandler(BaseActivity baseActivity) {
-        this.baseActivity = baseActivity;
-        initDialog(baseActivity);
+    public BaseClickHandler(BaseActivity baseActivity) {
+        this(baseActivity, null);
     }
 
-    public BaseActivityHandler(BaseActivity baseActivity, ViewDataBinding binding) {
-        this.baseActivity = baseActivity;
+    public BaseClickHandler(BaseActivity baseActivity, V binding) {
+        this.activity = baseActivity;
         this.binding = binding;
         initDialog(baseActivity);
     }
 
-    public BaseActivity getActivity() {
-        return baseActivity;
-    }
-
-    public ViewDataBinding getBinding() {
-        return binding;
-    }
-
     public final String getString(@StringRes int resId) {
-        return baseActivity.getResources().getString(resId);
+        return activity.getResources().getString(resId);
     }
 
     public final void showToast(@StringRes int resId) {
-        ToastUtil.showToast(baseActivity, resId);
+        ToastUtil.showToast(activity, resId);
     }
 
     public final void showToast(CharSequence sequence) {
-        ToastUtil.showToast(baseActivity, getStrWithNull(sequence));
+        ToastUtil.showToast(activity, getStrWithNull(sequence));
     }
 
     public final void showToast(String text) {
-        ToastUtil.showToast(baseActivity, getStrWithNull(text));
+        ToastUtil.showToast(activity, getStrWithNull(text));
     }
 
     public final void showErrorDialog(String text, boolean finish) {
-        StringUtil.showErrorDialog(baseActivity, getStrWithNull(text), finish);
+        StringUtil.showErrorDialog(activity, getStrWithNull(text), finish);
     }
 
     public final void showDialog(String text, boolean finish) {
-        ToastUtil.showDialog(baseActivity, getStrWithNull(text), finish);
+        ToastUtil.showDialog(activity, getStrWithNull(text), finish);
     }
 
     protected final String getStrWithNull(Object object) {

@@ -1,4 +1,4 @@
-package com.mwm.loyal.handle;
+package com.mwm.loyal.handler;
 
 import android.app.Activity;
 import android.view.View;
@@ -7,27 +7,27 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.activity.AboutActivity;
 import com.mwm.loyal.activity.AccountActivity;
 import com.mwm.loyal.activity.SettingsActivity;
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.base.BaseClickHandler;
+import com.mwm.loyal.databinding.ActivitySettingsBinding;
 import com.mwm.loyal.utils.IntentUtil;
 
-public class SettingsHandler implements Contact {
-    private final SettingsActivity settingsActivity;
+public class SettingsHandler extends BaseClickHandler<ActivitySettingsBinding> {
 
     public SettingsHandler(SettingsActivity activity) {
-        settingsActivity = activity;
+        super(activity);
     }
 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.settings_about:
-                IntentUtil.toStartActivity(settingsActivity, AboutActivity.class);
+                IntentUtil.toStartActivity(activity, AboutActivity.class);
                 break;
             case R.id.settings_switch:
-                settingsActivity.setResult(Activity.RESULT_OK);
-                settingsActivity.finish();
+                activity.setResult(Activity.RESULT_OK);
+                activity.finish();
                 break;
             case R.id.settings_security:
-                IntentUtil.toStartActivityForResult(settingsActivity, AccountActivity.class, Int.reqCode_Settings_account);
+                IntentUtil.toStartActivityForResult(activity, AccountActivity.class, Int.reqCode_Settings_account);
                 break;
         }
     }

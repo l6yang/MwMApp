@@ -22,8 +22,8 @@ public class LoginBean extends BaseObservable {
     public ObservableBoolean editable = new ObservableBoolean();
 
     /**
-     * {@link com.mwm.loyal.handle.LoginHandler}
-     * {@link com.mwm.loyal.handle.RegisterHandler}
+     * {@link com.mwm.loyal.handler.LoginHandler}
+     * {@link com.mwm.loyal.handler.RegisterHandler}
      */
     public LoginBean(String account, String password) {
         this.account.set(account);
@@ -33,7 +33,7 @@ public class LoginBean extends BaseObservable {
     }
 
     /**
-     * {@link com.mwm.loyal.handle.RegisterHandler}
+     * {@link com.mwm.loyal.handler.RegisterHandler}
      */
     public LoginBean(String account, String password, boolean isServer, String param) {
         this.account.set(account);

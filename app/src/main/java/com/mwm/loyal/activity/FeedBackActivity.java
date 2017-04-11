@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityFeedBackBinding;
-import com.mwm.loyal.handle.FeedBackHandler;
+import com.mwm.loyal.handler.FeedBackHandler;
 import com.mwm.loyal.utils.ResUtil;
 
 import butterknife.BindView;

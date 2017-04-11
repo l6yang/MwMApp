@@ -1,4 +1,4 @@
-package com.mwm.loyal.handle;
+package com.mwm.loyal.handler;
 
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -6,21 +6,21 @@ import android.view.View;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.PersonalActivity;
 import com.mwm.loyal.activity.QrCodeActivity;
+import com.mwm.loyal.base.BaseClickHandler;
+import com.mwm.loyal.databinding.ActivityPersonalBinding;
 import com.mwm.loyal.libs.album.Album;
 import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.utils.IntentUtil;
 
-public class PersonalHandler {
-    private final PersonalActivity personalActivity;
-
+public class PersonalHandler extends BaseClickHandler<ActivityPersonalBinding> {
     public PersonalHandler(PersonalActivity activity) {
-        personalActivity = activity;
+        super(activity);
     }
 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.view_person_qr:
-                IntentUtil.toStartActivity(personalActivity, QrCodeActivity.class);
+                IntentUtil.toStartActivity(activity, QrCodeActivity.class);
                 break;
             case R.id.simple_personal_icon:
                 selectImage();
@@ -40,8 +40,8 @@ public class PersonalHandler {
         // Album.startAlbum(this, Int.reqCode_Main_UCrop); // 第三个参数不填的话，可以选择无数个。
 
         // 3. 指定风格，并指定选择数量，如果不想限制数量传入Integer.MAX_VALUE;
-        Album.startAlbum(personalActivity, Contact.Int.reqCode_Main_UCrop, 1                                                         // 指定选择数量。
-                , ContextCompat.getColor(personalActivity, R.color.colorPrimary)        // 指定Toolbar的颜色。
-                , ContextCompat.getColor(personalActivity, R.color.colorPrimaryDark));  // 指定状态栏的颜色。
+        Album.startAlbum(activity, Contact.Int.reqCode_Main_UCrop, 1                                                         // 指定选择数量。
+                , ContextCompat.getColor(activity, R.color.colorPrimary)        // 指定Toolbar的颜色。
+                , ContextCompat.getColor(activity, R.color.colorPrimaryDark));  // 指定状态栏的颜色。
     }
 }

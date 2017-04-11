@@ -1,4 +1,4 @@
-package com.mwm.loyal.handle;
+package com.mwm.loyal.handler;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.RegisterActivity;
-import com.mwm.loyal.base.BaseActivityHandler;
+import com.mwm.loyal.base.BaseClickHandler;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityRegisterBinding;
@@ -19,13 +19,11 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class RegisterHandler extends BaseActivityHandler {
-    private final ActivityRegisterBinding mBinding;
+public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> {
     private final boolean fromLogin;
 
     public RegisterHandler(RegisterActivity activity, ActivityRegisterBinding binding, boolean fromLogin) {
-        super(activity);
-        mBinding = binding;
+        super(activity,binding);
         this.fromLogin = fromLogin;
         progressDialog.setMessage("提交信息中...");
     }
@@ -33,22 +31,22 @@ public class RegisterHandler extends BaseActivityHandler {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.account_clear:
-                mBinding.account.getText().clear();
+                binding.account.getText().clear();
                 break;
             case R.id.password_clear:
-                mBinding.password.getText().clear();
+                binding.password.getText().clear();
                 break;
             case R.id.repeat_clear:
-                mBinding.repeatMm.getText().clear();
+                binding.repeatMm.getText().clear();
                 break;
             case R.id.nickname_clear:
-                mBinding.nickname.getText().clear();
+                binding.nickname.getText().clear();
                 break;
             case R.id.pub_submit:
-                String account = mBinding.account.getText().toString().trim();
-                String nickname = mBinding.nickname.getText().toString().trim();
-                String password = mBinding.password.getText().toString().trim();
-                String repeat = mBinding.repeatMm.getText().toString().trim();
+                String account = binding.account.getText().toString().trim();
+                String nickname = binding.nickname.getText().toString().trim();
+                String password = binding.password.getText().toString().trim();
+                String repeat = binding.repeatMm.getText().toString().trim();
                 if (fromLogin) {
                     doRegister(account, nickname, password, repeat);
                 } else doResetPassWord(account, nickname, password, repeat);
@@ -128,9 +126,9 @@ public class RegisterHandler extends BaseActivityHandler {
                                         Intent intent = new Intent();
                                         intent.putExtra("account", loginBean.account.get());
                                         if (!fromLogin) {
-                                            getActivity().setResult(Activity.RESULT_OK, intent);
+                                            activity.setResult(Activity.RESULT_OK, intent);
                                         }
-                                        getActivity().finish();
+                                        activity.finish();
                                     }
                                 }, 1000);
                             } else showDialog(resultBean.getResultMsg(), false);

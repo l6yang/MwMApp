@@ -1,4 +1,4 @@
-package com.mwm.loyal.handle;
+package com.mwm.loyal.handler;
 
 import android.content.Intent;
 import android.text.TextUtils;
@@ -9,7 +9,7 @@ import com.mwm.loyal.activity.ForgetActivity;
 import com.mwm.loyal.activity.LoginActivity;
 import com.mwm.loyal.activity.MainActivity;
 import com.mwm.loyal.activity.RegisterActivity;
-import com.mwm.loyal.base.BaseActivityHandler;
+import com.mwm.loyal.base.BaseClickHandler;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityLoginBinding;
@@ -27,7 +27,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class LoginHandler extends BaseActivityHandler {
+public class LoginHandler extends BaseClickHandler {
     private final LoginActivity loginActivity;
     private final ActivityLoginBinding mBinding;
 

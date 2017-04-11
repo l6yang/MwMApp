@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivitySettingsBinding;
-import com.mwm.loyal.handle.SettingsHandler;
+import com.mwm.loyal.handler.SettingsHandler;
 import com.mwm.loyal.utils.ResUtil;
 
 import butterknife.BindView;
