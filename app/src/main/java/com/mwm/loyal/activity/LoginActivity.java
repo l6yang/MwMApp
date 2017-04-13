@@ -18,7 +18,6 @@ import com.mwm.loyal.service.UpdateService;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.ToastUtil;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
 import com.yanzhenjie.permission.PermissionYes;
@@ -77,16 +76,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
 
     @Override
     public void showRequestPermissionRationale(int requestCode, Rationale rationale) {
-        String tips = "";
-        switch (requestCode) {
-            case Int.permissionMemory:
-                tips = "为确保程序的正常使用，请开启存储权限，否则导致程序更新异常";
-                break;
-            case Int.permissionReadPhone:
-                tips = "为确保程序的正常使用，请开启电话权限(获取本机识别码等)";
-                break;
-        }
-        ToastUtil.permissionDialog(this, tips, rationale);
+        AndPermission.rationaleDialog(this, rationale).show();
     }
 
     @PermissionYes(Int.permissionReadPhone)
@@ -100,7 +90,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
             // 第一种：用默认的提示语。
             AndPermission.defaultSettingDialog(this, Int.permissionReadPhone).show();
         } else {
-            ToastUtil.showDialog(this, "您已拒绝开启电话权限，程序将退出", true);
+            showDialog("您已拒绝\"获取设备状态权限\"，程序将退出", true);
         }
     }
 
@@ -119,7 +109,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
             // 第一种：用默认的提示语。
             AndPermission.defaultSettingDialog(this, Int.permissionMemory).show();
         } else {
-            showDialog("您已拒绝开启存储权限，程序将退出", true);
+            showDialog("您已拒绝\"存储权限\"，程序将退出", true);
         }
     }
 
