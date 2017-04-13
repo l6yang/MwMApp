@@ -1,5 +1,6 @@
 package com.mwm.loyal.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -240,6 +241,14 @@ public class ApkUtil {
 
     public static String getDeviceID() {
         return Build.MANUFACTURER + "(" + Build.MODEL + ")";
+    }
+
+    /**
+     * 获取手机状态权限之后即可读取到序列号信息
+     */
+    @SuppressLint("HardwareIds")
+    public static String getDeviceSerial() {
+        return android.os.Build.SERIAL;
     }
 
     //不过我自己在做项目过程中，用另外一种方法也解决了android4.0获取IP错误的问题:
