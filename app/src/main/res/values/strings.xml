@@ -5,15 +5,15 @@
     <string name="key_default">未填写</string>
     <string name="nickname">昵称</string>
     <string name="qr">名片</string>
-    <string name="signature">签名</string>
+    <string name="sign">签名</string>
     <string name="app_name">MwM</string>
     <string name="login">登录</string>
-    <string name="hint_yhmc">用户名称(仅限字母和数字)</string>
+    <string name="hint_yhmc">账号名称(仅限字母和数字)</string>
     <string name="hint_yhmm">用户密码</string>
     <string name="hint_server">服务器地址</string>
-    <string name="hint_old_mm">请输入旧密码</string>
+    <string name="hint_old_mm">请输入密码</string>
     <string name="hint_new_mm">请输入新密码</string>
-    <string name="hint_nickname">昵称</string>
+    <string name="hint_nickname">昵称(可不填写，默认使用账号名称)</string>
     <string name="repeat_yhmm">再次输入密码</string>
     <string name="action_voice">语音合成</string>
     <string name="action_settings">设置</string>
@@ -100,7 +100,7 @@
     <string name="on">on</string>
     <string name="off">off</string>
     <string name="city_query_hint">输入城市名或首字母查询</string>
-    <string name="cancel">取消</string>
+    <string name="dialogCancel">取消</string>
     <string name="action_sign_in">Sign in</string>
     <string name="button_extract">Extract</string>
     <string name="button_share">Share</string>
@@ -109,4 +109,7 @@
     <string name="dialog_extract_fail_description">提取APK文件失败，请重启之后再试.</string>
     <string name="send_to">Send \"%s\" using</string>
     <string name="skip">跳过丨%1$ds</string>
+    <string name="destroy_account">注销账户</string>
+    <string name="destroy_tips">温馨提示</string>
+    <string name="destroy_message">请您确认是否注销“%1$s”？</string>
 </resources>

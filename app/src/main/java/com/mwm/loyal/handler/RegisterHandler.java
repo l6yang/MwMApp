@@ -9,22 +9,28 @@ import android.view.View;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.RegisterActivity;
 import com.mwm.loyal.base.BaseClickHandler;
+import com.mwm.loyal.base.BaseProgressSubscriber;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityRegisterBinding;
+import com.mwm.loyal.imp.OperaOnClickListener;
+import com.mwm.loyal.imp.SubscribeListener;
+import com.mwm.loyal.utils.OperateDialog;
 import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.ToastUtil;
 
 import rx.Observable;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
-public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> {
+public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> implements SubscribeListener<ResultBean>, OperaOnClickListener {
     private final boolean fromLogin;
+    private final String extra;
+    private final int resultReg = -1;
+    private final int resultDes = 0;
 
-    public RegisterHandler(RegisterActivity activity, ActivityRegisterBinding binding, boolean fromLogin) {
-        super(activity,binding);
-        this.fromLogin = fromLogin;
+    public RegisterHandler(RegisterActivity activity, ActivityRegisterBinding binding) {
+        super(activity, binding);
+        this.fromLogin = TextUtils.isEmpty(activity.getIntent().getStringExtra("account"));
+        this.extra = activity.getIntent().getStringExtra("extra");
         progressDialog.setMessage("提交信息中...");
     }
 
@@ -43,15 +49,33 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> {
                 binding.nickname.getText().clear();
                 break;
             case R.id.pub_submit:
+                ToastUtil.hideInput(activity, binding.account.getWindowToken());
                 String account = binding.account.getText().toString().trim();
                 String nickname = binding.nickname.getText().toString().trim();
                 String password = binding.password.getText().toString().trim();
                 String repeat = binding.repeatMm.getText().toString().trim();
                 if (fromLogin) {
                     doRegister(account, nickname, password, repeat);
-                } else doResetPassWord(account, nickname, password, repeat);
+                } else {
+                    if (TextUtils.isEmpty(extra))
+                        doResetPassWord(account, nickname, password, repeat);
+                    else destroyAccount(account, nickname);
+                }
                 break;
         }
+    }
+
+    private void destroyAccount(final String account, final String password) {
+        if (TextUtils.isEmpty(account)) {
+            showToast("用户名不能为空");
+            return;
+        }
+        if (!isValue(password)) {
+            showToast("密码长度少于6位");
+            return;
+        }
+        OperateDialog operateDialog = ToastUtil.operateDialog(activity, this);
+        operateDialog.setTitle(R.string.dialog_Title).setMessage(String.format(getString(R.string.destroy_message), account)).show();
     }
 
     private void doRegister(String account, String nickname, String password, String repeat) {
@@ -63,15 +87,11 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> {
             showToast("密码长度少于6位");
             return;
         }
-        if (TextUtils.isEmpty(nickname)) {
-            showToast("请填写您的昵称");
-            return;
-        }
         if (!TextUtils.equals(password, repeat)) {
             showToast("两次输入密码不一致");
             return;
         }
-        doAsyncTask(nickname, new LoginBean(account, password, false, nickname));
+        doAsyncTask(new LoginBean(account, password, false, TextUtils.isEmpty(nickname) ? account : nickname));
     }
 
     private void doResetPassWord(String account, String nickname, String password, String repeat) {
@@ -91,54 +111,80 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> {
             showToast("两次输入密码不一致");
             return;
         }
-        doAsyncTask(nickname, new LoginBean(account, password));
+        doAsyncTask(new LoginBean(account, password, nickname));
     }
 
-    private void doAsyncTask(String oldPassWord, final LoginBean loginBean) {
-        if (progressDialog != null)
-            progressDialog.show();
-        RetrofitManage.ObservableServer server = RetrofitManage.getInstance().getObservableServer();
-        Observable<ResultBean> observable = fromLogin ? server.doRegister(loginBean.toString()) : server.doUpdateAccount(loginBean.toString(), "password", oldPassWord);
-        observable.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ResultBean>() {
-                    @Override
-                    public void onCompleted() {
-                        if (progressDialog != null)
-                            progressDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if (progressDialog != null)
-                            progressDialog.dismiss();
-                        showErrorDialog(e.toString(), false);
-                    }
-
-                    @Override
-                    public void onNext(ResultBean resultBean) {
-                        if (resultBean != null) {
-                            if (resultBean.getResultCode() == 1) {
-                                showToast(fromLogin ? "注册成功,请牢记用户名和密码" : "修改成功，请重新登录");
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Intent intent = new Intent();
-                                        intent.putExtra("account", loginBean.account.get());
-                                        if (!fromLogin) {
-                                            activity.setResult(Activity.RESULT_OK, intent);
-                                        }
-                                        activity.finish();
-                                    }
-                                }, 1000);
-                            } else showDialog(resultBean.getResultMsg(), false);
-                        } else
-                            showErrorDialog("解析异常", false);
-                    }
-                });
+    private void doAsyncTask(LoginBean loginBean) {
+        BaseProgressSubscriber<ResultBean> subscriber = new BaseProgressSubscriber<>(activity, resultReg, RegisterHandler.this);
+        Observable<ResultBean> observable = fromLogin ? subscriber.doRegister(loginBean.toString()) : subscriber.doUpdateAccount(loginBean.toString());
+        RetrofitManage.rxExecuted(observable, subscriber);
     }
 
     private boolean isValue(String string) {
         return string.length() >= 6;
+    }
+
+    @Override
+    public void onResult(int what, ResultBean resultBean) {
+        final String account = binding.account.getText().toString().trim();
+        final String password = binding.password.getText().toString().trim();
+        switch (what) {
+            case resultReg:
+                if (resultBean != null) {
+                    if (resultBean.getResultCode() == 1) {
+                        showToast(fromLogin ? "注册成功,请牢记用户名和密码" : "修改成功，请重新登录");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent();
+                                intent.putExtra("account", account);
+                                intent.putExtra("password", fromLogin ? password : "");
+                                activity.setResult(Activity.RESULT_OK, intent);
+                                activity.finish();
+                            }
+                        }, 1000);
+                    } else showDialog(resultBean.getResultMsg(), false);
+                } else
+                    showErrorDialog("解析" + (fromLogin ? "注册" : "修改") + "信息异常", false);
+                break;
+            case resultDes:
+                if (resultBean != null) {
+                    if (resultBean.getResultCode() == 1) {
+                        showToast("账号已注销");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent();
+                                intent.putExtra("account", "");
+                                activity.setResult(Activity.RESULT_OK, intent);
+                                activity.finish();
+                            }
+                        }, 1000);
+                    } else showDialog(resultBean.getResultMsg(), false);
+                } else
+                    showErrorDialog("解析注销信息异常", false);
+                break;
+        }
+    }
+
+    @Override
+    public void onError(int what, Throwable e) {
+        showErrorDialog(e.toString(), false);
+    }
+
+    @Override
+    public void onCompleted(int what) {
+    }
+
+    @Override
+    public void dialogCancel() {
+    }
+
+    @Override
+    public void goNext() {
+        String account = binding.account.getText().toString().trim();
+        String nickname = binding.nickname.getText().toString().trim();
+        BaseProgressSubscriber<ResultBean> subscriber = new BaseProgressSubscriber<>(activity, resultDes, this);
+        RetrofitManage.rxExecuted(subscriber.destroyAccount(new LoginBean(account, nickname).toString()), subscriber);
     }
 }

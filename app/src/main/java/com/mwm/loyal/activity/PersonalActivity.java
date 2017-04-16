@@ -15,11 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
+import com.mwm.loyal.base.BaseProgressSubscriber;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityPersonalBinding;
 import com.mwm.loyal.handler.PersonalHandler;
+import com.mwm.loyal.imp.SubscribeListener;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.ImageUtil;
@@ -38,11 +40,11 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 
-public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding> implements View.OnClickListener {
+public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding> implements View.OnClickListener, SubscribeListener<ResultBean> {
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_menu)
-    ImageView pubFilter;
+    ImageView pubMenu;
     @BindView(R.id.pub_title)
     TextView pubTitle;
     private LoginBean loginBean;
@@ -57,13 +59,14 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
     public void afterOnCreate() {
         binding.setDrawable(ResUtil.getBackground(this));
         binding.setClick(new PersonalHandler(this));
-        loginBean = new LoginBean();
-        loginBean.account.set(getIntent().getStringExtra("account"));
-        loginBean.nickname.set(getIntent().getStringExtra("nickname"));
-        loginBean.signature.set(getIntent().getStringExtra("signature"));
-        loginBean.editable.set(false);
-        binding.setLoginBean(loginBean);
+        queryAccount();
         initViews();
+    }
+
+    private void queryAccount() {
+        String account=getIntent().getStringExtra("account");
+        BaseProgressSubscriber<ResultBean> querySubscribe = new BaseProgressSubscriber<>(this, -1, this);
+        RetrofitManage.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
     }
 
     @Override
@@ -73,8 +76,8 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
 
     private void initViews() {
         pubTitle.setText("个人资料");
-        pubFilter.setImageResource(R.drawable.src_edit_img);
-        pubFilter.setOnClickListener(this);
+        pubMenu.setImageResource(R.drawable.src_edit_img);
+        pubMenu.setOnClickListener(this);
         pubBack.setOnClickListener(this);
         showIcon();
     }
@@ -82,14 +85,14 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
     private void editData() {
         if (!loginBean.editable.get()) {
             loginBean.editable.set(true);
-            pubFilter.setImageResource(R.drawable.src_ok_save_img);
+            pubMenu.setImageResource(R.drawable.src_ok_save_img);
             return;
         }
-        pubFilter.setImageResource(R.drawable.src_edit_img);
+        pubMenu.setImageResource(R.drawable.src_edit_img);
         String nickname = binding.personalNickname.getText().toString().trim();
         String signature = binding.personalSignature.getText().toString().trim();
         loginBean.nickname.set(nickname);
-        loginBean.signature.set(signature);
+        loginBean.sign.set(signature);
         if (mUpdateAuth != null)
             return;
         mUpdateAuth = new UpdateAccount(loginBean);
@@ -104,9 +107,35 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
                 finish();
                 break;
             case R.id.pub_menu:
+                ToastUtil.hideInput(this, binding.personalNickname.getWindowToken());
                 editData();
                 break;
         }
+    }
+
+    @Override
+    public void onResult(int what, ResultBean resultBean) {
+        if (resultBean != null) {
+            if (resultBean.getResultCode() == 1) {
+                loginBean = new LoginBean();
+                loginBean.account.set(getIntent().getStringExtra("account"));
+                loginBean.nickname.set(resultBean.getResultMsg());
+                loginBean.sign.set(resultBean.getExceptMsg());
+                loginBean.editable.set(false);
+                binding.setLoginBean(loginBean);
+            } else showDialog(resultBean.getResultMsg(), false);
+        } else
+            showErrorDialog("解析个人信息失败", false);
+    }
+
+    @Override
+    public void onError(int what, Throwable e) {
+        showErrorDialog(e.toString(), true);
+    }
+
+    @Override
+    public void onCompleted(int what) {
+
     }
 
     private class UpdateAccount extends AsyncTask<Void, View, String> {
@@ -332,9 +361,10 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
     }
 
     private void showIcon() {
+        String account = getIntent().getStringExtra("account");
         if (binding.simplePersonalIcon == null)
             return;
-        binding.simplePersonalIcon.setImageURI(Uri.parse(Str.getServerUrl(Str.method_showIcon) + "&account=" + loginBean.account.get()));
+        binding.simplePersonalIcon.setImageURI(Uri.parse(Str.getServerUrl(Str.method_showIcon) + "&account=" + account));
     }
 
     @Override

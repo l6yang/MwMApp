@@ -4,30 +4,27 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
-import android.os.Message;
 
-import com.mwm.loyal.imp.Progress.ProgressCancelListener;
+import com.mwm.loyal.imp.ProgressCancelListener;
 
 public class DialogHandler extends Handler implements DialogInterface.OnCancelListener {
-    public static final int dialog_show = -5;
-    public static final int dialog_dismiss = -6;
     private ProgressDialog progressDialog;
     private Context context;
-    private ProgressCancelListener cancelListener;
+    private ProgressCancelListener listener;
 
-    public DialogHandler(Context context, ProgressCancelListener mProgressCancelListener) {
+    private DialogHandler() {
+    }
+
+    public DialogHandler(Context context, ProgressCancelListener cancelListener) {
         this.context = context;
         initDialog();
-        this.cancelListener = mProgressCancelListener;
+        this.listener = cancelListener;
     }
 
     private void initDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(context);
             progressDialog.setOnCancelListener(this);
-            if (!progressDialog.isShowing()) {
-                progressDialog.show();
-            }
         }
     }
 
@@ -41,44 +38,101 @@ public class DialogHandler extends Handler implements DialogInterface.OnCancelLi
             progressDialog.setTitle(resId);
     }
 
-    public void setCancelable(boolean flag) {
-        if (progressDialog != null)
-            progressDialog.setCancelable(flag);
-    }
-
     public void setDialogMessage(CharSequence message) {
         if (progressDialog != null)
             progressDialog.setMessage(message);
     }
 
-    public void setCanceledOnTouchOutside(boolean cancel) {
+    private void setTitle(int resId) {
+        if (progressDialog != null)
+            progressDialog.setTitle(resId);
+    }
+
+    private void setTitle(CharSequence title) {
+        if (progressDialog != null)
+            progressDialog.setTitle(title);
+    }
+
+    private void setCancelable(boolean flag) {
+        if (progressDialog != null)
+            progressDialog.setCancelable(flag);
+    }
+
+    private void setMessage(CharSequence message) {
+        if (progressDialog != null)
+            progressDialog.setMessage(message);
+    }
+
+    private void setCanceledOnTouchOutside(boolean cancel) {
         if (progressDialog != null)
             progressDialog.setCanceledOnTouchOutside(cancel);
     }
 
     private void dismissDialog() {
-        if (progressDialog != null) {
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
             progressDialog = null;
         }
     }
 
-    @Override
-    public void handleMessage(Message msg) {
-        super.handleMessage(msg);
-        switch (msg.what) {
-            case dialog_show:
-                initDialog();
-                break;
-            case dialog_dismiss:
-                dismissDialog();
-                break;
+    private void showDialog() {
+        if (null != progressDialog && !progressDialog.isShowing()) {
+            progressDialog.show();
         }
     }
 
     @Override
     public void onCancel(DialogInterface dialogInterface) {
-        if (cancelListener != null)
-            cancelListener.onCancelProgress();
+        if (listener != null)
+            listener.onCancelProgress();
+    }
+
+    public static final class Builder {
+        private Context mContext;
+        private ProgressCancelListener listener;
+        private DialogHandler handler;
+
+        public Builder(Context context, ProgressCancelListener cancelListener) {
+            this.mContext = context;
+            this.listener = cancelListener;
+            handler = new DialogHandler(mContext, listener);
+        }
+
+        public Builder setMessage(CharSequence sequence) {
+            handler.setMessage(sequence);
+            return this;
+        }
+
+        public Builder setTitle(CharSequence title) {
+            handler.setTitle(title);
+            return this;
+        }
+
+        public Builder setTitle(int resId) {
+            handler.setTitle(resId);
+            return this;
+        }
+
+        public Builder setCancelable(boolean cancelable) {
+            handler.setCancelable(cancelable);
+            return this;
+        }
+
+        public Builder setCanceledOnTouchOutside(boolean outsideCancel) {
+            handler.setCanceledOnTouchOutside(outsideCancel);
+            return this;
+        }
+
+        public DialogHandler getHandler() {
+            return handler;
+        }
+
+        public void show() {
+            handler.showDialog();
+        }
+
+        public void dismiss() {
+            handler.dismissDialog();
+        }
     }
 }

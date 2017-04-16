@@ -29,7 +29,7 @@ public class SimpleUCropActivity extends AppCompatActivity implements View.OnCli
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_menu)
-    ImageView pubFilter;
+    ImageView pubMenu;
     @BindView(R.id.btn_test)
     Button test;
 
@@ -43,10 +43,10 @@ public class SimpleUCropActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void initViews() {
-        pubFilter.setImageResource(R.drawable.src_ok_save_img);
+        pubMenu.setImageResource(R.drawable.src_ok_save_img);
         pubTitle.setText("图片裁剪");
         pubBack.setOnClickListener(this);
-        pubFilter.setOnClickListener(this);
+        pubMenu.setOnClickListener(this);
         test.setOnClickListener(this);
     }
 

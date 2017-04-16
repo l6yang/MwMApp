@@ -152,7 +152,7 @@
                         android:paddingRight="8dp"
                         android:paddingStart="8dp"
                         android:paddingTop="8dp"
-                        android:text="@string/signature"
+                        android:text="@string/sign"
                         android:textColor="@color/text_personal"
                         android:textSize="@dimen/text_sp_18" />
 
@@ -170,8 +170,8 @@
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
                             android:paddingStart="8dp"
-                            android:text="@{StringUtil.isEmpty(loginBean.signature)?@string/key_default:loginBean.signature}"
-                            android:textColor="@{StringUtil.isEmpty(loginBean.signature)?@color/text_personal:@color/black}"
+                            android:text="@{StringUtil.isEmpty(loginBean.sign)?@string/key_default:loginBean.sign}"
+                            android:textColor="@{StringUtil.isEmpty(loginBean.sign)?@color/text_personal:@color/black}"
                             android:textSize="@dimen/text_sp_18"
                             android:visibility="@{loginBean.editable?View.GONE:View.VISIBLE}" />
 
@@ -189,7 +189,7 @@
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
                             android:paddingStart="8dp"
-                            android:text="@{loginBean.signature}"
+                            android:text="@{loginBean.sign}"
                             android:textColor="@color/text_personal"
                             android:textSize="@dimen/text_sp_18"
                             android:visibility="@{loginBean.editable?View.VISIBLE:View.GONE}" />

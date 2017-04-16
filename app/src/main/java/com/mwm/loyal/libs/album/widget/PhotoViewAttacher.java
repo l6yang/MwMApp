@@ -448,7 +448,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
                         parent.requestDisallowInterceptTouchEvent(true);
                     }
 
-                    // If we're flinging, and the user presses down, cancel
+                    // If we're flinging, and the user presses down, dialogCancel
                     // fling
                     cancelFling();
                     break;

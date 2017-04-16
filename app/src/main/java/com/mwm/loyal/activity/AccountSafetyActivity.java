@@ -11,23 +11,20 @@ import com.mwm.loyal.base.BaseProgressSubscriber;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAccountBinding;
-import com.mwm.loyal.handler.AccountHandler;
-import com.mwm.loyal.imp.Progress;
-import com.mwm.loyal.utils.GsonUtil;
+import com.mwm.loyal.handler.AccountSafetyHandler;
+import com.mwm.loyal.imp.SubscribeListener;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
-import com.mwm.loyal.utils.StringUtil;
 
 import butterknife.BindView;
-import rx.Observable;
 
-public class AccountActivity extends BaseSwipeActivity<ActivityAccountBinding> implements View.OnClickListener, Progress.SubscribeListener<String> {
+public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBinding> implements View.OnClickListener, SubscribeListener<ResultBean> {
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_menu)
-    ImageView pubFilter;
+    ImageView pubMenu;
 
     @Override
     protected int getLayoutRes() {
@@ -36,7 +33,7 @@ public class AccountActivity extends BaseSwipeActivity<ActivityAccountBinding> i
 
     @Override
     public void afterOnCreate() {
-        binding.setClick(new AccountHandler(this, binding));
+        binding.setClick(new AccountSafetyHandler(this, binding));
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();
         checkLocked();
@@ -49,7 +46,7 @@ public class AccountActivity extends BaseSwipeActivity<ActivityAccountBinding> i
 
     private void initViews() {
         pubTitle.setText("账号与安全");
-        pubFilter.setVisibility(View.GONE);
+        pubMenu.setVisibility(View.GONE);
         pubBack.setOnClickListener(this);
         binding.accountDeviceLock.setOnClickListener(this);
     }
@@ -79,17 +76,18 @@ public class AccountActivity extends BaseSwipeActivity<ActivityAccountBinding> i
 
     private void checkLocked() {
         String account = getIntent().getStringExtra("account");
-        Observable<String> observable = RetrofitManage.getInstance().getObservableServer().doAccountLocked(account);
-        BaseProgressSubscriber<String> subscriber = new BaseProgressSubscriber<>(this, "doing...", true, false, true);
-        subscriber.setSubscribeListener(this);
-        RetrofitManage.doEnqueueStr(observable, subscriber);
+        BaseProgressSubscriber<ResultBean> subscriber = new BaseProgressSubscriber<>(this, this);
+        RetrofitManage.rxExecuted(subscriber.doAccountLocked(account), subscriber);
     }
 
     @Override
-    public void onResult(String result) {
-        ResultBean bean = GsonUtil.getBeanFromJson(result, ResultBean.class);
-        System.out.println(result);
-        toggleLocked(TextUtils.equals(StringUtil.replaceNull(bean.getResultMsg()), "1"));
+    public void onResult(int what, ResultBean resultBean) {
+        if (resultBean != null) {
+            if (resultBean.getResultCode() == 1) {
+                toggleLocked(TextUtils.equals(replaceNull(resultBean.getResultMsg()), "1"));
+            } else showDialog(resultBean.getResultMsg(), false);
+        } else
+            showErrorDialog("解析设备锁信息失败", false);
     }
 
     private void toggleLocked(boolean locked) {
@@ -103,12 +101,12 @@ public class AccountActivity extends BaseSwipeActivity<ActivityAccountBinding> i
     }
 
     @Override
-    public void onError(Throwable e) {
-        System.out.println("onError::"+ e.toString());
+    public void onError(int what, Throwable e) {
+        showErrorDialog(e.toString(),false);
     }
 
     @Override
-    public void onCompleted() {
+    public void onCompleted(int what) {
 
     }
 }

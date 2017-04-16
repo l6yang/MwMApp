@@ -9,7 +9,8 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseProgressSubscriber;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityForgetBinding;
-import com.mwm.loyal.imp.Progress;
+import com.mwm.loyal.imp.ObservableServer;
+import com.mwm.loyal.imp.SubscribeListener;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.StringUtil;
@@ -17,13 +18,13 @@ import com.mwm.loyal.utils.StringUtil;
 import butterknife.BindView;
 import rx.Observable;
 
-public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> implements View.OnClickListener, Progress.SubscribeListener<String> {
+public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> implements View.OnClickListener, SubscribeListener<String> {
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_menu)
-    ImageView pubFilter;
+    ImageView pubMenu;
     @BindView(R.id.forget_test)
     Button button;
 
@@ -46,7 +47,7 @@ public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> imp
     private void initViews() {
         pubTitle.setText("重置密码");
         pubBack.setOnClickListener(this);
-        pubFilter.setVisibility(View.GONE);
+        pubMenu.setVisibility(View.GONE);
         button.setOnClickListener(this);
     }
 
@@ -63,27 +64,26 @@ public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> imp
                 finish();
                 break;
             case R.id.forget_test:
-                RetrofitManage.ObservableServer server = RetrofitManage.getInstance().getObservableServer();
+                ObservableServer server = RetrofitManage.getInstance().getObservableServer();
                 Observable<String> call = server.doTestLogin("loyal", "111111");
-                BaseProgressSubscriber<String> subscriber = new BaseProgressSubscriber<>(this, "doing...", true, false, true);
-                subscriber.setSubscribeListener(this);
-                RetrofitManage.doEnqueueStr(call, subscriber);
+                BaseProgressSubscriber<String> subscriber = new BaseProgressSubscriber<>(this, this);
+                RetrofitManage.rxExecuted(call, subscriber);
                 break;
         }
     }
 
     @Override
-    public void onResult(String s) {
+    public void onResult(int what, String s) {
         System.out.println("onResult--" + s);
     }
 
     @Override
-    public void onError(Throwable e) {
+    public void onError(int what, Throwable e) {
         StringUtil.showErrorToast(this, e.toString());
         System.out.println("onError--" + e.toString());
     }
 
     @Override
-    public void onCompleted() {
+    public void onCompleted(int what) {
     }
 }

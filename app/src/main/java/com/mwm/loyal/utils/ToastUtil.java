@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mwm.loyal.R;
-import com.yanzhenjie.permission.Rationale;
+import com.mwm.loyal.imp.OperaOnClickListener;
 
 public class ToastUtil {
     private static Toast toast = null;
@@ -111,42 +112,17 @@ public class ToastUtil {
         btn_cancel.setText(isFinish ? "取消" : "确定");
     }
 
-    public static void permissionDialog(Context context, String message, final Rationale rationale) {
-        final AlertDialog mDialog = new AlertDialog.Builder(context).create();
-        if (mDialog.isShowing())
-            mDialog.dismiss();
-        mDialog.show();
-        mDialog.setCanceledOnTouchOutside(true);
-        mDialog.setCancelable(false);
-        if (mDialog.getWindow() != null)
-            mDialog.getWindow().setContentView(R.layout.dialog_permission);
-        TextView mContent = (TextView) mDialog.getWindow().findViewById(R.id.dialog_tv_content);
-        mContent.setText(message);
-        Button btn_ok = (Button) mDialog.getWindow().findViewById(R.id.dialog_btn_ok);
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mDialog.isShowing())
-                    mDialog.dismiss();
-                if (rationale != null)
-                    rationale.resume();// 用户同意继续申请。
-            }
-        });
-        Button btn_cancel = (Button) mDialog.getWindow().findViewById(R.id.dialog_btn_cancel);
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mDialog.isShowing())
-                    mDialog.dismiss();
-                if (rationale != null)
-                    rationale.cancel(); // 用户拒绝申请。
-            }
-        });
+    public static
+    @NonNull
+    OperateDialog operateDialog(@NonNull Context context, OperaOnClickListener listener) {
+        return new OperateDialog(context, listener);
     }
 
     public static void hideInput(Context context, IBinder token) {
         InputMethodManager im = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
+        System.out.println(im.isAcceptingText());
+        System.out.println(im.isActive());
     }
 
     public static void alwaysHideInput(Context context, IBinder token) {

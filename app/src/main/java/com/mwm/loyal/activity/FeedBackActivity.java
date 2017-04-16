@@ -6,23 +6,25 @@ import android.widget.TextView;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
-import com.mwm.loyal.databinding.ActivityFeedBackBinding;
+import com.mwm.loyal.databinding.ActivityFeedbackBinding;
 import com.mwm.loyal.handler.FeedBackHandler;
+import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.ToastUtil;
 
 import butterknife.BindView;
 
-public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedBackBinding> implements View.OnClickListener {
+public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedbackBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)
     ImageView pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_menu)
-    ImageView pubFilter;
+    ImageView pubMenu;
 
     @Override
     protected int getLayoutRes() {
-        return R.layout.activity_feed_back;
+        return R.layout.activity_feedback;
     }
 
     @Override
@@ -38,7 +40,8 @@ public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedBackBinding>
     }
 
     private void initViews() {
-        pubFilter.setVisibility(View.GONE);
+        pubMenu.setImageResource(R.drawable.src_history_img);
+        pubMenu.setOnClickListener(this);
         pubBack.setOnClickListener(this);
         pubTitle.setText("问题反馈");
     }
@@ -54,6 +57,10 @@ public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedBackBinding>
             case R.id.pub_back:
                 finish();
                 break;
+            case R.id.pub_menu:
+                IntentUtil.toStartActivity(this, ListFeedBackActivity.class);
+                break;
         }
+        ToastUtil.hideInput(this,binding.editFeedBack.getWindowToken());
     }
 }

@@ -26,10 +26,12 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseActivity;
+import com.mwm.loyal.base.BaseProgressSubscriber;
 import com.mwm.loyal.beans.ContactBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.beans.WeatherBean;
 import com.mwm.loyal.databinding.ActivityMainBinding;
+import com.mwm.loyal.imp.SubscribeListener;
 import com.mwm.loyal.service.LocationService;
 import com.mwm.loyal.utils.DisplayUtil;
 import com.mwm.loyal.utils.ImageUtil;
@@ -58,7 +60,7 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding> implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, RationaleListener, AppBarLayout.OnOffsetChangedListener {
+public class MainActivity extends BaseActivity<ActivityMainBinding> implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, RationaleListener, AppBarLayout.OnOffsetChangedListener, SubscribeListener<ResultBean> {
     @BindView(R.id.pub_toolbar)
     Toolbar toolbar;
     @BindView(R.id.pub_drawer_layout)
@@ -141,7 +143,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
                 IntentUtil.toStartActivityForResult(this, QrCodeActivity.class, Int.reqCode_Main_Zing);
                 break;
             case R.id.text_weather:
-                if (!TextUtils.isEmpty(binding.getWeather().trim())) {
+                if (binding.getWeather() != null && !TextUtils.isEmpty(binding.getWeather().trim())) {
                     Intent intent = new Intent(this, WeatherActivity.class);
                     intent.putExtra("city", PreferencesUtil.getString(getApplicationContext(), Str.KEY_CITY, Str.defaultCity));
                     IntentUtil.toStartActivityForResult(this, intent, Int.reqCode_Main_weather);
@@ -236,8 +238,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         if (StringUtil.isEmpty(account)) {
             return;
         }
-        showDialog("处理中...");
-        Observable<ResultBean> observable = RetrofitManage.getInstance().getObservableServer().doQueryAccount(account);
+        BaseProgressSubscriber<ResultBean> querySubscribe = new BaseProgressSubscriber< >(this, -1, this);
+        RetrofitManage.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
+        /*Observable<ResultBean> observable = RetrofitManage.getInstance().getObservableServer().doQueryAccount(account);
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ResultBean>() {
@@ -264,21 +267,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
                             showErrorDialog("解析异常", false);
                         }
                     }
-                });
+                });*/
     }
 
     @Override
     public void showRequestPermissionRationale(int requestCode, Rationale rationale) {
-        String tips = "为确保程序的正常使用，请开启";
-        switch (requestCode) {
-            case Int.permissionLocation:
-                tips += "定位权限";
-                break;
-            case Int.permissionCamera:
-                tips += "相机权限";
-                break;
-        }
-        ToastUtil.permissionDialog(this, tips, rationale);
+        AndPermission.rationaleDialog(this, rationale).show();
     }
 
     @Override
@@ -327,6 +321,29 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         int alpha = 255 * (0 - verticalOffset) / height;
         collapsing_toolbar.setExpandedTitleColor(Color.argb(0, 255, 255, 255));
         collapsing_toolbar.setCollapsedTitleTextColor(Color.argb(alpha, 255, 255, 255));
+    }
+
+    @Override
+    public void onResult(int what, ResultBean resultBean) {
+        if (resultBean != null) {
+            if (resultBean.getResultCode() == 1) {
+                navNickName.setText(replaceNull(resultBean.getResultMsg()));
+                navSignature.setText(replaceNull(resultBean.getExceptMsg()));
+            } else
+                showDialog(resultBean.getResultMsg(), false);
+        } else {
+            showErrorDialog("解析异常", false);
+        }
+    }
+
+    @Override
+    public void onError(int what, Throwable e) {
+        showErrorDialog(e.toString(), false);
+    }
+
+    @Override
+    public void onCompleted(int what) {
+
     }
 
     private static class HandlerClass extends Handler {

@@ -8,6 +8,7 @@ import com.mwm.loyal.activity.FeedBackActivity;
 import com.mwm.loyal.base.BaseClickHandler;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAboutBinding;
+import com.mwm.loyal.imp.ObservableServer;
 import com.mwm.loyal.utils.ApkUtil;
 import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.RetrofitManage;
@@ -36,7 +37,7 @@ public class AboutHandler extends BaseClickHandler<ActivityAboutBinding> {
     }
 
     private void doVerApk() {
-        RetrofitManage.ObservableServer server = RetrofitManage.getInstance().getObservableServer();
+        ObservableServer server = RetrofitManage.getInstance().getObservableServer();
         server.doApkVer(ApkUtil.getApkVersion(activity))
                 .subscribeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.io())

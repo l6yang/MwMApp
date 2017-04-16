@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.AboutActivity;
-import com.mwm.loyal.activity.AccountActivity;
+import com.mwm.loyal.activity.AccountSafetyActivity;
 import com.mwm.loyal.activity.SettingsActivity;
 import com.mwm.loyal.base.BaseClickHandler;
 import com.mwm.loyal.databinding.ActivitySettingsBinding;
@@ -27,7 +27,7 @@ public class SettingsHandler extends BaseClickHandler<ActivitySettingsBinding> {
                 activity.finish();
                 break;
             case R.id.settings_security:
-                IntentUtil.toStartActivityForResult(activity, AccountActivity.class, Int.reqCode_Settings_account);
+                IntentUtil.toStartActivityForResult(activity, AccountSafetyActivity.class, Int.reqCode_Settings_account);
                 break;
         }
     }

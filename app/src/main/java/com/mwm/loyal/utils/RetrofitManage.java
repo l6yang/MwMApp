@@ -1,34 +1,21 @@
 package com.mwm.loyal.utils;
 
-import com.mwm.loyal.beans.ResultBean;
-import com.mwm.loyal.beans.WeatherBean;
 import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.imp.ObservableServer;
+import com.mwm.loyal.imp.RequestServer;
 
 import java.io.IOException;
 
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
-import retrofit2.http.Multipart;
-import retrofit2.http.POST;
-import retrofit2.http.Part;
-import retrofit2.http.Streaming;
-import retrofit2.http.Url;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
-import static com.mwm.loyal.imp.Contact.Str.*;
 
 public class RetrofitManage implements Contact {
     private static RetrofitManage mInstance;
@@ -92,119 +79,10 @@ public class RetrofitManage implements Contact {
         else throw new IOException("Unexpected code" + response);
     }
 
-    public static <T> void doEnqueueStr(Observable<T> observable, Subscriber<T> subscriber) {
+    public static <T> void rxExecuted(Observable<T> observable, Subscriber<T> subscriber) {
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .unsubscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
-    }
-
-    public interface RequestServer {
-
-        @FormUrlEncoded
-        @POST(action + method_register)
-        Call<String> doRegister(@Field("json_register") String json);
-
-        @FormUrlEncoded
-        @POST(action + method_login)
-        Call<String> doLogin(@Field("json_login") String json);
-
-        @FormUrlEncoded
-        @Streaming
-        @POST(action + method_showIcon)
-        Call<ResponseBody> doShowIcon(@Field("account") String account);
-
-        @FormUrlEncoded
-        @POST(action + method_update)
-        Call<String> doUpdateAccount(@Field("json_update") String json, @Field("update_state") String state, @Field("old_data") String old);
-
-        @FormUrlEncoded
-        @POST(action + method_account_locked)
-        Call<String> doAccountLocked(@Field("account") String account);
-
-        @Multipart
-        @POST(action + method_update_icon)
-        Call<String> doUpdateIcon(@Part("description") RequestBody description, @Part MultipartBody.Part iconFile);
-
-        @FormUrlEncoded
-        @POST(action + method_feedBack)
-        Call<String> doFeedBack(@Field("json_feed") String json);
-
-        @FormUrlEncoded
-        @POST(action + method_ucrop_test)
-        Call<String> doUCropTest(@Field("account") String account, @Field("password") String password);
-
-        @FormUrlEncoded
-        @POST(action + method_scan)
-        Call<String> doScan(@Field("json_scan") String json, @Field("param") String param);
-
-        @FormUrlEncoded
-        @POST(action + method_apkVerCheck)
-        Call<String> doApkVer(@Field("apkVer") String apkVer);
-
-        @GET
-        Call<ResponseBody> doDownLoadApk(@Url String url);
-
-        @GET
-        Call<String> getWeather(@Url String url);
-    }
-
-    public interface ObservableServer {
-
-        @FormUrlEncoded
-        @POST(action + "doLoginTest")
-        Observable<String> doTestLogin(@Field("account") String account, @Field("password") String password);
-
-        @FormUrlEncoded
-        @POST(action + method_register)
-        Observable<ResultBean> doRegister(@Field("json_register") String json);
-
-        @FormUrlEncoded
-        @POST(action + method_queryAccount)
-        Observable<ResultBean> doQueryAccount(@Field("account") String account);
-
-        @FormUrlEncoded
-        @POST(action + method_login)
-        Observable<ResultBean> doLogin(@Field("json_login") String json);
-
-        @FormUrlEncoded
-        @Streaming
-        @POST(action + method_showIcon)
-        Observable<ResponseBody> doShowIcon(@Field("account") String account);
-
-        @FormUrlEncoded
-        @POST(action + method_update)
-        Observable<ResultBean> doUpdateAccount(@Field("json_update") String json, @Field("update_state") String state, @Field("old_data") String old);
-
-        @FormUrlEncoded
-        @POST(action + method_account_locked)
-        Observable<String> doAccountLocked(@Field("account") String account);
-
-        @Multipart
-        @POST(action + method_update_icon)
-        Observable<String> doUpdateIcon(@Part("description") RequestBody description, @Part MultipartBody.Part iconFile);
-
-        @FormUrlEncoded
-        @POST(action + method_feedBack)
-        Observable<String> doFeedBack(@Field("json_feed") String json);
-
-        @FormUrlEncoded
-        @POST(action + method_ucrop_test)
-        Observable<String> doUCropTest(@Field("account") String account, @Field("password") String password);
-
-        @FormUrlEncoded
-        @POST(action + method_scan)
-        Observable<ResultBean> doScan(@Field("json_scan") String json, @Field("param") String param);
-
-        @FormUrlEncoded
-        @POST(action + method_apkVerCheck)
-        Observable<ResultBean> doApkVer(@Field("apkVer") String apkVer);
-
-        @Streaming
-        @GET
-        Observable<ResponseBody> doDownLoadApk(@Url String url);
-
-        @GET
-        Observable<WeatherBean> getWeather(@Url String url);
     }
 }

@@ -1,32 +1,25 @@
 package com.mwm.loyal.handler;
 
-import android.content.DialogInterface;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.FeedBackActivity;
-import com.mwm.loyal.base.BaseAsyncTask;
 import com.mwm.loyal.base.BaseClickHandler;
+import com.mwm.loyal.base.BaseProgressSubscriber;
 import com.mwm.loyal.beans.FeedBackBean;
 import com.mwm.loyal.beans.ResultBean;
-import com.mwm.loyal.databinding.ActivityFeedBackBinding;
-import com.mwm.loyal.utils.GsonUtil;
+import com.mwm.loyal.databinding.ActivityFeedbackBinding;
+import com.mwm.loyal.imp.SubscribeListener;
 import com.mwm.loyal.utils.RetrofitManage;
-import com.mwm.loyal.utils.StringUtil;
 import com.mwm.loyal.utils.TimeUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
-import java.io.IOException;
+public class FeedBackHandler extends BaseClickHandler implements SubscribeListener<ResultBean> {
+    private final ActivityFeedbackBinding binding;
 
-import retrofit2.Call;
-
-public class FeedBackHandler extends BaseClickHandler  {
-    private final ActivityFeedBackBinding binding;
-    private FeedBackAsync mFeedAuth;
-
-    public FeedBackHandler(FeedBackActivity activity, ActivityFeedBackBinding binding) {
+    public FeedBackHandler(FeedBackActivity activity, ActivityFeedbackBinding binding) {
         super(activity);
         this.binding = binding;
     }
@@ -41,47 +34,17 @@ public class FeedBackHandler extends BaseClickHandler  {
                 }
                 String account = activity.getIntent().getStringExtra("account");
                 FeedBackBean backBean = new FeedBackBean(account, content, TimeUtil.getDateTime());
-                if (mFeedAuth != null)
-                    return;
-                mFeedAuth = new FeedBackAsync(backBean);
-                mFeedAuth.execute();
+                BaseProgressSubscriber<ResultBean> subscriber = new BaseProgressSubscriber<>(activity, this);
+                RetrofitManage.rxExecuted(subscriber.doFeedBack(backBean.toString()), subscriber);
                 break;
-
         }
+        ToastUtil.hideInput(activity, binding.editFeedBack.getWindowToken());
     }
 
-    private class FeedBackAsync extends BaseAsyncTask<Void, Void, String> implements DialogInterface.OnCancelListener {
-        private final FeedBackBean feedBackBean;
-
-        FeedBackAsync(FeedBackBean backBean) {
-            super(activity);
-            feedBackBean = backBean;
-            setDialogMessage("反馈中...稍等");
-            setCancelable(true);
-            setCanceledOnTouchOutside(false);
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            Call<String> call = RetrofitManage.getInstance().getRequestServer().doFeedBack(feedBackBean.toString());
-            try {
-                //RequestBody body = new FormBody.Builder()
-                //.add("json_feed", feedBackBean.toString()).build();
-                //return OkHttpClientManager.getInstance().post_jsonDemo(StringUtil.getServiceUrl(Str.method_feedBack), body);
-                return RetrofitManage.doExecuteStr(call);
-            } catch (IOException e) {
-                return e.toString();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            cancelDialog();
-            mFeedAuth = null;
-            if (StringUtil.showErrorToast(activity, result)) return;
-            ResultBean bean = GsonUtil.getBeanFromJson(result, ResultBean.class);
-            if (bean.getResultCode() == 1) {
+    @Override
+    public void onResult(int what, ResultBean resultBean) {
+        if (null != resultBean) {
+            if (1 == resultBean.getResultCode()) {
                 ToastUtil.showToast(activity, "感谢您的反馈");
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -89,15 +52,18 @@ public class FeedBackHandler extends BaseClickHandler  {
                         activity.finish();
                     }
                 }, 1000);
-            } else {
-                ToastUtil.showToast(activity, getStrWithNull(bean.getResultMsg()));
-            }
-        }
+            } else showDialog(resultBean.getResultMsg(), false);
+        } else showDialog("解析反馈数据失败", false);
+    }
 
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            mFeedAuth = null;
-        }
+    @Override
+    public void onError(int what, Throwable e) {
+        System.out.println("onError:" + what + ":" + e.toString());
+        showErrorDialog(e.toString(), false);
+    }
+
+    @Override
+    public void onCompleted(int what) {
+
     }
 }

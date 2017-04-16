@@ -178,7 +178,7 @@ public class FriendAdapter extends PullToRequestListAdapter implements PlatformA
 			}
 			@SuppressWarnings("unchecked")
 			HashMap<String, Object> paging = (HashMap<String, Object>) res.get("paging");
-			hasNext = paging.containsKey("next");
+			hasNext = paging.containsKey("goNext");
 		} else if ("Twitter".equals(platform)) {
 			// users[screen_name, name, description]
 			@SuppressWarnings("unchecked")

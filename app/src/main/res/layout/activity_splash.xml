@@ -23,7 +23,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_margin="20dp"
+            android:layout_margin="30dp"
             android:background="@drawable/drawable_login_input"
             android:onClick="onClick"
             android:paddingBottom="8dp"

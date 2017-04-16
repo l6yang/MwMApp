@@ -33,9 +33,12 @@ public interface Contact {
         public static final String method_account_locked = "doAccountLocked";
         public static final String method_update_icon = "doUpdateIcon";
         public static final String method_feedBack = "doFeedBack";
+        public static final String method_getSelfFeed = "doGetSelfFeed";
+        public static final String method_deleteSelfFeed = "deleteSelfFeed";
         public static final String method_ucrop_test = "doUCropTest";
         public static final String method_scan = "doScan";
         public static final String method_apkVerCheck = "doCheckApkVer";
+        public static final String method_destroyAccount = "destroyAccount";
         public static final String KAY_ENCRYPT_DECODE = "com.mwm.forLoyal";
         public static final String ipAdd = "192.168.31.96";
         public static final String port = ":8080";
@@ -73,6 +76,7 @@ public interface Contact {
         public static final int reqCode_Settings_account = 109;
         public static final int reqCode_UpdateMM = 110;
         public static final int reqCode_register = 111;
+        public static final int reqCode_destroy = 112;
         public static final int permissionMemory = 600;
         public static final int permissionCamera = 601;
         public static final int permissionReadPhone = 602;

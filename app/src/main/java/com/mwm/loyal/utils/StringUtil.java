@@ -18,12 +18,8 @@ public class StringUtil implements Contact {
         return false;
     }
 
-    public static boolean showErrorDialog(Context context, String error, boolean isFinish) {
-        if (showErrorToast(error)) {
-            ToastUtil.showDialog(context, errorException(error), isFinish);
-            return true;
-        }
-        return false;
+    public static void showErrorDialog(Context context, String error, boolean isFinish) {
+        ToastUtil.showDialog(context, errorException(error), isFinish);
     }
 
     private static boolean showErrorToast(String error) {
@@ -53,7 +49,7 @@ public class StringUtil implements Contact {
 
     private static String errorException(String error) {
         if (TextUtils.isEmpty(error)) {
-            return "获取数据失败";
+            return "无数据";
         } else if (error.startsWith("java.io.IOException: Unexpected codeResponse")) {
             return "服务器响应异常";
         } else if (error.startsWith("java.net.SocketTimeoutException")) {
@@ -66,7 +62,7 @@ public class StringUtil implements Contact {
             return "网络未连接或者当前网络地址未被识别";
         } else if (error.startsWith("org.ksoap2.transport.HttpResponseException")) {
             return "与服务器通信失败";
-        } else return "";
+        } else return error;
     }
 
     public static String replaceNull(Object object) {

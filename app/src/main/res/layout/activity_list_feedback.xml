@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="drawable"
+            type="android.graphics.drawable.Drawable" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@{drawable}"
+        android:fitsSystemWindows="true"
+        tools:context=".activity.ListFeedBackActivity">
+
+        <include
+            android:id="@id/pub_layout_title"
+            layout="@layout/pub_title" />
+
+        <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+            android:id="@+id/listFeedBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pub_layout_title" />
+    </RelativeLayout>
+</layout>

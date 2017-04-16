@@ -781,7 +781,7 @@ public class ViewDragHelper {
     /**
      * Move the captured settling view by the appropriate amount for the current
      * time. If <code>continueSettling</code> returns true, the caller should
-     * call it again on the next frame to continue.
+     * call it again on the goNext frame to continue.
      *
      * @param deferCallbacks true if state callbacks should be deferred via
      *                       posted message. Set this to true if you are calling this

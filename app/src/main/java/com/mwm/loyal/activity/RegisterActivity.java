@@ -37,8 +37,9 @@ public class RegisterActivity extends BaseSwipeActivity<ActivityRegisterBinding>
         loginBean.editable.set(TextUtils.isEmpty(account));
         binding.setDrawable(ResUtil.getBackground(this));
         boolean fromLogin = TextUtils.isEmpty(account);
-        binding.setClick(new RegisterHandler(this, binding,fromLogin));
-        initViews(fromLogin);
+        String extra = getIntent().getStringExtra("extra");
+        binding.setClick(new RegisterHandler(this, binding));
+        initViews(fromLogin, extra);
     }
 
     @Override
@@ -46,16 +47,24 @@ public class RegisterActivity extends BaseSwipeActivity<ActivityRegisterBinding>
         return false;
     }
 
-    private void initViews(boolean fromLogin) {
+    private void initViews(boolean fromLogin, String extra) {
         pubBack.setOnClickListener(this);
-        pubTitle.setText(fromLogin ? "快速注册" : "修改密码");
         pubMenu.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(extra)) {
+            pubTitle.setText(fromLogin ? "快速注册" : "修改密码");
+            binding.accountClear.setImageResource(fromLogin ? R.mipmap.edit_clear : R.color.white);
+            binding.accountClear.setEnabled(fromLogin);
+        } else {
+            pubTitle.setText(R.string.destroy_account);
+            binding.accountClear.setImageResource(R.color.white);
+            binding.accountClear.setEnabled(false);
+            binding.password.setVisibility(View.GONE);
+            binding.repeatMm.setVisibility(View.GONE);
+        }
         binding.account.addTextChangedListener(new TextChangedListener(binding.accountClear));
         binding.nickname.addTextChangedListener(new TextChangedListener(binding.nicknameClear));
         binding.password.addTextChangedListener(new TextChangedListener(binding.passwordClear));
         binding.repeatMm.addTextChangedListener(new TextChangedListener(binding.repeatClear));
-        binding.accountClear.setImageResource(fromLogin ? R.mipmap.edit_clear : R.color.white);
-        binding.accountClear.setEnabled(fromLogin);
     }
 
     @Override

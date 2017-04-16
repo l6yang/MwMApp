@@ -68,7 +68,7 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:theme="@style/BaseSwipeTheme"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity
             android:name=".activity.AboutActivity"
             android:theme="@style/BaseSwipeTheme"
@@ -100,7 +100,7 @@
             android:name=".activity.SimpleTestActivity"
             android:label="@string/title_activity_test" />
         <activity
-            android:name=".activity.AccountActivity"
+            android:name=".activity.AccountSafetyActivity"
             android:theme="@style/BaseSwipeTheme" />
         <activity
             android:name=".activity.PersonalActivity"
@@ -209,6 +209,11 @@
         <activity
             android:name=".activity.ShareActivity"
             android:theme="@style/BaseSwipeTheme" />
+
+        <activity
+            android:name=".activity.ListFeedBackActivity"
+            android:theme="@style/BaseSwipeTheme"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
     </application>
 
 </manifest>

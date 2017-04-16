@@ -6,7 +6,7 @@
 
         <variable
             name="click"
-            type="com.mwm.loyal.handler.AccountHandler" />
+            type="com.mwm.loyal.handler.AccountSafetyHandler" />
 
         <variable
             name="drawable"
@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:background="@{drawable}"
         android:fitsSystemWindows="true"
-        tools:context=".activity.AccountActivity">
+        tools:context=".activity.AccountSafetyActivity">
 
         <include
             android:id="@id/pub_layout_title"
@@ -84,6 +84,25 @@
                     android:onClick="@{click.onClick}"
                     android:padding="8dp"
                     android:text="@string/reset_mm"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_sp_16" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey" />
+
+                <TextView
+                    android:id="@+id/account_destroy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/drawable_settings_item"
+                    android:drawableEnd="@mipmap/arrow_right"
+                    android:drawableRight="@mipmap/arrow_right"
+                    android:gravity="center_vertical"
+                    android:onClick="@{click.onClick}"
+                    android:padding="8dp"
+                    android:text="@string/destroy_account"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_sp_16" />
             </LinearLayout>
