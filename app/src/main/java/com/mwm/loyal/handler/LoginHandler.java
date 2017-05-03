@@ -48,7 +48,6 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
                     showToast("密码长度格式错误");
                     return;
                 }
-                //System.out.println("mac==" + DeviceHelper.getInstance(activity).getMacAddress());
                 login2MainActivity(new LoginBean(account, password));
                 break;
             case R.id.account_clear:
@@ -62,7 +61,7 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
                 break;
             case R.id.mm_forget:
                 Intent intent = new Intent(activity, ForgetActivity.class);
-                activity.startActivity(intent);
+                 startActivity(intent);
                 break;
             case R.id.register:
                 toRegister(R.id.pub_submit);
@@ -77,6 +76,7 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
         Observable<ResponseBody> observable = bodySubscriber.doShowIcon(loginBean.account.get()).subscribeOn(Schedulers.io());
         RetrofitManage.rxExecuted(observable, bodySubscriber);
         final BaseProgressSubscriber<ResultBean> loginSubscriber = new BaseProgressSubscriber<>(activity, 0, this);
+        loginSubscriber.setMessage("正在登录...");
         Observable<ResultBean> loginObservable = observable.flatMap(new Func1<ResponseBody, Observable<ResultBean>>() {
             @Override
             public Observable<ResultBean> call(ResponseBody body) {
@@ -121,8 +121,8 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
         intent.putExtra("account", loginBean.account.get());
         intent.putExtra("nickname", resultBean.getResultMsg());
         intent.putExtra("sign", resultBean.getExceptMsg());
-        activity.startActivity(intent);
-        activity.finish();
+        startActivity(intent);
+        finish();
         } else showDialog(resultBean.getResultMsg(), false);
         } else
         showErrorDialog("解析失败", false);
@@ -134,11 +134,12 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
         Intent intent = new Intent(activity, RegisterActivity.class);
         intent.putExtra("resId", resId);
         intent.putExtra("account", "");
-        activity.startActivityForResult(intent, Int.reqCode_register);
+         startActivityForResult(intent, Int.reqCode_register);
     }
 
     @Override
     public void onResult(int what, ResultBean resultBean) {
+        System.out.println("onResult::"+what);
         disMissDialog();
         String account = binding.account.getText().toString().trim();
         String password = binding.password.getText().toString().trim();
@@ -148,8 +149,8 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
                 PreferencesUtil.putLoginBean(activity, loginBean);
                 Intent intent = new Intent(activity, MainActivity.class);
                 intent.putExtra("account", loginBean.account.get());
-                activity.startActivity(intent);
-                activity.finish();
+                startActivity(intent);
+                finish();
             } else showDialog(resultBean.getResultMsg(), false);
         } else
             showErrorDialog("解析失败", false);
@@ -157,6 +158,7 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
 
     @Override
     public void onError(int what, Throwable e) {
+        System.out.println("onError::" + what);
         disMissDialog();
         showErrorDialog(e.toString(), false);
     }

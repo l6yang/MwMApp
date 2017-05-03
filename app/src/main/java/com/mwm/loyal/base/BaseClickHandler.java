@@ -99,7 +99,6 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Con
     }
 
     public void disMissDialog() {
-        System.out.println("disMissDialog");
         if (null != progressDialog && progressDialog.isShowing())
             progressDialog.dismiss();
     }

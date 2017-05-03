@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@drawable/bg_dialog_all"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="5dp">
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:scrollbars="none">
 
         <TextView
             android:id="@+id/dialog_tv_content"
@@ -24,57 +24,56 @@
             android:paddingRight="8dp"
             android:paddingStart="8dp"
             android:paddingTop="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:textColor="@android:color/holo_red_light"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_sp_16" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/dialog_layout_cancel"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_dialog_foot"
-            android:baselineAligned="false"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="2dp">
+            android:layout_weight="1"
+            android:gravity="center">
 
-            <LinearLayout
-                android:id="@+id/dialog_layout_cancel"
-                android:layout_width="0dp"
+            <Button
+                android:id="@+id/dialog_btn_cancel"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center">
+                android:layout_margin="5dp"
+                android:background="@drawable/bg_dialog_foot_button"
+                android:padding="5dp"
+                android:textColor="@color/color_error_btn"
+                android:text="@string/refuse"
+                android:textSize="@dimen/text_sp_18" />
+        </LinearLayout>
 
-                <Button
-                    android:id="@+id/dialog_btn_cancel"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/bg_dialog_foot_button"
-                    android:padding="8dp"
-                    android:text="@string/refuse"
-                    android:textSize="@dimen/text_sp_20" />
-            </LinearLayout>
+        <LinearLayout
+            android:id="@+id/dialog_layout_ok"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
 
-            <LinearLayout
-                android:id="@+id/dialog_layout_ok"
-                android:layout_width="0dp"
+            <Button
+                android:id="@+id/dialog_btn_ok"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <Button
-                    android:id="@+id/dialog_btn_ok"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/bg_dialog_foot_button"
-                    android:padding="8dp"
-                    android:text="@string/agree"
-                    android:textSize="@dimen/text_sp_20" />
-            </LinearLayout>
+                android:layout_margin="5dp"
+                android:background="@drawable/bg_dialog_foot_button"
+                android:padding="5dp"
+                android:textColor="@color/color_error_btn"
+                android:text="@string/agree"
+                android:textSize="@dimen/text_sp_18" />
         </LinearLayout>
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

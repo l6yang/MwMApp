@@ -140,7 +140,7 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
     @Override
     public void onItemClick(Closeable closeable, final int adapterPosition, int menuPosition, int direction) {
         closeable.smoothCloseMenu();// 关闭被点击的菜单。
-        // TODO 如果是删除：推荐调用Adapter.notifyItemRemoved(position)，不推荐Adapter.notifyDataSetChanged();
+        // 如果是删除：推荐调用Adapter.notifyItemRemoved(position)，不推荐Adapter.notifyDataSetChanged();
         if (menuPosition == 0) {// 删除按钮被点击。
             BaseProgressSubscriber<ResultBean> subscriber = new BaseProgressSubscriber<>(this, 2, new SubscribeListener<ResultBean>() {
                 @Override

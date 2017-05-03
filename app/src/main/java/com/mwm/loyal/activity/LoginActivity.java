@@ -148,7 +148,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         System.out.println("onEditorAction" + actionId);
-        System.out.println(actionId == R.id.login);
         if (actionId == R.id.login || actionId == EditorInfo.IME_NULL) {
             System.out.println("回车键已按下");
             // attemptLogin();

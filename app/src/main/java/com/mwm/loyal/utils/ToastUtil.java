@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -82,10 +83,11 @@ public class ToastUtil {
             myDialog.dismiss();
         myDialog.show();
         myDialog.setCanceledOnTouchOutside(true);
-        myDialog.setCancelable(false);
+        myDialog.setCancelable(true);
         if (myDialog.getWindow() != null)
             myDialog.getWindow().setContentView(R.layout.dialog_permission);
         TextView mContent = (TextView) myDialog.getWindow().findViewById(R.id.dialog_tv_content);
+        mContent.setMovementMethod(new ScrollingMovementMethod());
         mContent.setText(content);
         Button btn_ok = (Button) myDialog.getWindow().findViewById(R.id.dialog_btn_ok);
         View view_ok = myDialog.getWindow().findViewById(R.id.dialog_layout_ok);

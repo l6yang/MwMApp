@@ -30,7 +30,6 @@ public class AccountSafetyHandler extends BaseClickHandler<ActivityAccountBindin
                 break;
             case R.id.account_device_lock:
                 String des = binding.accountDeviceLock.getContentDescription().toString();
-                System.out.println(des);
                 LoginBean loginBean = new LoginBean();
                 loginBean.account.set(activity.getIntent().getStringExtra("account"));
                 loginBean.locked.set(TextUtils.equals(replaceNull(des), "off") ? 1 : 0);

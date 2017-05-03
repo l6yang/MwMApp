@@ -48,7 +48,7 @@ public class BaseProgressSubscriber<T> extends Subscriber<T> implements Progress
         initDialog(context, message);
     }
 
-    public void resetWhat(int what) {
+    public void setWhat(int what) {
         this.mWhat = what;
     }
 
@@ -169,6 +169,7 @@ public class BaseProgressSubscriber<T> extends Subscriber<T> implements Progress
     public Observable<ResultBean> doFeedBack(@Field("json_feed") String json) {
         return server.doFeedBack(json);
     }
+
     @Override
     public Observable<ResultBean> deleteSelfFeed(@Field("json_delete") String json) {
         return server.deleteSelfFeed(json);
