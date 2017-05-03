@@ -78,7 +78,7 @@ public class UpdateService extends IntentService implements Contact {
 
                     @Override
                     public void onNext(ResultBean resultBean) {
-                        if (resultBean != null) {
+                        try {
                             if (resultBean.getResultCode() == 1) {
                                 String url = StringUtil.replaceNull(resultBean.getExceptMsg());
                                 //发送广播，showPopWindowForDownLoad
@@ -87,6 +87,8 @@ public class UpdateService extends IntentService implements Contact {
                                 intent.putExtra("apkUrl", url);
                                 sendBroadcast(intent);
                             }
+                        } catch (Exception e) {
+                            //
                         }
                     }
                 });
@@ -99,7 +101,7 @@ public class UpdateService extends IntentService implements Contact {
                 .setContentTitle("正在下载" + getString(R.string.app_name))
                 .setContentText("已下载0%")
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.mwm))
-                .setAutoCancel(true);
+                .setAutoCancel(true).setOngoing(true);
         manager.notify(NOTIFY_TAG, 0, builder.build());
         DownLoadListener listener = new DownLoadListener() {
             @Override
@@ -121,12 +123,12 @@ public class UpdateService extends IntentService implements Contact {
             DownLoadAPI.saveFile(observable, file, new Subscriber<InputStream>() {
                 @Override
                 public void onCompleted() {
-                    downloadCompleted(file.getPath());
+                    downloadCompleted(false, file.getPath());
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    downloadCompleted(e.toString());
+                    downloadCompleted(true, e.toString());
                 }
 
                 @Override
@@ -137,14 +139,16 @@ public class UpdateService extends IntentService implements Contact {
         }
     }
 
-    private void downloadCompleted(String path) {
-        DownLoadBean download = new DownLoadBean();
-        download.setProgress(100);
+    private void downloadCompleted(boolean error, String path) {
         //sendIntent(download);
-        manager.cancel(NOTIFY_TAG, 0);
-        builder.setProgress(0, 0, false);
-        manager.notify(NOTIFY_TAG, 0, builder.build());
-        doInstallApk(path);
+        if (error) {
+            builder.setContentTitle("下载异常：" + path).setProgress(100, 0, false).setOngoing(false);
+        } else {
+            DownLoadBean download = new DownLoadBean();
+            download.setProgress(100);
+            manager.cancel(NOTIFY_TAG, 0);
+            doInstallApk(path);
+        }
     }
 
     private void doInstallApk(String path) {
@@ -158,10 +162,12 @@ public class UpdateService extends IntentService implements Contact {
     private void showNotify(DownLoadBean loadBean) {
         //sendIntent(loadBean);
         int progress = loadBean.getProgress();
-        builder.setProgress(100, progress, false).
-                setContentText(getDataSize(loadBean.getCurrentFileSize())
-                        + "/" +
-                        getDataSize(loadBean.getTotalFileSize()));
+        if (progress >= 100) {
+            builder.setContentTitle("已完成").setOngoing(false);
+        } else
+            builder.setProgress(100, progress, false)
+                    .setContentText(getDataSize(loadBean.getCurrentFileSize())
+                            + "/" + getDataSize(loadBean.getTotalFileSize()));
         manager.notify(NOTIFY_TAG, 0, builder.build());
     }
 

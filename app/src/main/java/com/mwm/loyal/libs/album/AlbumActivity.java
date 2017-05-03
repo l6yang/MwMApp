@@ -466,7 +466,11 @@ public class AlbumActivity extends AppCompatActivity {
         options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
         options.setCompressionQuality(100);
         Uri goalUri = Uri.fromFile(goal);
+        //设置toolbar颜色
+        options.setToolbarColor(ActivityCompat.getColor(this, R.color.colorPrimary));
+        options.setStatusBarColor(ActivityCompat.getColor(this, R.color.colorPrimary));
         UCrop uCrop = UCrop.of(currentUri, goalUri);
+        //裁剪图片的宽高比
         uCrop = uCrop.withAspectRatio(size, size);
         uCrop = uCrop.withOptions(options);
         uCrop.start(this);
