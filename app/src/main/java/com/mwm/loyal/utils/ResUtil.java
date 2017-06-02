@@ -8,8 +8,10 @@ import android.graphics.drawable.Drawable;
 
 import com.mwm.loyal.R;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 
 public class ResUtil {
@@ -42,17 +44,21 @@ public class ResUtil {
     public static String getStrFromRes(InputStream is) {
         if (is == null)
             return "";
-        StringBuilder str = new StringBuilder();
-        byte b[] = new byte[1024];
-        int len;
+        BufferedReader bufferedReader = null;
         try {
-            while ((len = is.read(b)) != -1) {
-                str.append(new String(b, 0, len, "utf-8"));
+            StringBuilder buffer = new StringBuilder();
+            bufferedReader = new BufferedReader(new InputStreamReader(is, "utf-8"));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                buffer.append(line);
             }
-            return str.toString();
+            return buffer.toString();
         } catch (IOException e) {
             e.printStackTrace();
             return "";
+        } finally {
+            IOUtil.closeStream(bufferedReader);
+            IOUtil.closeStream(is);
         }
     }
 
@@ -63,18 +69,7 @@ public class ResUtil {
         InputStream is = openAssetFile(context, fileName);
         if (is == null)
             return "";
-        StringBuilder str = new StringBuilder();
-        byte b[] = new byte[1024];
-        int len;
-        try {
-            while ((len = is.read(b)) != -1) {
-                str.append(new String(b, 0, len, "utf-8"));
-            }
-            return str.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "";
-        }
+        return getStrFromRes(is);
     }
 
     public static Drawable getBackground(Context context) {

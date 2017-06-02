@@ -33,6 +33,8 @@ import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import okhttp3.MediaType;
@@ -64,7 +66,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
     }
 
     private void queryAccount() {
-        String account=getIntent().getStringExtra("account");
+        String account = getIntent().getStringExtra("account");
         BaseProgressSubscriber<ResultBean> querySubscribe = new BaseProgressSubscriber<>(this, -1, this);
         RetrofitManage.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
     }
@@ -323,7 +325,11 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
                 //return OkHttpClientManager.getInstance().post_jsonDemo(StringUtil.getServiceUrl(Str.method_update_icon), body);
                 RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), file);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(loginBean.account.get(), file.getName(), body);
-                Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateIcon(body, part);
+                //Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateIcon(body, part);
+                Map<String, RequestBody> map = new HashMap<>();
+                //map.put("file" + "\"; filename=\"" + file.getName(), body);
+                map.put("file" + "\"; filename=\"" + file.getName(), body);
+                Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateIcon(loginBean.account.get(), map);
                 return RetrofitManage.doExecute(call);
             } catch (Exception e) {
                 e.printStackTrace();

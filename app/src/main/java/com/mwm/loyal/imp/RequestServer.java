@@ -1,5 +1,7 @@
 package com.mwm.loyal.imp;
 
+import java.util.Map;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -10,6 +12,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
@@ -41,6 +44,10 @@ public interface RequestServer {
     @Multipart
     @POST(action + method_update_icon)
     Call<String> doUpdateIcon(@Part("description") RequestBody description, @Part MultipartBody.Part iconFile);
+
+    @Multipart
+    @POST(action + method_update_icon)
+    Call<String> doUpdateIcon(@Part("account") String account, @PartMap Map<String, RequestBody> mapParams);
 
     @FormUrlEncoded
     @POST(action + method_feedBack)
