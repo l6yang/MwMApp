@@ -27,7 +27,6 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.libs.zxing.camera.CameraManager;
 
 import java.io.IOException;
