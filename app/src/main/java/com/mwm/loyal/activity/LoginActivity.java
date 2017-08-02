@@ -2,14 +2,13 @@ package com.mwm.loyal.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.BaseActivity;
+import com.mwm.loyal.base.BasePermitActivity;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.databinding.ActivityLoginBinding;
 import com.mwm.loyal.handler.LoginHandler;
@@ -21,14 +20,13 @@ import com.mwm.loyal.utils.ResUtil;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
 import com.yanzhenjie.permission.PermissionYes;
-import com.yanzhenjie.permission.Rationale;
 import com.yanzhenjie.permission.RationaleListener;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements RationaleListener, TextView.OnEditorActionListener {
+public class LoginActivity extends BasePermitActivity<ActivityLoginBinding> implements RationaleListener, TextView.OnEditorActionListener {
 
     @Override
     protected int getLayoutRes() {
@@ -42,20 +40,12 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         binding.setClick(new LoginHandler(this, binding));
         binding.setDrawable(ResUtil.getBackground(this));
         initViews();
-        initPermission(Int.permissionReadPhone, Manifest.permission.READ_PHONE_STATE);
+        requestPermissions(Int.permissionReadPhone, new String[]{Manifest.permission.READ_PHONE_STATE});
     }
 
     @Override
     public boolean isTransStatus() {
         return false;
-    }
-
-    private void initPermission(int reqCode, String... permission) {
-        AndPermission.with(this)
-                .requestCode(reqCode)
-                .permission(permission)
-                .rationale(this)
-                .send();
     }
 
     private void initViews() {
@@ -68,20 +58,9 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         binding.server.setAdapter(adapter);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
-    }
-
-    @Override
-    public void showRequestPermissionRationale(int requestCode, Rationale rationale) {
-        AndPermission.rationaleDialog(this, rationale).show();
-    }
-
     @PermissionYes(Int.permissionReadPhone)
     private void onReadPhoneSuccess(List<String> grantedPermissions) {
-        initPermission(Int.permissionMemory, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
+        requestPermissions(Int.permissionMemory, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE});
     }
 
     @PermissionNo(Int.permissionReadPhone)

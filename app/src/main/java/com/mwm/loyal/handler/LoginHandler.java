@@ -123,7 +123,7 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
         intent.putExtra("sign", resultBean.getExceptMsg());
         startActivity(intent);
         finish();
-        } else showDialog(resultBean.getResultMsg(), false);
+        } else showProgressDialog(resultBean.getResultMsg(), false);
         } else
         showErrorDialog("解析失败", false);
         }

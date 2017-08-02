@@ -1,79 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:gravity="center"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="5dp"
-        android:scrollbars="none">
-
-        <TextView
-            android:id="@+id/dialog_tv_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingEnd="8dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingStart="8dp"
-            android:paddingTop="10dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/text_sp_16" />
-    </FrameLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:baselineAligned="false"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_centerInParent="true"
+        android:layout_margin="8dp"
+        android:background="@drawable/shape_dialog"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_sp_20"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#66ccff"
+            android:src="@android:color/transparent" />
+
+        <TextView
+            android:id="@+id/text_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="5"
+            android:padding="10dp"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="@dimen/text_sp_18" />
 
         <LinearLayout
-            android:id="@+id/dialog_layout_cancel"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_margin="5dp"
+            android:baselineAligned="false"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/dialog_btn_cancel"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="match_parent"
+            <FrameLayout
+                android:id="@+id/dialog_layout_cancel"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/bg_dialog_foot_button"
-                android:padding="5dp"
-                android:textColor="@color/color_error_btn"
-                android:text="@string/refuse"
-                android:textSize="@dimen/text_sp_18" />
-        </LinearLayout>
+                android:layout_weight="1">
 
-        <LinearLayout
-            android:id="@+id/dialog_layout_ok"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+                <Button
+                    android:id="@+id/dialog_btn_cancel"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/bg_dialog_foot_button"
+                    android:padding="5dp"
+                    android:text="@string/refuse"
+                    android:textColor="@color/color_error_btn"
+                    android:textSize="@dimen/text_sp_18" />
+            </FrameLayout>
 
-            <Button
-                android:id="@+id/dialog_btn_ok"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="match_parent"
+            <FrameLayout
+                android:id="@+id/dialog_layout_ok"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/bg_dialog_foot_button"
-                android:padding="5dp"
-                android:textColor="@color/color_error_btn"
-                android:text="@string/agree"
-                android:textSize="@dimen/text_sp_18" />
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/dialog_btn_ok"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/bg_dialog_foot_button"
+                    android:padding="5dp"
+                    android:text="@string/agree"
+                    android:textColor="@color/color_error_btn"
+                    android:textSize="@dimen/text_sp_18" />
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

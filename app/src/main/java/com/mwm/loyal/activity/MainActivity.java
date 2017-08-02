@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
@@ -25,7 +27,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.BaseActivity;
+import com.mwm.loyal.base.BasePermitActivity;
 import com.mwm.loyal.base.BaseProgressSubscriber;
 import com.mwm.loyal.beans.ContactBean;
 import com.mwm.loyal.beans.ResultBean;
@@ -47,7 +49,6 @@ import com.mwm.loyal.utils.WeatherUtil;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
 import com.yanzhenjie.permission.PermissionYes;
-import com.yanzhenjie.permission.Rationale;
 import com.yanzhenjie.permission.RationaleListener;
 
 import java.io.UnsupportedEncodingException;
@@ -60,7 +61,7 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding> implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, RationaleListener, AppBarLayout.OnOffsetChangedListener, SubscribeListener<ResultBean> {
+public class MainActivity extends BasePermitActivity<ActivityMainBinding> implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, RationaleListener, AppBarLayout.OnOffsetChangedListener, SubscribeListener<ResultBean> {
     @BindView(R.id.pub_toolbar)
     Toolbar toolbar;
     @BindView(R.id.pub_drawer_layout)
@@ -88,7 +89,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         setSupportActionBar(toolbar);
         mHandler = new HandlerClass(this);
         initViews();
-        initPermission(Int.permissionLocation, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
     @Override
@@ -125,12 +125,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         return true;
     }
 
-    private void initPermission(int requestCode, String... permissions) {
-        AndPermission.with(this)
-                .requestCode(requestCode)
-                .permission(permissions)
-                .rationale(this)
-                .send();
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        requestPermissions(Int.permissionLocation, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION});
     }
 
     @Override
@@ -238,7 +236,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         if (StringUtil.isEmpty(account)) {
             return;
         }
-        BaseProgressSubscriber<ResultBean> querySubscribe = new BaseProgressSubscriber< >(this, -1, this);
+        BaseProgressSubscriber<ResultBean> querySubscribe = new BaseProgressSubscriber<>(this, -1, this);
         RetrofitManage.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
         /*Observable<ResultBean> observable = RetrofitManage.getInstance().getObservableServer().doQueryAccount(account);
         observable.subscribeOn(Schedulers.newThread())
@@ -262,23 +260,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
                                 navNickName.setText(replaceNull(resultBean.getResultMsg()));
                                 navSignature.setText(replaceNull(resultBean.getExceptMsg()));
                             } else
-                                showDialog(resultBean.getResultMsg(), false);
+                                showProgressDialog(resultBean.getResultMsg(), false);
                         } else {
                             showErrorDialog("解析异常", false);
                         }
                     }
                 });*/
-    }
-
-    @Override
-    public void showRequestPermissionRationale(int requestCode, Rationale rationale) {
-        AndPermission.rationaleDialog(this, rationale).show();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        AndPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 
     @PermissionYes(Int.permissionCamera)
@@ -362,16 +349,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
                     int id = msg.arg1;
                     switch (id) {
                         case R.id.nav_camera:
-                            activity.initPermission(Int.permissionCamera, Manifest.permission.CAMERA);
-                            break;
                         case R.id.nav_gallery:
-                            activity.initPermission(Int.permissionCamera, Manifest.permission.CAMERA);
+                        case R.id.nav_scan:
+                            activity.requestPermissions(Int.permissionCamera, new String[]{Manifest.permission.CAMERA});
                             break;
                         case R.id.nav_share:
                             IntentUtil.toStartActivity(activity, ShareActivity.class);
-                            break;
-                        case R.id.nav_scan:
-                            activity.initPermission(Int.permissionCamera, Manifest.permission.CAMERA);
                             break;
                         case R.id.nav_voice:
                             IntentUtil.toStartActivity(activity, VoiceActivity.class);

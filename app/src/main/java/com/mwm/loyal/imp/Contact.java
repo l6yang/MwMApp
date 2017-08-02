@@ -86,4 +86,8 @@ public interface Contact {
         public static final int async2Null = -102;
         public static final int delayed2Activity = -103;
     }
+
+    enum TYPE {
+        NONE, LEFT, RIGHT
+    }
 }

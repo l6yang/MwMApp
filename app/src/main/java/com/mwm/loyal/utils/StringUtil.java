@@ -1,10 +1,16 @@
 package com.mwm.loyal.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.widget.Spinner;
 
+import com.mwm.loyal.beans.SpinBean;
 import com.mwm.loyal.imp.Contact;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,7 +24,7 @@ public class StringUtil implements Contact {
         return false;
     }
 
-    public static void showErrorDialog(Context context, String error, boolean isFinish) {
+    public static void showErrorDialog(@NonNull Activity context, String error, boolean isFinish) {
         ToastUtil.showDialog(context, errorException(error), isFinish);
     }
 
@@ -65,8 +71,12 @@ public class StringUtil implements Contact {
         } else return error;
     }
 
+    public static String replaceNull(String string) {
+        return TextUtils.isEmpty(string) ? "" : string;
+    }
+
     public static String replaceNull(Object object) {
-        return object == null || TextUtils.equals(object.toString(), "null") ? "" : object.toString();
+        return null == object ? "" : replaceNull(object.toString());
     }
 
     public static boolean isEmpty(String str) {
@@ -74,7 +84,7 @@ public class StringUtil implements Contact {
     }
 
     public static boolean isEmail(String email) {
-        String str = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
+        String str = "^([a-zA-Z0-9_\\-.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
         Pattern p = Pattern.compile(str);
         Matcher m = p.matcher(email);
 
@@ -97,5 +107,47 @@ public class StringUtil implements Contact {
         Pattern pattern = Pattern.compile(ipPattern);
         Matcher matcher = pattern.matcher(address);
         return matcher.matches();
+    }
+
+    public static String subEndTime(String time) {
+        return replaceNull(time).replace("00:00:00", "").replace(".0", "").trim();
+    }
+
+    public static String encodeStr2Utf(String str) {
+        if (TextUtils.isEmpty(str))
+            return "";
+        try {
+            return URLEncoder.encode(str, "utf-8");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String decodeStr2Utf(String str) {
+        if (TextUtils.isEmpty(str))
+            return "";
+        try {
+            return URLDecoder.decode(str, "utf-8");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String getSpinSelectStr(Spinner spinner, String key) {
+        if (null == spinner)
+            return "";
+        try {
+            SpinBean spinBean = (SpinBean) spinner.getSelectedItem();
+            switch (key) {
+                case "dm":
+                    return replaceNull(spinBean.getDm());
+                case "glbm":
+                    return replaceNull(spinBean.getGlbm());
+                default:
+                    return "";
+            }
+        } catch (Exception e) {
+            return "";
+        }
     }
 }

@@ -111,7 +111,7 @@ public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> imple
         private int actualApps;
 
         QueryAppAsync() {
-            showDialog();
+            showProgressDialog();
             actualApps = 0;
         }
 

@@ -1,6 +1,5 @@
 package com.mwm.loyal.base;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,24 +9,27 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Spinner;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.imp.DialogClickListener;
+import com.mwm.loyal.imp.UIInterface;
 import com.mwm.loyal.service.UpdateService;
 import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.StringUtil;
 import com.mwm.loyal.utils.ToastUtil;
+import com.mwm.loyal.widget.BaseDialog;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity implements Contact {
+public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity implements UIInterface, DialogClickListener {
     private UpdateReceiver updateReceiver;
     protected ProgressDialog progressDialog;
     protected T binding;
@@ -71,13 +73,13 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
         progressDialog.setCanceledOnTouchOutside(false);
     }
 
-    public void showDialog() {
-        showDialog(null);
+    public void showProgressDialog() {
+        showProgressDialog(null);
     }
 
-    public void showDialog(CharSequence message) {
+    public void showProgressDialog(CharSequence message) {
         if (null != progressDialog) {
-            progressDialog.setMessage(replaceNull(message));
+            progressDialog.setMessage(replaceNull(message.toString()));
             progressDialog.show();
         }
     }
@@ -90,11 +92,6 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        //super.onSaveInstanceState(outState);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         updateReceiver = new UpdateReceiver();
@@ -103,20 +100,69 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
         registerReceiver(updateReceiver, intentFilter);
     }
 
-    public void showToast(String text) {
+    @Override
+    public void showToast(@NonNull String text) {
         ToastUtil.showToast(this, text);
     }
 
-    public void showErrorDialog(String text, boolean finish) {
-        StringUtil.showErrorDialog(this, replaceNull(text), finish);
+    @Override
+    public void showToast(@StringRes int resId) {
+        showToast(getString(resId));
     }
 
-    public void showDialog(String text, boolean finish) {
+    @Override
+    public void showDialog(@NonNull String text) {
+        showDialog(text, false);
+    }
+
+    @Override
+    public void showDialog(@NonNull String text, boolean finish) {
         ToastUtil.showDialog(this, replaceNull(text), finish);
     }
 
-    public String replaceNull(Object t) {
+    @Override
+    public String replaceNull(String t) {
         return StringUtil.replaceNull(t);
+    }
+
+    @Override
+    public String subEndTime(@NonNull String t) {
+        return StringUtil.subEndTime(t);
+    }
+
+    @Override
+    public String encodeStr2Utf(@NonNull String string) {
+        return StringUtil.encodeStr2Utf(string);
+    }
+
+    @Override
+    public String decodeStr2Utf(@NonNull String string) {
+        return StringUtil.decodeStr2Utf(string);
+    }
+
+    @Override
+    public String getSpinSelectStr(Spinner spinner, @NonNull String key) {
+        return StringUtil.getSpinSelectStr(spinner, key);
+    }
+
+    @Override
+    public void showErrorDialog(@NonNull String text) {
+        showErrorDialog(text, false);
+    }
+
+    @Override
+    public void showErrorDialog(@NonNull String text, boolean finish) {
+        showErrorDialog(text, null, finish);
+    }
+
+    @Override
+    public void showErrorDialog(@NonNull String text, Throwable e) {
+        showErrorDialog(text, e, false);
+    }
+
+    @Override
+    public void showErrorDialog(@NonNull String text, Throwable e, boolean finish) {
+        ToastUtil.showDialog(this, replaceNull(text) + (null == e ? "" : e.getMessage()), finish);
     }
 
     @Override
@@ -130,6 +176,24 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onClick(BaseDialog dialog, View view) {
+        if (null != dialog && dialog.isShowing())
+            dialog.dismiss();
+        String apkUrl = null == dialog ? "" : (String) dialog.getTag();
+        switch (view.getId()) {
+            case R.id.dialog_btn_ok:
+                if (!apkUrl.endsWith(".apk") || !apkUrl.endsWith(".APK")) {
+                    showToast("apk路径地址错误");
+                    return;
+                }
+                UpdateService.startActionUpdate(BaseActivity.this, Str.ACTION_DOWN, apkUrl);
+                break;
+            case R.id.dialog_btn_cancel:
+                break;
+        }
     }
 
     private class UpdateReceiver extends BroadcastReceiver {
@@ -146,45 +210,14 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
         }
     }
 
-    protected final String getStrWithNull(Object object) {
-        return StringUtil.replaceNull(object);
-    }
-
     /**
      * 更新提示
      */
     public void showUpdateDialog(String content, final String apkUrl) {
-        final AlertDialog myDialog = new AlertDialog.Builder(this).create();
-        if (myDialog.isShowing())
-            myDialog.dismiss();
-        myDialog.show();
-        myDialog.setCanceledOnTouchOutside(true);
-        myDialog.setCancelable(false);
-        if (myDialog.getWindow() != null)
-            myDialog.getWindow().setContentView(R.layout.dialog_permission);
-        TextView mContent = (TextView) myDialog.getWindow().findViewById(R.id.dialog_tv_content);
-        mContent.setText(getStrWithNull(content));
-        Button btn_ok = (Button) myDialog.getWindow().findViewById(R.id.dialog_btn_ok);
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (myDialog.isShowing())
-                    myDialog.dismiss();
-                //update
-                UpdateService.startActionUpdate(BaseActivity.this, Str.ACTION_DOWN, apkUrl);
-            }
-        });
-        btn_ok.setText("立即更新");
-        btn_ok.setTextSize(16);
-        Button btn_cancel = (Button) myDialog.getWindow().findViewById(R.id.dialog_btn_cancel);
-        btn_cancel.setText("下次再说");
-        btn_cancel.setTextSize(16);
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (myDialog.isShowing())
-                    myDialog.dismiss();
-            }
-        });
+        BaseDialog.Builder builder = new BaseDialog.Builder(this);
+        builder.setContent(content).setTag(apkUrl)
+                .setBtnText(new String[]{"下次再说", "立即更新"})
+                .setOutsideCancel(false).setClickListener(this);
+        builder.create().show();
     }
 }
