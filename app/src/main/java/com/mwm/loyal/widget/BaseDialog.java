@@ -15,10 +15,13 @@ import com.mwm.loyal.imp.Contact;
 import com.mwm.loyal.imp.DialogClickListener;
 import com.mwm.loyal.utils.StringUtil;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class BaseDialog extends Dialog implements Contact {
 
     private BaseDialog(@NonNull Context context) {
-        this(context, 0);
+        this(context, R.style.DialogTheme);
     }
 
     private BaseDialog(@NonNull Context context, @StyleRes int themeResId) {
@@ -47,11 +50,23 @@ public class BaseDialog extends Dialog implements Contact {
         private DialogClickListener listener;
         private BaseDialog baseDialog;
         private TYPE type = TYPE.NONE;
-        private TextView textTitle, textContent;
-        private View layoutOk, layoutCancel;
-        private Button btnOk, btnCancel;
+        //private TextView textTitle, textContent;
+        //private View layoutOk, layoutCancel;
+        //private Button btnOk, btnCancel;
         private boolean cancelable = false, outsideCancelable = false;
         private Object objectTag;
+        @BindView(R.id.text_title)
+        TextView textTitle;
+        @BindView(R.id.text_content)
+        TextView textContent;
+        @BindView(R.id.dialog_layout_ok)
+        View layoutOk;
+        @BindView(R.id.dialog_layout_cancel)
+        View layoutCancel;
+        @BindView(R.id.dialog_btn_ok)
+        Button btnOk;
+        @BindView(R.id.dialog_btn_cancel)
+        Button btnCancel;
 
         public Builder(Context context) {
             this.mContext = context;
@@ -126,7 +141,7 @@ public class BaseDialog extends Dialog implements Contact {
                     break;
                 case NONE:
                     setLeftBtnText(sequence[0]);
-                    setRightBtnText(sequence[1]);
+                    setRightBtnText(sequence.length > 2 ? sequence[1] : "");
                     break;
             }
             return this;
@@ -191,11 +206,12 @@ public class BaseDialog extends Dialog implements Contact {
         }
 
         public BaseDialog create() {
-            baseDialog = new BaseDialog(mContext, R.style.DialogTheme);
+            baseDialog = new BaseDialog(mContext);
             baseDialog.setContentView(R.layout.dialog_permission);
             baseDialog.setCancelable(cancelable);
             baseDialog.setCanceledOnTouchOutside(outsideCancelable);
             baseDialog.setTag(objectTag);
+            ButterKnife.bind(baseDialog);
             initDialogView();
             switch (type) {
                 case NONE:
@@ -227,15 +243,15 @@ public class BaseDialog extends Dialog implements Contact {
         }
 
         private void initDialogView() {
-            textTitle = (TextView) baseDialog.findViewById(R.id.text_title);
+            //textTitle = (TextView) baseDialog.findViewById(R.id.text_title);
             textTitle.setText(replaceNull(sequenceTitle));
-            textContent = (TextView) baseDialog.findViewById(R.id.text_content);
+            //textContent = (TextView) baseDialog.findViewById(R.id.text_content);
             textContent.setText(replaceNull(sequenceContent));
-            layoutOk = baseDialog.findViewById(R.id.dialog_layout_ok);
-            layoutCancel = baseDialog.findViewById(R.id.dialog_layout_cancel);
-            btnOk = (Button) baseDialog.findViewById(R.id.dialog_btn_ok);
+            //layoutOk = baseDialog.findViewById(R.id.dialog_layout_ok);
+            //layoutCancel = baseDialog.findViewById(R.id.dialog_layout_cancel);
+            //btnOk = (Button) baseDialog.findViewById(R.id.dialog_btn_ok);
             btnOk.setText(sequenceOk);
-            btnCancel = (Button) baseDialog.findViewById(R.id.dialog_btn_cancel);
+            //btnCancel = (Button) baseDialog.findViewById(R.id.dialog_btn_cancel);
             btnCancel.setText(replaceNull(sequenceCancel));
             btnOk.setOnClickListener(this);
             btnCancel.setOnClickListener(this);

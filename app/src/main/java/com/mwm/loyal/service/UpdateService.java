@@ -85,7 +85,7 @@ public class UpdateService extends IntentService implements Contact {
                                 Intent intent = new Intent();
                                 intent.setAction(Str.method_apkVerCheck);
                                 intent.putExtra("apkUrl", url);
-                                sendBroadcast(intent);
+                                LocalBroadcastManager.getInstance(UpdateService.this).sendBroadcast(intent);
                             }
                         } catch (Exception e) {
                             //

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -97,7 +98,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
         updateReceiver = new UpdateReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Str.method_apkVerCheck);
-        registerReceiver(updateReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateReceiver, intentFilter);
     }
 
     @Override
@@ -169,7 +170,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     protected void onPause() {
         super.onPause();
         if (updateReceiver != null) {
-            unregisterReceiver(updateReceiver);
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(updateReceiver);
         }
     }
 

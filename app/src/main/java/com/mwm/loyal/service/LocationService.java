@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -73,7 +74,7 @@ public class LocationService extends Service implements Contact, AMapLocationLis
                     Intent intent = new Intent();
                     intent.setAction(Str.service_action_loc);
                     intent.putExtra("city", null == location ? "" : StringUtil.replaceNull(location.getCity()));
-                    service.sendBroadcast(intent);
+                    LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
                     service.stopLocation();
                     break;
             }
