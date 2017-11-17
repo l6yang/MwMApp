@@ -11,7 +11,7 @@ import android.text.TextUtils;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.beans.ResultBean;
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.Contact;
 import com.mwm.loyal.libs.network.DownLoadAPI;
 import com.mwm.loyal.libs.network.DownLoadBean;
 import com.mwm.loyal.libs.network.imp.DownLoadListener;
@@ -54,9 +54,9 @@ public class UpdateService extends IntentService implements Contact {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-            if (Str.ACTION_UPDATE.equals(action)) {
+            if (Str.actionUpdate.equals(action)) {
                 handleActionUpdate();
-            } else if (Str.ACTION_DOWN.equals(action)) {
+            } else if (Str.actionDownload.equals(action)) {
                 String apkUrl = intent.getStringExtra("apkUrl");
                 handleActionDownLoad(apkUrl);
             } else stopSelf();

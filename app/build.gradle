@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.jakewharton.butterknife'
 
 android {
     signingConfigs {
@@ -10,12 +9,12 @@ android {
             storePassword 'mwm.loyal'
         }
     }
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 27
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.mwm.loyal"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -49,31 +48,18 @@ dependencies {
     })
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //retrofit
-    compile files('libs/MobCommons-2016.1107.1809.jar')
-    compile files('libs/MobTools-2016.1107.1809.jar')
-    compile files('libs/ShareSDK-Core-2.7.10.jar')
-    compile files('libs/ShareSDK-Email-2.7.10.jar')
-    compile files('libs/ShareSDK-QQ-2.7.10.jar')
-    compile files('libs/ShareSDK-QZone-2.7.10.jar')
-    compile files('libs/ShareSDK-Renren-2.7.10.jar')
-    compile files('libs/ShareSDK-SinaWeibo-2.7.10.jar')
-    compile files('libs/ShareSDK-TencentWeibo-2.7.10.jar')
-    compile files('libs/ShareSDK-Wechat-2.7.10.jar')
-    compile files('libs/ShareSDK-Wechat-Core-2.7.10.jar')
-    compile files('libs/ShareSDK-Wechat-Favorite-2.7.10.jar')
-    compile files('libs/ShareSDK-Wechat-Moments-2.7.10.jar')
     compile files('libs/com.baidu.tts_2.3.0.jar')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.jakewharton:butterknife:8.5.1'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:support-vector-drawable:25.3.1'
-    compile 'com.facebook.fresco:fresco:1.4.0'
-    compile 'com.yanzhenjie:permission:1.0.8'
-    compile 'com.google.zxing:core:3.3.0'
-    compile 'com.yalantis:ucrop:2.2.0-native'
-    compile 'io.reactivex:rxjava:1.3.0'
+    compile 'com.android.support:appcompat-v7:27.0.0'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    compile 'com.android.support:support-v4:27.0.0'
+    compile 'com.android.support:recyclerview-v7:27.0.0'
+    compile 'com.android.support:design:27.0.0'
+    compile 'com.android.support:support-vector-drawable:27.0.0'
+    compile 'com.facebook.fresco:fresco:1.5.0'
+    compile 'com.yanzhenjie:permission:1.1.0'
+    compile 'com.google.zxing:core:3.3.1'
+    compile 'com.yalantis:ucrop:2.2.0'
+    compile 'io.reactivex:rxjava:1.3.2'
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'com.yanzhenjie:recyclerview-swipe:1.0.4'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
@@ -83,7 +69,7 @@ dependencies {
     compile 'com.yalantis:phoenix:1.2.3'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.github.ikidou:TypeBuilder:1.0'/**Gson泛型*/
-    compile 'com.amap.api:location:latest.integration'
+    compile 'com.amap.api:location:3.6.1'
 }

@@ -3,19 +3,26 @@ package com.mwm.loyal.base;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.ViewDataBinding;
-import android.os.Bundle;
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Spinner;
 
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.IntentFrame;
+import com.mwm.loyal.impl.UIInterface;
+import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.StringUtil;
+import com.mwm.loyal.utils.TimeUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
-public abstract class BaseClickHandler<V extends ViewDataBinding> implements Contact {
+public abstract class BaseClickHandler<V extends ViewDataBinding> implements IntentFrame, UIInterface {
     protected ProgressDialog progressDialog;
     protected BaseActivity activity;
     protected V binding;
+    protected IntentUtil builder;
 
     public BaseClickHandler(BaseActivity baseActivity) {
         this(baseActivity, null);
@@ -25,42 +32,98 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Con
         this.activity = baseActivity;
         this.binding = binding;
         initDialog(baseActivity);
+        hasIntentParams(false);
     }
 
     public final String getString(@StringRes int resId) {
-        return activity.getResources().getString(resId);
+        return activity.getString(resId);
     }
 
-    public final void showToast(@StringRes int resId) {
-        ToastUtil.showToast(activity, resId);
+    @Override
+    public void showToast(@NonNull String text) {
+        ToastUtil.showToast(activity, text);
     }
 
-    public final void showToast(CharSequence sequence) {
-        ToastUtil.showToast(activity, replaceNull(sequence));
+    @Override
+    public void showToast(@StringRes int resId) {
+        showToast(getString(resId));
     }
 
-    public final void showToast(String text) {
-        ToastUtil.showToast(activity, replaceNull(text));
+    @Override
+    public void showDialog(@NonNull String text) {
+        showDialog(text, false);
     }
 
-    public final void showErrorDialog(String text, boolean finish) {
-        StringUtil.showErrorDialog(activity, replaceNull(text), finish);
-    }
-
-    public final void showDialog(String text, boolean finish) {
+    @Override
+    public void showDialog(@NonNull String text, boolean finish) {
         ToastUtil.showDialog(activity, replaceNull(text), finish);
     }
 
-    public final void startActivity(Intent intent) {
-        activity.startActivity(intent);
+    @Override
+    public String replaceNull(CharSequence sequence) {
+        return StringUtil.replaceNull(sequence);
     }
 
-    public final void startActivityForResult(Intent intent, int reqCode) {
-        activity.startActivityForResult(intent, reqCode);
+    @Override
+    public String subEndTime(@NonNull String t) {
+        return TimeUtil.subEndTime(t);
     }
 
-    public final void startActivityForResult(Intent intent, int reqCode, Bundle bundle) {
-        activity.startActivityForResult(intent, reqCode, bundle);
+    @Override
+    public String encodeStr2Utf(@NonNull String string) {
+        return StringUtil.encodeStr2Utf(string);
+    }
+
+    @Override
+    public String decodeStr2Utf(@NonNull String string) {
+        return StringUtil.decodeStr2Utf(string);
+    }
+
+    @Override
+    public String getSpinSelectStr(Spinner spinner, @NonNull String key) {
+        return StringUtil.getSpinSelectStr(spinner, key);
+    }
+
+    @Override
+    public void showErrorDialog(@NonNull String text) {
+        showErrorDialog(text, false);
+    }
+
+    @Override
+    public void showErrorDialog(@NonNull String text, boolean finish) {
+        showErrorDialog(text, null, finish);
+    }
+
+    @Override
+    public void showErrorDialog(@NonNull String text, Throwable e) {
+        showErrorDialog(text, e, false);
+    }
+
+    @Override
+    public void showErrorDialog(@NonNull String text, Throwable e, boolean finish) {
+        ToastUtil.showDialog(activity, replaceNull(text) + (null == e ? "" : e.getMessage()), finish);
+    }
+
+    protected void hasIntentParams(boolean hasParam) {
+        builder = null;
+        if (hasParam)
+            builder = new IntentUtil(activity, activity.getIntent());
+        else builder = new IntentUtil(activity);
+    }
+
+    @Override
+    public void startActivity(@Nullable Class<?> tClass) {
+        builder.startActivity(tClass);
+    }
+
+    @Override
+    public void startActivityForResult(@Nullable Class<?> tClass, @IntRange(from = 2) int reqCode) {
+        builder.startActivityForResult(tClass, reqCode);
+    }
+
+    @Override
+    public void startService(@Nullable Class<?> tClass) {
+        builder.startService(tClass);
     }
 
     public final void finish() {
@@ -91,15 +154,5 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Con
         }
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
-    }
-
-    public void showDialog() {
-        if (null != progressDialog)
-            progressDialog.show();
-    }
-
-    public void disMissDialog() {
-        if (null != progressDialog && progressDialog.isShowing())
-            progressDialog.dismiss();
     }
 }

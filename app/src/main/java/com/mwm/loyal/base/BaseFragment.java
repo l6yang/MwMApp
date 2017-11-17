@@ -2,15 +2,17 @@ package com.mwm.loyal.base;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mwm.loyal.imp.Contact;
-import com.mwm.loyal.imp.Frag2ActListener;
+import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.Frag2ActListener;
 
-public abstract class BaseFragment extends Fragment implements View.OnClickListener ,Contact {
+public abstract class BaseFragment extends Fragment implements View.OnClickListener, Contact {
     protected final String TAG = BaseFragment.class.getSimpleName();
     protected Frag2ActListener mListener;
 
@@ -30,15 +32,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         super.onCreate(savedInstanceState);
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

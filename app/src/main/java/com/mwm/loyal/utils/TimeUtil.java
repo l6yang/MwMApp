@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.Contact;
 
 public class TimeUtil implements Contact {
     public static String getWeek() {
@@ -116,5 +116,11 @@ public class TimeUtil implements Contact {
 
     private static String replaceTime(String str) {
         return str.toLowerCase().replace("上午", "").replace("下午", "").replace("am", "").replace("pm", "");
+    }
+
+    public static String subEndTime(String time) {
+        String subTime = StringUtil.replaceNull(time).trim();
+        return TextUtils.isEmpty(subTime) ? "" : subTime.
+                replace("00:00:00", "").replace(".0", "").trim();
     }
 }

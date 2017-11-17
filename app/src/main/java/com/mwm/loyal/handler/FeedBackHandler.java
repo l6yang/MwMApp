@@ -7,11 +7,11 @@ import android.view.View;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.FeedBackActivity;
 import com.mwm.loyal.base.BaseClickHandler;
-import com.mwm.loyal.base.BaseProgressSubscriber;
+import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.FeedBackBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityFeedbackBinding;
-import com.mwm.loyal.imp.SubscribeListener;
+import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.TimeUtil;
 import com.mwm.loyal.utils.ToastUtil;
@@ -34,7 +34,7 @@ public class FeedBackHandler extends BaseClickHandler implements SubscribeListen
                 }
                 String account = activity.getIntent().getStringExtra("account");
                 FeedBackBean backBean = new FeedBackBean(account, content, TimeUtil.getDateTime());
-                BaseProgressSubscriber<ResultBean> subscriber = new BaseProgressSubscriber<>(activity, this);
+                RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(activity, this);
                 RetrofitManage.rxExecuted(subscriber.doFeedBack(backBean.toString()), subscriber);
                 break;
         }
@@ -42,7 +42,7 @@ public class FeedBackHandler extends BaseClickHandler implements SubscribeListen
     }
 
     @Override
-    public void onResult(int what, ResultBean resultBean) {
+    public void onResult(int what, Object tag, ResultBean resultBean) {
         if (null != resultBean) {
             if (1 == resultBean.getResultCode()) {
                 ToastUtil.showToast(activity, "感谢您的反馈");
@@ -57,13 +57,7 @@ public class FeedBackHandler extends BaseClickHandler implements SubscribeListen
     }
 
     @Override
-    public void onError(int what, Throwable e) {
-        System.out.println("onError:" + what + ":" + e.toString());
-        showErrorDialog(e.toString(), false);
-    }
-
-    @Override
-    public void onCompleted(int what) {
-
+    public void onError(int what, Object tag, Throwable e) {
+        showErrorDialog(e+"");
     }
 }

@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.mwm.loyal.libs.swipback.app.SwipeBackActivity;
 import com.mwm.loyal.libs.swipback.utils.SwipeBackLayout;
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.Contact;
 
 public abstract class BaseSwipeActivity<T extends ViewDataBinding> extends SwipeBackActivity<T> implements SwipeBackLayout.SwipeListener, Contact {
     protected int LEFT = SwipeBackLayout.EDGE_LEFT;
@@ -42,16 +42,13 @@ public abstract class BaseSwipeActivity<T extends ViewDataBinding> extends Swipe
 
     @Override
     public void onScrollStateChange(int state, float scrollPercent) {
-
     }
 
     @Override
     public void onEdgeTouch(int edgeFlag) {
-
     }
 
     @Override
     public void onScrollOverThreshold() {
-
     }
 }

@@ -1,4 +1,4 @@
-package com.mwm.loyal.imp;
+package com.mwm.loyal.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -29,6 +29,6 @@ public interface UIInterface extends Contact {
 
     void showDialog(@NonNull String text, boolean finish);
 
-    String replaceNull(String str);
+    String replaceNull(CharSequence sequence);
 
 }

@@ -1,4 +1,4 @@
-package com.mwm.loyal.imp;
+package com.mwm.loyal.impl;
 
 import android.text.Editable;
 import android.text.TextWatcher;

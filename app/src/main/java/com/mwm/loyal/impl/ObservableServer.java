@@ -1,4 +1,4 @@
-package com.mwm.loyal.imp;
+package com.mwm.loyal.impl;
 
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.beans.WeatherBean;
@@ -16,7 +16,7 @@ import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 import rx.Observable;
 
-import static com.mwm.loyal.imp.Contact.Str.*;
+import static com.mwm.loyal.impl.Contact.Str.*;
 
 public interface ObservableServer {
 
@@ -84,6 +84,10 @@ public interface ObservableServer {
     @Streaming
     @GET
     Observable<ResponseBody> doDownLoadApk(@Url String url);
+
+    @Streaming
+    @GET
+    Observable<ResponseBody> downloadImage(@Url String url);
 
     @GET
     Observable<WeatherBean> getWeather(@Url String url);

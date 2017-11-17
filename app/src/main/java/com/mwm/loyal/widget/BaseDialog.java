@@ -12,8 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.imp.Contact;
-import com.mwm.loyal.imp.DialogClickListener;
+import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.DialogClickListener;
 import com.mwm.loyal.utils.StringUtil;
 
 public class BaseDialog extends Dialog implements Contact {

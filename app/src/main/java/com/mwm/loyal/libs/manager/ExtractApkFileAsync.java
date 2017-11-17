@@ -9,7 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.Contact;
 import com.mwm.loyal.utils.ToastUtil;
 
 public class ExtractApkFileAsync extends AsyncTask<Void, String, Boolean> {

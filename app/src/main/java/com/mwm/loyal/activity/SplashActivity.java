@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.databinding.ActivitySplashBinding;
-import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.ResUtil;
 
 import butterknife.BindView;
@@ -35,7 +34,7 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
 
     public void onClick(View view) {
         mContentView.removeCallbacks(runnable);
-        IntentUtil.toStartActivity(this, LoginActivity.class);
+        startActivity(LoginActivity.class);
         finish();
     }
 
@@ -56,7 +55,7 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
 
         @Override
         public void run() {
-            if (mWhat==0){
+            if (mWhat == 0) {
                 onClick(mContentView);
                 return;
             }

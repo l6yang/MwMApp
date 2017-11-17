@@ -8,9 +8,8 @@ import com.mwm.loyal.activity.PersonalActivity;
 import com.mwm.loyal.activity.QrCodeActivity;
 import com.mwm.loyal.base.BaseClickHandler;
 import com.mwm.loyal.databinding.ActivityPersonalBinding;
+import com.mwm.loyal.impl.Contact;
 import com.mwm.loyal.libs.album.Album;
-import com.mwm.loyal.imp.Contact;
-import com.mwm.loyal.utils.IntentUtil;
 
 public class PersonalHandler extends BaseClickHandler<ActivityPersonalBinding> {
     public PersonalHandler(PersonalActivity activity) {
@@ -20,7 +19,8 @@ public class PersonalHandler extends BaseClickHandler<ActivityPersonalBinding> {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.view_person_qr:
-                IntentUtil.toStartActivity(activity, QrCodeActivity.class);
+                hasIntentParams(true);
+                startActivity(QrCodeActivity.class);
                 break;
             case R.id.simple_personal_icon:
                 selectImage();

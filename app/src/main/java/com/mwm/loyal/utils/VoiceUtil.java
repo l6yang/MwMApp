@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.baidu.tts.client.SpeechSynthesizer;
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.Contact;
 
 import java.io.File;
 import java.io.FileOutputStream;

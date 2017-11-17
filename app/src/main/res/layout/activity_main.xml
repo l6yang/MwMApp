@@ -16,6 +16,10 @@
         <variable
             name="city"
             type="String" />
+
+        <variable
+            name="handler"
+            type="com.mwm.loyal.handler.MainHandler" />
     </data>
 
     <RelativeLayout

@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.mwm.loyal.imp.Contact;
-import com.mwm.loyal.imp.DialogClickListener;
-import com.mwm.loyal.imp.OperaOnClickListener;
+import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.DialogClickListener;
+import com.mwm.loyal.impl.OperaOnClickListener;
 import com.mwm.loyal.widget.BaseDialog;
 
 public class ToastUtil implements Contact {

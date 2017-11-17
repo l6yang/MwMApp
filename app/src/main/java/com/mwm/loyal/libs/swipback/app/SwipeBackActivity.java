@@ -2,8 +2,6 @@ package com.mwm.loyal.libs.swipback.app;
 
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.libs.swipback.utils.SwipeBackLayout;
@@ -23,14 +21,6 @@ public abstract class SwipeBackActivity<T extends ViewDataBinding> extends BaseA
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mHelper.onPostCreate();
-    }
-
-    @Override
-    public View findViewById(int id) {
-        View view = super.findViewById(id);
-        if (view == null && mHelper != null)
-            return mHelper.findViewById(id);
-        return view;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.mwm.loyal.imp;
+package com.mwm.loyal.impl;
 
 import android.view.View;
 

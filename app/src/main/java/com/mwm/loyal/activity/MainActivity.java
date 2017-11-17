@@ -28,16 +28,16 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BasePermitActivity;
-import com.mwm.loyal.base.BaseProgressSubscriber;
+import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.ContactBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.beans.WeatherBean;
 import com.mwm.loyal.databinding.ActivityMainBinding;
-import com.mwm.loyal.imp.SubscribeListener;
+import com.mwm.loyal.handler.MainHandler;
+import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.service.LocationService;
 import com.mwm.loyal.utils.DisplayUtil;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
@@ -87,6 +87,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         binding.setDrawable(ResUtil.getBackground(this));
         toolbar.setTitle("测试");
         setSupportActionBar(toolbar);
+        binding.setHandler(new MainHandler(this, binding));
         mHandler = new HandlerClass(this);
         initViews();
     }
@@ -103,13 +104,13 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         View view = navigationView.getHeaderView(0);
-        navIcon = (SimpleDraweeView) view.findViewById(R.id.nav_icon);
+        navIcon = view.findViewById(R.id.nav_icon);
         view.findViewById(R.id.nav_zxing).setOnClickListener(this);
         if (navIcon != null) {
             navIcon.setOnClickListener(this);
         }
-        navNickName = (TextView) view.findViewById(R.id.nav_nickName);
-        navSignature = (TextView) view.findViewById(R.id.nav_signature);
+        navNickName = view.findViewById(R.id.nav_nickName);
+        navSignature = view.findViewById(R.id.nav_signature);
         updateAccount();
         appBarLayout.addOnOffsetChangedListener(this);
     }
@@ -135,16 +136,18 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.nav_icon:
-                IntentUtil.toStartActivityForResult(this, PersonalActivity.class, Int.reqCode_Main_icon);
+                hasIntentParams(true);
+                startActivityForResult(PersonalActivity.class, Int.reqCode_Main_icon);
                 break;
             case R.id.nav_zxing:
-                IntentUtil.toStartActivityForResult(this, QrCodeActivity.class, Int.reqCode_Main_Zing);
+                hasIntentParams(true);
+                startActivityForResult(QrCodeActivity.class, Int.reqCode_Main_Zing);
                 break;
             case R.id.text_weather:
                 if (binding.getWeather() != null && !TextUtils.isEmpty(binding.getWeather().trim())) {
                     Intent intent = new Intent(this, WeatherActivity.class);
                     intent.putExtra("city", PreferencesUtil.getString(getApplicationContext(), Str.KEY_CITY, Str.defaultCity));
-                    IntentUtil.toStartActivityForResult(this, intent, Int.reqCode_Main_weather);
+                    startActivityForResult(intent, Int.reqCode_Main_weather);
                 }
                 break;
         }
@@ -236,36 +239,8 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         if (StringUtil.isEmpty(account)) {
             return;
         }
-        BaseProgressSubscriber<ResultBean> querySubscribe = new BaseProgressSubscriber<>(this, -1, this);
+        RxProgressSubscriber<ResultBean> querySubscribe = new RxProgressSubscriber<>(this, this);
         RetrofitManage.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
-        /*Observable<ResultBean> observable = RetrofitManage.getInstance().getObservableServer().doQueryAccount(account);
-        observable.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ResultBean>() {
-                    @Override
-                    public void onCompleted() {
-                        disMissDialog();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        disMissDialog();
-                        showErrorDialog(e.toString(), false);
-                    }
-
-                    @Override
-                    public void onNext(ResultBean resultBean) {
-                        if (resultBean != null) {
-                            if (resultBean.getResultCode() == 1) {
-                                navNickName.setText(replaceNull(resultBean.getResultMsg()));
-                                navSignature.setText(replaceNull(resultBean.getExceptMsg()));
-                            } else
-                                showProgressDialog(resultBean.getResultMsg(), false);
-                        } else {
-                            showErrorDialog("解析异常", false);
-                        }
-                    }
-                });*/
     }
 
     @PermissionYes(Int.permissionCamera)
@@ -274,7 +249,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         intent.setClass(this, CaptureActivity.class);
         intent.putExtra("title", "二维码/条码扫描");
         intent.putExtra("auto", true);
-        IntentUtil.toStartActivityForResult(this, intent, Int.reqCode_Main_Zing);
+        startActivityForResult(intent, Int.reqCode_Main_Zing);
     }
 
     @PermissionNo(Int.permissionCamera)
@@ -311,7 +286,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
     }
 
     @Override
-    public void onResult(int what, ResultBean resultBean) {
+    public void onResult(int what, Object tag, ResultBean resultBean) {
         if (resultBean != null) {
             if (resultBean.getResultCode() == 1) {
                 navNickName.setText(replaceNull(resultBean.getResultMsg()));
@@ -324,13 +299,8 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
     }
 
     @Override
-    public void onError(int what, Throwable e) {
+    public void onError(int what, Object tag, Throwable e) {
         showErrorDialog(e.toString(), false);
-    }
-
-    @Override
-    public void onCompleted(int what) {
-
     }
 
     private static class HandlerClass extends Handler {
@@ -354,13 +324,13 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
                             activity.requestPermissions(Int.permissionCamera, new String[]{Manifest.permission.CAMERA});
                             break;
                         case R.id.nav_share:
-                            IntentUtil.toStartActivity(activity, ShareActivity.class);
+                            activity.startActivity(ShareActivity.class);
                             break;
                         case R.id.nav_voice:
-                            IntentUtil.toStartActivity(activity, VoiceActivity.class);
+                            activity.startActivity(VoiceActivity.class);
                             break;
                         case R.id.nav_settings:
-                            IntentUtil.toStartActivityForResult(activity, SettingsActivity.class, Int.reqCode_Main_Setting);
+                            activity.startActivityForResult(SettingsActivity.class, Int.reqCode_Main_Setting);
                             break;
                     }
                     break;
@@ -458,13 +428,11 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             String city = intent.getStringExtra("city");
-            if (TextUtils.equals(action, Str.service_action_loc)) {
+            if (TextUtils.equals(Str.service_action_loc, action)) {
                 if (!TextUtils.isEmpty(city)) {
                     resetCity(city);
                 }
             }
-            intent.setClass(MainActivity.this, LocationService.class);
-            stopService(intent);
         }
     }
 }

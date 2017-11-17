@@ -6,11 +6,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.BaseProgressSubscriber;
+import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityForgetBinding;
-import com.mwm.loyal.imp.ObservableServer;
-import com.mwm.loyal.imp.SubscribeListener;
+import com.mwm.loyal.impl.ObservableServer;
+import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.StringUtil;
@@ -66,24 +66,20 @@ public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> imp
             case R.id.forget_test:
                 ObservableServer server = RetrofitManage.getInstance().getObservableServer();
                 Observable<String> call = server.doTestLogin("loyal", "111111");
-                BaseProgressSubscriber<String> subscriber = new BaseProgressSubscriber<>(this, this);
+                RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(this, this);
                 RetrofitManage.rxExecuted(call, subscriber);
                 break;
         }
     }
 
     @Override
-    public void onResult(int what, String s) {
+    public void onResult(int what, Object tag, String s) {
         System.out.println("onResult--" + s);
     }
 
     @Override
-    public void onError(int what, Throwable e) {
+    public void onError(int what, Object tag, Throwable e) {
         StringUtil.showErrorToast(this, e.toString());
         System.out.println("onError--" + e.toString());
-    }
-
-    @Override
-    public void onCompleted(int what) {
     }
 }

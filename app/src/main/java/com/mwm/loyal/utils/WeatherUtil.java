@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.beans.WeatherBean;
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.Contact;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -39,17 +39,18 @@ public class WeatherUtil implements Contact {
     }
 
     public static int getWeatherImg(String type) {
-        int resId = R.mipmap.unknow;
-        if (TextUtils.equals(type, "多云")) {
-            resId = R.mipmap.cloudy;
-        } else if (TextUtils.equals(type, "晴")) {
-            resId = R.mipmap.sun;
-        } else if (TextUtils.equals(type, "阴")) {
-            resId = R.mipmap.shade;
+        int resId = R.mipmap.ic_weather_unknow;
+        if (TextUtils.isEmpty(type)) return resId;
+        if (TextUtils.equals("多云", type)) {
+            resId = R.mipmap.ic_weather_cloudy;
+        } else if (TextUtils.equals("晴", type)) {
+            resId = R.mipmap.ic_weather_sun;
+        } else if (TextUtils.equals("阴", type)) {
+            resId = R.mipmap.ic_weather_shade;
         } else if (type.endsWith("雪")) {
-            resId = R.mipmap.snow;
+            resId = R.mipmap.ic_weather_snow;
         } else if (type.endsWith("雨")) {
-            resId = R.mipmap.rainy;
+            resId = R.mipmap.ic_weather_rainy;
         }
         return resId;
     }

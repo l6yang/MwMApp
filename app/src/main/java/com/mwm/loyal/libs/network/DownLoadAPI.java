@@ -1,6 +1,6 @@
 package com.mwm.loyal.libs.network;
 
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.Contact;
 import com.mwm.loyal.libs.network.imp.DownLoadListener;
 import com.mwm.loyal.utils.FileUtil;
 

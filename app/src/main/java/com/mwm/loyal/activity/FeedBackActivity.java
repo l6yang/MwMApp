@@ -8,7 +8,6 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityFeedbackBinding;
 import com.mwm.loyal.handler.FeedBackHandler;
-import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
@@ -53,14 +52,14 @@ public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedbackBinding>
 
     @Override
     public void onClick(View view) {
+        ToastUtil.hideInput(this, binding.editFeedBack.getWindowToken());
         switch (view.getId()) {
             case R.id.pub_back:
                 finish();
                 break;
             case R.id.pub_menu:
-                IntentUtil.toStartActivity(this, ListFeedBackActivity.class);
+                startActivity(ListFeedBackActivity.class);
                 break;
         }
-        ToastUtil.hideInput(this,binding.editFeedBack.getWindowToken());
     }
 }

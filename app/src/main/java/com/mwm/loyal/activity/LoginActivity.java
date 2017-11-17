@@ -12,7 +12,7 @@ import com.mwm.loyal.base.BasePermitActivity;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.databinding.ActivityLoginBinding;
 import com.mwm.loyal.handler.LoginHandler;
-import com.mwm.loyal.imp.TextChangedListener;
+import com.mwm.loyal.impl.TextChangedListener;
 import com.mwm.loyal.service.UpdateService;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
@@ -79,7 +79,7 @@ public class LoginActivity extends BasePermitActivity<ActivityLoginBinding> impl
         if (file.exists())
             FileUtil.deleteFile(file);
         FileUtil.createFiles();
-        UpdateService.startActionUpdate(this, Str.ACTION_UPDATE, null);
+        UpdateService.startActionUpdate(this, Str.actionUpdate, null);
     }
 
     @PermissionNo(Int.permissionMemory)

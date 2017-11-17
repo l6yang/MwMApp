@@ -1,4 +1,4 @@
-package com.mwm.loyal.imp;
+package com.mwm.loyal.impl;
 
 import java.util.Map;
 
@@ -16,7 +16,7 @@ import retrofit2.http.PartMap;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
-import static com.mwm.loyal.imp.Contact.Str.*;
+import static com.mwm.loyal.impl.Contact.Str.*;
 
 public interface RequestServer {
 

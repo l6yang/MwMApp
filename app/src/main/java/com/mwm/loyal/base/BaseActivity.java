@@ -5,14 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -20,45 +18,23 @@ import android.view.WindowManager;
 import android.widget.Spinner;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.imp.DialogClickListener;
-import com.mwm.loyal.imp.UIInterface;
+import com.mwm.loyal.impl.DialogClickListener;
+import com.mwm.loyal.impl.UIInterface;
 import com.mwm.loyal.service.UpdateService;
-import com.mwm.loyal.utils.StateBarUtil;
+import com.mwm.loyal.utils.ConnectUtil;
 import com.mwm.loyal.utils.StringUtil;
+import com.mwm.loyal.utils.TimeUtil;
 import com.mwm.loyal.utils.ToastUtil;
 import com.mwm.loyal.widget.BaseDialog;
 
-import butterknife.ButterKnife;
-
-public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity implements UIInterface, DialogClickListener {
+public abstract class BaseActivity<T extends ViewDataBinding> extends BasicActivity<T> implements UIInterface, DialogClickListener {
     private UpdateReceiver updateReceiver;
     protected ProgressDialog progressDialog;
-    protected T binding;
-
-    /**
-     * 绑定布局文件
-     *
-     * @return LayoutRes
-     */
-    protected abstract
-    @LayoutRes
-    int getLayoutRes();
-
-    /**
-     * 初始化控件
-     */
-    public abstract void afterOnCreate();
-
-    public abstract boolean isTransStatus();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, getLayoutRes());
-        StateBarUtil.setTranslucentStatus(this, isTransStatus());//沉浸式状态栏
-        ButterKnife.bind(this);
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         initDialog();
-        afterOnCreate();
     }
 
     private void initDialog() {
@@ -80,7 +56,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
 
     public void showProgressDialog(CharSequence message) {
         if (null != progressDialog) {
-            progressDialog.setMessage(replaceNull(message.toString()));
+            progressDialog.setMessage(replaceNull(message));
             progressDialog.show();
         }
     }
@@ -122,13 +98,13 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     }
 
     @Override
-    public String replaceNull(String t) {
-        return StringUtil.replaceNull(t);
+    public String replaceNull(CharSequence sequence) {
+        return StringUtil.replaceNull(sequence);
     }
 
     @Override
     public String subEndTime(@NonNull String t) {
-        return StringUtil.subEndTime(t);
+        return TimeUtil.subEndTime(t);
     }
 
     @Override
@@ -163,7 +139,8 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
 
     @Override
     public void showErrorDialog(@NonNull String text, Throwable e, boolean finish) {
-        ToastUtil.showDialog(this, replaceNull(text) + (null == e ? "" : e.getMessage()), finish);
+        String error = null == e ? "" : ConnectUtil.getError(e);
+        showDialog(replaceNull(text) + (TextUtils.isEmpty(error) ? "" : "\n" + error), finish);
     }
 
     @Override
@@ -190,7 +167,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
                     showToast("apk路径地址错误");
                     return;
                 }
-                UpdateService.startActionUpdate(BaseActivity.this, Str.ACTION_DOWN, apkUrl);
+                UpdateService.startActionUpdate(BaseActivity.this, Str.actionDownload, apkUrl);
                 break;
             case R.id.dialog_btn_cancel:
                 break;
@@ -201,9 +178,11 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (null == intent)
+                return;
             String action = intent.getAction();
             String apkUrl = intent.getStringExtra("apkUrl");
-            if (TextUtils.equals(action, Str.method_apkVerCheck)) {
+            if (TextUtils.equals(Str.method_apkVerCheck, action)) {
                 if (!TextUtils.isEmpty(apkUrl) && apkUrl.endsWith(".apk")) {
                     showUpdateDialog("检测到有新的版本，是否更新?", apkUrl);
                 }

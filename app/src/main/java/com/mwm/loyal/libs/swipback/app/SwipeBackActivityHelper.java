@@ -10,7 +10,7 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.libs.swipback.utils.SwipeBackLayout;
 import com.mwm.loyal.libs.swipback.utils.SwipeBackUtil;
 
-public class SwipeBackActivityHelper {
+public class SwipeBackActivityHelper<V> {
     private Activity mActivity;
 
     private SwipeBackLayout mSwipeBackLayout;
@@ -43,13 +43,6 @@ public class SwipeBackActivityHelper {
 
     public void onPostCreate() {
         mSwipeBackLayout.attachToActivity(mActivity);
-    }
-
-    public View findViewById(int id) {
-        if (mSwipeBackLayout != null) {
-            return mSwipeBackLayout.findViewById(id);
-        }
-        return null;
     }
 
     public SwipeBackLayout getSwipeBackLayout() {

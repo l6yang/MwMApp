@@ -9,12 +9,12 @@ import android.view.View;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.RegisterActivity;
 import com.mwm.loyal.base.BaseClickHandler;
-import com.mwm.loyal.base.BaseProgressSubscriber;
+import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityRegisterBinding;
-import com.mwm.loyal.imp.OperaOnClickListener;
-import com.mwm.loyal.imp.SubscribeListener;
+import com.mwm.loyal.impl.OperaOnClickListener;
+import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.OperateDialog;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.ToastUtil;
@@ -24,8 +24,8 @@ import rx.Observable;
 public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> implements SubscribeListener<ResultBean>, OperaOnClickListener {
     private final boolean fromLogin;
     private final String extra;
-    private final int resultReg = -1;
-    private final int resultDes = 0;
+    private final int resultReg = 2;
+    private final int resultDes = 4;
 
     public RegisterHandler(RegisterActivity activity, ActivityRegisterBinding binding) {
         super(activity, binding);
@@ -115,7 +115,8 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
     }
 
     private void doAsyncTask(LoginBean loginBean) {
-        BaseProgressSubscriber<ResultBean> subscriber = new BaseProgressSubscriber<>(activity, resultReg, RegisterHandler.this);
+        RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(activity, this);
+        subscriber.setWhat(resultReg);
         Observable<ResultBean> observable = fromLogin ? subscriber.doRegister(loginBean.toString()) : subscriber.doUpdateAccount(loginBean.toString());
         RetrofitManage.rxExecuted(observable, subscriber);
     }
@@ -125,7 +126,7 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
     }
 
     @Override
-    public void onResult(int what, ResultBean resultBean) {
+    public void onResult(int what, Object tag, ResultBean resultBean) {
         final String account = binding.account.getText().toString().trim();
         final String password = binding.password.getText().toString().trim();
         switch (what) {
@@ -168,12 +169,8 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
     }
 
     @Override
-    public void onError(int what, Throwable e) {
+    public void onError(int what, Object tag, Throwable e) {
         showErrorDialog(e.toString(), false);
-    }
-
-    @Override
-    public void onCompleted(int what) {
     }
 
     @Override
@@ -184,7 +181,8 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
     public void goNext() {
         String account = binding.account.getText().toString().trim();
         String nickname = binding.nickname.getText().toString().trim();
-        BaseProgressSubscriber<ResultBean> subscriber = new BaseProgressSubscriber<>(activity, resultDes, this);
+        RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(activity, this);
+        subscriber.setWhat(resultDes);
         RetrofitManage.rxExecuted(subscriber.destroyAccount(new LoginBean(account, nickname).toString()), subscriber);
     }
 }

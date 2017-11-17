@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import com.mwm.loyal.beans.LoginBean;
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.Contact;
 
 import java.util.HashSet;
 import java.util.Set;

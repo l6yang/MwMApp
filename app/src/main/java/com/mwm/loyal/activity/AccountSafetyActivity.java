@@ -7,12 +7,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.BaseProgressSubscriber;
+import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAccountBinding;
 import com.mwm.loyal.handler.AccountSafetyHandler;
-import com.mwm.loyal.imp.SubscribeListener;
+import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 
@@ -76,15 +76,15 @@ public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBind
 
     private void checkLocked() {
         String account = getIntent().getStringExtra("account");
-        BaseProgressSubscriber<ResultBean> subscriber = new BaseProgressSubscriber<>(this, this);
+        RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(this, this);
         RetrofitManage.rxExecuted(subscriber.doAccountLocked(account), subscriber);
     }
 
     @Override
-    public void onResult(int what, ResultBean resultBean) {
+    public void onResult(int what, Object tag, ResultBean resultBean) {
         if (resultBean != null) {
-            if (resultBean.getResultCode() == 1) {
-                toggleLocked(TextUtils.equals(replaceNull(resultBean.getResultMsg()), "1"));
+            if (1 == resultBean.getResultCode()) {
+                toggleLocked(TextUtils.equals("1", replaceNull(resultBean.getResultMsg())));
             } else showDialog(resultBean.getResultMsg(), false);
         } else
             showErrorDialog("解析设备锁信息失败", false);
@@ -101,12 +101,8 @@ public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBind
     }
 
     @Override
-    public void onError(int what, Throwable e) {
-        showErrorDialog(e.toString(),false);
+    public void onError(int what, Object tag, Throwable e) {
+        showErrorDialog(e.toString(), false);
     }
 
-    @Override
-    public void onCompleted(int what) {
-
-    }
 }

@@ -1,6 +1,6 @@
 package com.mwm.loyal.utils;
 
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.Contact;
 
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -141,15 +141,15 @@ public class CipherUtil {
      * @param buf byte[]
      */
     private static String parseByte2HexStr(byte buf[]) {
-        String sb = "";
+        StringBuilder sb = new StringBuilder();
         for (byte b : buf) {
             String hex = Integer.toHexString(b & 0xFF);
             if (hex.length() == 1) {
                 hex = '0' + hex;
             }
-            sb += (hex.toUpperCase());
+            sb.append(hex.toUpperCase());
         }
-        return sb;
+        return sb.toString();
     }
 
     /**
@@ -180,9 +180,8 @@ public class CipherUtil {
         try {
             return parseByte2HexStr(encrypt(content, keyBytes));
         } catch (Exception e) {
-            e.printStackTrace();
+            return "";
         }
-        return "";
     }
 
     /**

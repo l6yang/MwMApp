@@ -14,7 +14,6 @@ import com.mwm.loyal.adapter.WeatherAdapter;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.WeatherBean;
 import com.mwm.loyal.databinding.ActivityWeatherBinding;
-import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.TimeUtil;
@@ -87,7 +86,7 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
                 break;
             case R.id.text_change_city:
                 Intent intent = new Intent(this, CityActivity.class);
-                IntentUtil.toStartActivityForResult(this, intent, Int.reqCode_Weather_city);
+                startActivityForResult(intent, Int.reqCode_Weather_city);
                 break;
         }
     }
@@ -105,7 +104,7 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
                 binding.setCity(cityName);
                 PreferencesUtil.putString(getApplicationContext(), Str.KEY_CITY, cityName);
                 try {
-                    WeatherUtil.getCityWeather(cityName,mHandler);
+                    WeatherUtil.getCityWeather(cityName, mHandler);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -141,7 +140,7 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
                         String high = weatherBean.getData().getForecast().get(0).getHigh();
                         String low = weatherBean.getData().getForecast().get(0).getLow();
                         activity.binding.setWeatherAndTemper(weather + "      " + low.replace("低温", "").trim() + "/" + high.replace("高温", "").trim());
-                        activity.binding.setWeatherImg(ResUtil.getBackground(activity, R.mipmap.cloudy, false));
+                        activity.binding.setWeatherImg(ResUtil.getBackground(activity, R.mipmap.ic_weather_cloudy, false));
                         activity.binding.setGanmao(weatherBean.getData().getGanmao());
                         if (activity.weatherAdapter != null)
                             activity.weatherAdapter.refreshList(weatherBean.getData().getForecast());

@@ -15,13 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.BaseProgressSubscriber;
+import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityPersonalBinding;
 import com.mwm.loyal.handler.PersonalHandler;
-import com.mwm.loyal.imp.SubscribeListener;
+import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.ImageUtil;
@@ -67,7 +67,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
 
     private void queryAccount() {
         String account = getIntent().getStringExtra("account");
-        BaseProgressSubscriber<ResultBean> querySubscribe = new BaseProgressSubscriber<>(this, -1, this);
+        RxProgressSubscriber<ResultBean> querySubscribe = new RxProgressSubscriber<>(this, this);
         RetrofitManage.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
     }
 
@@ -116,7 +116,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
     }
 
     @Override
-    public void onResult(int what, ResultBean resultBean) {
+    public void onResult(int what, Object tag, ResultBean resultBean) {
         if (resultBean != null) {
             if (resultBean.getResultCode() == 1) {
                 loginBean = new LoginBean();
@@ -131,13 +131,8 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
     }
 
     @Override
-    public void onError(int what, Throwable e) {
+    public void onError(int what, Object tag, Throwable e) {
         showErrorDialog(e.toString(), true);
-    }
-
-    @Override
-    public void onCompleted(int what) {
-
     }
 
     private class UpdateAccount extends AsyncTask<Void, View, String> {

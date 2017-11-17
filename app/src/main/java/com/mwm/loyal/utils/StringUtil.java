@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import android.widget.Spinner;
 
 import com.mwm.loyal.beans.SpinBean;
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.Contact;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -45,7 +45,7 @@ public class StringUtil implements Contact {
             return true;
         } else if (error.startsWith("SoapFault - faultcode")) {
             return true;
-        } else if (TextUtils.equals(error, "err")) {
+        } else if (TextUtils.equals("err", error)) {
             return true;
         } else if (error.startsWith("org.ksoap2.transport.HttpResponseException")) {
             return true;
@@ -71,8 +71,8 @@ public class StringUtil implements Contact {
         } else return error;
     }
 
-    public static String replaceNull(String string) {
-        return TextUtils.isEmpty(string) ? "" : string;
+    public static String replaceNull(CharSequence sequence) {
+        return TextUtils.isEmpty(sequence) ? "" : sequence.toString().trim();
     }
 
     public static String replaceNull(Object object) {
@@ -81,20 +81,6 @@ public class StringUtil implements Contact {
 
     public static boolean isEmpty(String str) {
         return ((str == null) || (str.trim().length() == 0));
-    }
-
-    public static boolean isEmail(String email) {
-        String str = "^([a-zA-Z0-9_\\-.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
-        Pattern p = Pattern.compile(str);
-        Matcher m = p.matcher(email);
-
-        return m.matches();
-    }
-
-    public static boolean isMobileNo(String mobiles) {
-        Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
-        Matcher m = p.matcher(mobiles);
-        return m.matches();
     }
 
     public static boolean ipValue(String address) {
@@ -109,17 +95,13 @@ public class StringUtil implements Contact {
         return matcher.matches();
     }
 
-    public static String subEndTime(String time) {
-        return replaceNull(time).replace("00:00:00", "").replace(".0", "").trim();
-    }
-
     public static String encodeStr2Utf(String str) {
         if (TextUtils.isEmpty(str))
             return "";
         try {
             return URLEncoder.encode(str, "utf-8");
         } catch (Exception e) {
-            return "";
+            return str;
         }
     }
 
@@ -129,7 +111,7 @@ public class StringUtil implements Contact {
         try {
             return URLDecoder.decode(str, "utf-8");
         } catch (Exception e) {
-            return "";
+            return str;
         }
     }
 

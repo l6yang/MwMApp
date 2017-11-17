@@ -1,12 +1,14 @@
 package com.mwm.loyal.base;
 
 import android.content.Context;
+import android.support.annotation.IntRange;
+import android.text.TextUtils;
 
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.beans.WeatherBean;
-import com.mwm.loyal.imp.ObservableServer;
-import com.mwm.loyal.imp.ProgressCancelListener;
-import com.mwm.loyal.imp.SubscribeListener;
+import com.mwm.loyal.impl.ObservableServer;
+import com.mwm.loyal.impl.ProgressCancelListener;
+import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.widget.DialogHandler;
 
@@ -19,66 +21,81 @@ import retrofit2.http.Url;
 import rx.Observable;
 import rx.Subscriber;
 
-public class BaseProgressSubscriber<T> extends Subscriber<T> implements ProgressCancelListener, ObservableServer {
+public class RxProgressSubscriber<T> extends Subscriber<T> implements ProgressCancelListener, ObservableServer {
 
     private DialogHandler.Builder builder;
     private SubscribeListener<T> subscribeListener;
     private int mWhat;
     private ObservableServer server = RetrofitManage.getInstance().getObservableServer();
+    private Object tag;
+    private boolean isShowDialog = true;//是否显示dialog
 
-    public BaseProgressSubscriber(Context context) {
-        this(context, 0);
+    public RxProgressSubscriber(Context context) {
+        this(context, null);
     }
 
-    public BaseProgressSubscriber(Context context, int what) {
-        this(context, what, null);
+    public RxProgressSubscriber(Context context, SubscribeListener<T> listener) {
+        this(context, 2, listener);
     }
 
-    public BaseProgressSubscriber(Context context, SubscribeListener<T> listener) {
-        this(context, 0, listener);
+    /**
+     * @param what default=2
+     */
+    public RxProgressSubscriber(Context context, @IntRange(from = 2) int what, SubscribeListener<T> listener) {
+        setSubscribeListener(listener);
+        setWhat(what);
+        initDialog(context);
     }
 
-    public BaseProgressSubscriber(Context context, int what, SubscribeListener<T> listener) {
-        this(context, null, what, listener);
-    }
-
-    public BaseProgressSubscriber(Context context, String message, int what, SubscribeListener<T> listener) {
-        subscribeListener = listener;
+    public RxProgressSubscriber setWhat(@IntRange(from = 2) int what) {
         this.mWhat = what;
-        initDialog(context, message);
+        return this;
     }
 
-    public void setWhat(int what) {
-        this.mWhat = what;
+    public RxProgressSubscriber setSubscribeListener(SubscribeListener<T> listener) {
+        this.subscribeListener = listener;
+        return this;
     }
 
-    private void initDialog(Context context, String message) {
+    public RxProgressSubscriber setShowDialog(boolean showDialog) {
+        isShowDialog = showDialog;
+        return this;
+    }
+
+    public RxProgressSubscriber setTag(Object tag) {
+        this.tag = tag;
+        return this;
+    }
+
+    private void initDialog(Context context) {
         builder = new DialogHandler.Builder(context, this);
-        builder.setMessage(message);
-        builder.setCancelable(true);
-        builder.setCanceledOnTouchOutside(false);
+        setMessage(null);
+        setCancelable(true);
+        setCanceledOnTouchOutside(false);
     }
 
-    public void setMessage(CharSequence sequence) {
+    public RxProgressSubscriber setMessage(CharSequence sequence) {
         if (builder != null) {
             builder.setMessage(sequence);
         }
+        return this;
     }
 
-    public void setCancelable(boolean flag) {
+    public RxProgressSubscriber setCancelable(boolean flag) {
         if (builder != null)
             builder.setCancelable(flag);
+        return this;
     }
 
-    public void setCanceledOnTouchOutside(boolean cancel) {
+    public RxProgressSubscriber setCanceledOnTouchOutside(boolean cancel) {
         if (builder != null)
             builder.setCanceledOnTouchOutside(cancel);
+        return this;
     }
 
     private void showDialog() {
-        if (builder != null) {
+        if (isShowDialog && builder != null)
             builder.show();
-        }
     }
 
     private void dismissDialog() {
@@ -86,6 +103,10 @@ public class BaseProgressSubscriber<T> extends Subscriber<T> implements Progress
             builder.dismiss();
             builder = null;
         }
+    }
+
+    public Object getTag() {
+        return tag;
     }
 
     @Override
@@ -96,25 +117,31 @@ public class BaseProgressSubscriber<T> extends Subscriber<T> implements Progress
     @Override
     public void onCompleted() {
         dismissDialog();
-        if (subscribeListener != null)
-            subscribeListener.onCompleted(mWhat);
     }
 
     @Override
     public void onNext(T result) {
         if (subscribeListener != null)
-            subscribeListener.onResult(mWhat, result);
+            subscribeListener.onResult(mWhat, tag, result);
     }
 
     @Override
     public void onError(Throwable e) {
-        if (subscribeListener != null)
-            subscribeListener.onError(mWhat, e);
         dismissDialog();
+        if (TextUtils.equals("已取消操作", null == e ? "" : e.getMessage())) {
+            if (subscribeListener != null)
+                subscribeListener.onError(mWhat, tag, e);
+            subscribeListener = null;
+        } else {
+            if (subscribeListener != null)
+                subscribeListener.onError(mWhat, tag, e);
+        }
     }
 
     @Override
     public void onCancelProgress() {
+        onError(new Exception("已取消操作"));
+        onCompleted();
         if (!isUnsubscribed()) {
             unsubscribe();
         }
@@ -203,5 +230,10 @@ public class BaseProgressSubscriber<T> extends Subscriber<T> implements Progress
     @Override
     public Observable<WeatherBean> getWeather(@Url String url) {
         return server.getWeather(url);
+    }
+
+    @Override
+    public Observable<ResponseBody> downloadImage(String url) {
+        return server.downloadImage(url);
     }
 }

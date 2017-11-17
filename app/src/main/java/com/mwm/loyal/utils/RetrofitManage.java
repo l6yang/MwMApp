@@ -1,8 +1,8 @@
 package com.mwm.loyal.utils;
 
-import com.mwm.loyal.imp.Contact;
-import com.mwm.loyal.imp.ObservableServer;
-import com.mwm.loyal.imp.RequestServer;
+import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.ObservableServer;
+import com.mwm.loyal.impl.RequestServer;
 
 import java.io.IOException;
 
@@ -83,6 +83,13 @@ public class RetrofitManage implements Contact {
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .unsubscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public static <T> void rxExecutedWithIO(Observable<T> observable, Subscriber<T> subscriber) {
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
                 .subscribe(subscriber);
     }
 }

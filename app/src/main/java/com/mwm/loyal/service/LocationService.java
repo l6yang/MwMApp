@@ -11,7 +11,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.Contact;
 import com.mwm.loyal.utils.StringUtil;
 
 import java.lang.ref.WeakReference;
@@ -76,6 +76,7 @@ public class LocationService extends Service implements Contact, AMapLocationLis
                     intent.putExtra("city", null == location ? "" : StringUtil.replaceNull(location.getCity()));
                     LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
                     service.stopLocation();
+                    service.stopSelf();
                     break;
             }
         }

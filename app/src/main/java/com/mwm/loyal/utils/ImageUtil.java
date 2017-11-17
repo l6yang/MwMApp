@@ -182,7 +182,7 @@ public class ImageUtil {
             }
         }
         bitmap.setPixels(pix, 0, w, 0, 0, w, h);
-        return (bitmap);
+        return bitmap;
     }
 
     public static Bitmap createScaledBitmap(Bitmap src, int dstWidth, int dstHeight, boolean filter) {

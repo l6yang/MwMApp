@@ -1,4 +1,4 @@
-package com.mwm.loyal.imp;
+package com.mwm.loyal.impl;
 
 import android.app.Activity;
 
@@ -23,8 +23,8 @@ public interface Contact {
         public static final String KEY_PASSWORD = "password";
         public static final String KEY_SERVER = "server";
         public static final String service_action_loc = "com.mwm.loyal.service.action.loc";
-        public static final String ACTION_UPDATE = "com.mwm.loyal.activity.action.update";
-        public static final String ACTION_DOWN = "com.mwm.loyal.activity.action.downLoad";
+        public static final String actionUpdate = "com.mwm.loyal.activity.action.update";
+        public static final String actionDownload = "com.mwm.loyal.activity.action.downLoad";
         public static final String method_register = "doRegister";
         public static final String method_login = "doLogin";
         public static final String method_queryAccount = "doQueryAccount";

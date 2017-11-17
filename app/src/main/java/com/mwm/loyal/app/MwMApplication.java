@@ -4,20 +4,26 @@ import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
-import cn.sharesdk.framework.ShareSDK;
-
 public class MwMApplication extends Application {
     private static MwMApplication application;
+    private String activityTag;
 
     @Override
     public void onCreate() {
         super.onCreate();
         application = this;
         Fresco.initialize(this);
-        ShareSDK.initSDK(this);
     }
 
-    public static MwMApplication getApplication() {
+    public static synchronized MwMApplication getInstance() {
         return application;
+    }
+
+    public void setActivityTag(String activityTag) {
+        this.activityTag = activityTag;
+    }
+
+    public String getActivityTag() {
+        return activityTag;
     }
 }

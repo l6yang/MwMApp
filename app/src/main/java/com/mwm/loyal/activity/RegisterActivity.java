@@ -10,7 +10,7 @@ import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.databinding.ActivityRegisterBinding;
 import com.mwm.loyal.handler.RegisterHandler;
-import com.mwm.loyal.imp.TextChangedListener;
+import com.mwm.loyal.impl.TextChangedListener;
 import com.mwm.loyal.utils.ResUtil;
 
 import butterknife.BindView;

@@ -8,9 +8,8 @@ import com.mwm.loyal.activity.FeedBackActivity;
 import com.mwm.loyal.base.BaseClickHandler;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAboutBinding;
-import com.mwm.loyal.imp.ObservableServer;
+import com.mwm.loyal.impl.ObservableServer;
 import com.mwm.loyal.utils.ApkUtil;
-import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 
 import rx.Observer;
@@ -26,7 +25,7 @@ public class AboutHandler extends BaseClickHandler<ActivityAboutBinding> {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.about_feedBack:
-                IntentUtil.toStartActivity(activity, FeedBackActivity.class);
+                startActivity(FeedBackActivity.class);
                 break;
             case R.id.about_version:
                 progressDialog.setMessage("正在检查中");
@@ -63,7 +62,7 @@ public class AboutHandler extends BaseClickHandler<ActivityAboutBinding> {
                                 activity.showUpdateDialog(resultBean.getResultMsg(), resultBean.getExceptMsg());
                             } else showDialog(resultBean.getResultMsg(), false);
                         } else {
-                            showErrorDialog("解析失败", false);
+                            showErrorDialog("解析失败");
                         }
                     }
                 });

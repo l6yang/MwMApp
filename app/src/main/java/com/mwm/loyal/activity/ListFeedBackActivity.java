@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.adapter.FeedBackAdapter;
-import com.mwm.loyal.base.BaseProgressSubscriber;
+import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.FeedBackBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityListFeedbackBinding;
-import com.mwm.loyal.imp.SubscribeListener;
+import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.libs.swipback.utils.SwipeBackLayout;
 import com.mwm.loyal.utils.DividerItemDecoration;
 import com.mwm.loyal.utils.GsonUtil;
@@ -63,7 +63,7 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
 
     private void queryHistory() {
         String account = getIntent().getStringExtra("account");
-        BaseProgressSubscriber<ResultBean> subscriber = new BaseProgressSubscriber<>(this, this);
+        RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(this, this);
         RetrofitManage.rxExecuted(subscriber.getSelfFeed(account), subscriber);
     }
 
@@ -100,7 +100,7 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
     }
 
     @Override
-    public void onResult(int what, ResultBean resultBean) {
+    public void onResult(int what, Object tag, ResultBean resultBean) {
         try {
             if (1 == resultBean.getResultCode()) {
                 List<FeedBackBean> beanList = GsonUtil.getBeanListFromJson(resultBean.getResultMsg(), FeedBackBean.class);
@@ -115,12 +115,8 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
     }
 
     @Override
-    public void onError(int what, Throwable e) {
+    public void onError(int what, Object tag, Throwable e) {
         showErrorDialog(e.toString(), false);
-    }
-
-    @Override
-    public void onCompleted(int what) {
     }
 
     @Override
@@ -142,9 +138,9 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
         closeable.smoothCloseMenu();// 关闭被点击的菜单。
         // 如果是删除：推荐调用Adapter.notifyItemRemoved(position)，不推荐Adapter.notifyDataSetChanged();
         if (menuPosition == 0) {// 删除按钮被点击。
-            BaseProgressSubscriber<ResultBean> subscriber = new BaseProgressSubscriber<>(this, 2, new SubscribeListener<ResultBean>() {
+            RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(this, new SubscribeListener<ResultBean>() {
                 @Override
-                public void onResult(int what, ResultBean resultBean) {
+                public void onResult(int what, Object tag, ResultBean resultBean) {
                     if (null != resultBean) {
                         if (1 == resultBean.getResultCode()) {
                             showToast("删除成功");
@@ -155,13 +151,8 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
                 }
 
                 @Override
-                public void onError(int what, Throwable e) {
+                public void onError(int what, Object tag, Throwable e) {
                     showDialog(e.toString(), false);
-                }
-
-                @Override
-                public void onCompleted(int what) {
-
                 }
             });
             RetrofitManage.rxExecuted(subscriber.deleteSelfFeed(beanList.get(adapterPosition).toString()), subscriber);

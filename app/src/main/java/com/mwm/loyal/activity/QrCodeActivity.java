@@ -21,8 +21,8 @@ import java.io.File;
 
 import butterknife.BindView;
 
-import static com.mwm.loyal.imp.Contact.Str.action;
-import static com.mwm.loyal.imp.Contact.Str.method_scan;
+import static com.mwm.loyal.impl.Contact.Str.action;
+import static com.mwm.loyal.impl.Contact.Str.method_scan;
 
 public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)

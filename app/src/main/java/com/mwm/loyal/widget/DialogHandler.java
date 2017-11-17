@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 
-import com.mwm.loyal.imp.ProgressCancelListener;
+import com.mwm.loyal.impl.ProgressCancelListener;
 
 public class DialogHandler extends Handler implements DialogInterface.OnCancelListener {
     private ProgressDialog progressDialog;

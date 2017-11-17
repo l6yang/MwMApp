@@ -3,7 +3,7 @@ package com.mwm.loyal.libs.manager;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.mwm.loyal.imp.Contact;
+import com.mwm.loyal.impl.Contact;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.IOUtil;
 
