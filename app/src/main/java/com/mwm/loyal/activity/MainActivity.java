@@ -41,6 +41,7 @@ import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.StateBarUtil;
 import com.mwm.loyal.utils.StringUtil;
 import com.mwm.loyal.utils.TimeUtil;
@@ -240,7 +241,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
             return;
         }
         RxProgressSubscriber<ResultBean> querySubscribe = new RxProgressSubscriber<>(this, this);
-        RetrofitManage.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
+        RxUtil.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
     }
 
     @PermissionYes(Int.permissionCamera)

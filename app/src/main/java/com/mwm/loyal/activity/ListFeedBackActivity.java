@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.adapter.FeedBackAdapter;
-import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.base.BaseSwipeActivity;
+import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.FeedBackBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityListFeedbackBinding;
@@ -19,7 +19,7 @@ import com.mwm.loyal.libs.swipback.utils.SwipeBackLayout;
 import com.mwm.loyal.utils.DividerItemDecoration;
 import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.RxUtil;
 import com.yanzhenjie.recyclerview.swipe.Closeable;
 import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
@@ -64,7 +64,7 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
     private void queryHistory() {
         String account = getIntent().getStringExtra("account");
         RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(this, this);
-        RetrofitManage.rxExecuted(subscriber.getSelfFeed(account), subscriber);
+        RxUtil.rxExecuted(subscriber.getSelfFeed(account), subscriber);
     }
 
     private void initViews() {
@@ -155,7 +155,7 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
                     showDialog(e.toString(), false);
                 }
             });
-            RetrofitManage.rxExecuted(subscriber.deleteSelfFeed(beanList.get(adapterPosition).toString()), subscriber);
+            RxUtil.rxExecuted(subscriber.deleteSelfFeed(beanList.get(adapterPosition).toString()), subscriber);
         }
     }
 }

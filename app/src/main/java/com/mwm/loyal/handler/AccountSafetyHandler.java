@@ -13,7 +13,7 @@ import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAccountBinding;
 import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.ApkUtil;
-import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.RxUtil;
 
 public class AccountSafetyHandler extends BaseClickHandler<ActivityAccountBinding> implements SubscribeListener<ResultBean> {
 
@@ -34,7 +34,7 @@ public class AccountSafetyHandler extends BaseClickHandler<ActivityAccountBindin
                 loginBean.device.set(ApkUtil.getDeviceID());
                 loginBean.serial.set(ApkUtil.getDeviceSerial());
                 RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(activity, this);
-                RetrofitManage.rxExecuted(subscriber.doUpdateAccount(loginBean.toString()), subscriber);
+                RxUtil.rxExecuted(subscriber.doUpdateAccount(loginBean.toString()), subscriber);
                 break;
             case R.id.account_destroy:
                 builder.putExtra("extra", "destroy");

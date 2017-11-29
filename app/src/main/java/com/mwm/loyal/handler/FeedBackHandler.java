@@ -12,7 +12,7 @@ import com.mwm.loyal.beans.FeedBackBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityFeedbackBinding;
 import com.mwm.loyal.impl.SubscribeListener;
-import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.TimeUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
@@ -35,7 +35,7 @@ public class FeedBackHandler extends BaseClickHandler implements SubscribeListen
                 String account = activity.getIntent().getStringExtra("account");
                 FeedBackBean backBean = new FeedBackBean(account, content, TimeUtil.getDateTime());
                 RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(activity, this);
-                RetrofitManage.rxExecuted(subscriber.doFeedBack(backBean.toString()), subscriber);
+                RxUtil.rxExecuted(subscriber.doFeedBack(backBean.toString()), subscriber);
                 break;
         }
         ToastUtil.hideInput(activity, binding.editFeedBack.getWindowToken());

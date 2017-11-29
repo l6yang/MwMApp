@@ -17,6 +17,7 @@ import com.mwm.loyal.impl.OperaOnClickListener;
 import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.OperateDialog;
 import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
 import rx.Observable;
@@ -118,7 +119,7 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
         RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(activity, this);
         subscriber.setWhat(resultReg);
         Observable<ResultBean> observable = fromLogin ? subscriber.doRegister(loginBean.toString()) : subscriber.doUpdateAccount(loginBean.toString());
-        RetrofitManage.rxExecuted(observable, subscriber);
+        RxUtil.rxExecuted(observable, subscriber);
     }
 
     private boolean isValue(String string) {
@@ -183,6 +184,6 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
         String nickname = binding.nickname.getText().toString().trim();
         RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(activity, this);
         subscriber.setWhat(resultDes);
-        RetrofitManage.rxExecuted(subscriber.destroyAccount(new LoginBean(account, nickname).toString()), subscriber);
+        RxUtil.rxExecuted(subscriber.destroyAccount(new LoginBean(account, nickname).toString()), subscriber);
     }
 }

@@ -15,8 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.base.BaseSwipeActivity;
+import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityPersonalBinding;
@@ -27,6 +27,7 @@ import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.StringUtil;
 import com.mwm.loyal.utils.ToastUtil;
 import com.yalantis.ucrop.UCrop;
@@ -68,7 +69,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
     private void queryAccount() {
         String account = getIntent().getStringExtra("account");
         RxProgressSubscriber<ResultBean> querySubscribe = new RxProgressSubscriber<>(this, this);
-        RetrofitManage.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
+        RxUtil.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
     }
 
     @Override

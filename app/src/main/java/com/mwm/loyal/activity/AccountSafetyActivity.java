@@ -7,14 +7,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.base.BaseSwipeActivity;
+import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAccountBinding;
 import com.mwm.loyal.handler.AccountSafetyHandler;
 import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.RxUtil;
 
 import butterknife.BindView;
 
@@ -77,7 +77,7 @@ public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBind
     private void checkLocked() {
         String account = getIntent().getStringExtra("account");
         RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(this, this);
-        RetrofitManage.rxExecuted(subscriber.doAccountLocked(account), subscriber);
+        RxUtil.rxExecuted(subscriber.doAccountLocked(account), subscriber);
     }
 
     @Override

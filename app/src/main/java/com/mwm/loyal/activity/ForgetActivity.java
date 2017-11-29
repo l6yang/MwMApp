@@ -6,13 +6,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.base.BaseSwipeActivity;
+import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.databinding.ActivityForgetBinding;
 import com.mwm.loyal.impl.ObservableServer;
 import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.StringUtil;
 
 import butterknife.BindView;
@@ -67,7 +68,7 @@ public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> imp
                 ObservableServer server = RetrofitManage.getInstance().getObservableServer();
                 Observable<String> call = server.doTestLogin("loyal", "111111");
                 RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(this, this);
-                RetrofitManage.rxExecuted(call, subscriber);
+                RxUtil.rxExecuted(call, subscriber);
                 break;
         }
     }

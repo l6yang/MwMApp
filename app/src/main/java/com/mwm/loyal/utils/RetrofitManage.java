@@ -85,11 +85,4 @@ public class RetrofitManage implements Contact {
                 .unsubscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
-
-    public static <T> void rxExecutedWithIO(Observable<T> observable, Subscriber<T> subscriber) {
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.newThread())
-                .unsubscribeOn(Schedulers.io())
-                .subscribe(subscriber);
-    }
 }

@@ -19,7 +19,7 @@ import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.service.ImageService;
 import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
-import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
 public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> implements SubscribeListener<ResultBean> {
@@ -67,7 +67,7 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
         //登录页面只有登录
         RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(activity, this);
         subscriber.setMessage("登录中...").setTag(loginBean);
-        RetrofitManage.rxExecuted(subscriber.doLogin(loginBean.toString()), subscriber);
+        RxUtil.rxExecuted(subscriber.doLogin(loginBean.toString()), subscriber);
     }
 
     private void toRegister(@IdRes int resId) {

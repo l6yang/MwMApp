@@ -35,7 +35,7 @@ public class WeatherUtil implements Contact {
                 message.sendToTarget();
             }
         };
-        RetrofitManage.rxExecuted(observable, subscriber);
+        RxUtil.rxExecuted(observable, subscriber);
     }
 
     public static int getWeatherImg(String type) {

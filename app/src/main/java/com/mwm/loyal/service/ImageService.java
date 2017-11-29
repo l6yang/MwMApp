@@ -10,7 +10,7 @@ import com.mwm.loyal.impl.Contact;
 import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.RetrofitManage;
+import com.mwm.loyal.utils.RxUtil;
 
 import java.io.File;
 
@@ -51,7 +51,7 @@ public class ImageService extends IntentService implements Contact, SubscribeLis
         RxProgressSubscriber<ResponseBody> subscriber = new RxProgressSubscriber<>(this, this);
         subscriber.setShowDialog(false).setTag(account);
         String url = Str.getServerUrl(Str.method_showIcon) + "&account=" + account;
-        RetrofitManage.rxExecutedWithIO(subscriber.downloadImage(url), subscriber);
+        RxUtil.rxExecutedByIO(subscriber.downloadImage(url), subscriber);
     }
 
     @Override
