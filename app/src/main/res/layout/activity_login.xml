@@ -53,7 +53,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:contentDescription="@string/empty"
-                        android:onClick="@{click.onClick}"
+                        android:onClick="@{click::onClick}"
                         android:src="@mipmap/edit_clear"
                         android:visibility="gone" />
 
@@ -97,7 +97,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:contentDescription="@string/empty"
-                        android:onClick="@{click.onClick}"
+                        android:onClick="@{click::onClick}"
                         android:src="@mipmap/edit_clear"
                         android:visibility="gone" />
 
@@ -140,7 +140,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:contentDescription="@string/empty"
-                        android:onClick="@{click.onClick}"
+                        android:onClick="@{click::onClick}"
                         android:src="@mipmap/edit_clear"
                         android:visibility="gone" />
 
@@ -182,7 +182,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:onClick="@{click.onClick}"
+                        android:onClick="@{click::onClick}"
                         android:padding="8dp"
                         android:text="@string/forget_mm"
                         android:textColor="@color/color_text_click"
@@ -200,7 +200,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:onClick="@{click.onClick}"
+                        android:onClick="@{click::onClick}"
                         android:padding="8dp"
                         android:text="@string/register"
                         android:textColor="@color/color_text_click"
@@ -215,7 +215,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/drawable_btn_login"
                 android:gravity="center"
-                android:onClick="@{click.onClick}"
+                android:onClick="@{click::onClick}"
                 android:padding="10dp"
                 android:text="@string/login"
                 android:textColor="@color/color_text_click"

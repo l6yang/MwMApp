@@ -218,7 +218,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
-                        android:onClick="@{click.onClick}">
+                        android:onClick="@{click::onClick}">
 
                         <ImageView
                             android:layout_width="32dp"
@@ -238,7 +238,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="48dp"
-                    android:onClick="@{click.onClick}"
+                    android:onClick="@{click::onClick}"
                     fresco:actualImageScaleType="centerInside"
                     fresco:roundAsCircle="true"
                     fresco:roundingBorderColor="@color/white"

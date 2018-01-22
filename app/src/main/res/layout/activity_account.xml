@@ -51,7 +51,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:onClick="@{click.onClick}"
+                        android:onClick="@{click::onClick}"
                         android:contentDescription="@string/off"
                         android:src="@mipmap/switch_off" />
 
@@ -81,7 +81,7 @@
                     android:drawableEnd="@mipmap/arrow_right"
                     android:drawableRight="@mipmap/arrow_right"
                     android:gravity="center_vertical"
-                    android:onClick="@{click.onClick}"
+                    android:onClick="@{click::onClick}"
                     android:padding="8dp"
                     android:text="@string/reset_mm"
                     android:textColor="@color/black"
@@ -100,7 +100,7 @@
                     android:drawableEnd="@mipmap/arrow_right"
                     android:drawableRight="@mipmap/arrow_right"
                     android:gravity="center_vertical"
-                    android:onClick="@{click.onClick}"
+                    android:onClick="@{click::onClick}"
                     android:padding="8dp"
                     android:text="@string/destroy_account"
                     android:textColor="@color/black"

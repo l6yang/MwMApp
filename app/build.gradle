@@ -1,12 +1,16 @@
 apply plugin: 'com.android.application'
 
+Properties properties = new Properties()
+def propertiesFile = rootProject.file('local.properties')
+properties.load(new FileInputStream(propertiesFile))
+
 android {
     signingConfigs {
         release {
-            keyAlias 'mwm.loyal'
-            keyPassword 'mwm.loyal'
-            storeFile file('E:/Studio Demo/MwMApp/mwm.jks')
-            storePassword 'mwm.loyal'
+            keyAlias properties["release.key"]
+            keyPassword properties["release.key"]
+            storeFile file(properties["release.keyPath"])
+            storePassword properties["release.key"]
         }
     }
     compileSdkVersion 27
@@ -22,6 +26,20 @@ android {
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "arm64-v8a", "x86_64"
+        }
+        applicationVariants.all { variant ->
+            variant.outputs.all { output ->
+                def outputFile = output.outputFile
+                if (null != outputFile && outputFile.name.endsWith('.apk')) {
+                    def calender = Calendar.getInstance(Locale.SIMPLIFIED_CHINESE)
+                    def year = calender.get(Calendar.YEAR)
+                    def month = calender.get(Calendar.MONTH)
+                    def day = calender.get(Calendar.DAY_OF_MONTH)
+                    def date = year + "_" + (month + 1) + "_" + day
+                    def fileName = "mwm_${defaultConfig.versionName}_${date}.apk"
+                    outputFileName = fileName
+                }
+            }
         }
     }
     buildTypes {
@@ -42,34 +60,33 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile fileTree(include: ['*.jar'], dir: 'libs')
     //retrofit
-    compile files('libs/com.baidu.tts_2.3.0.jar')
-    compile 'com.android.support:appcompat-v7:27.0.2'
-    compile 'com.jakewharton:butterknife:8.8.1'
-    compile 'com.android.support:support-v4:27.0.2'
-    compile 'com.android.support:recyclerview-v7:27.0.2'
-    compile 'com.android.support:design:27.0.2'
-    compile 'com.android.support:support-vector-drawable:27.0.2'
-    compile 'com.facebook.fresco:fresco:1.5.0'
-    compile 'com.yanzhenjie:permission:1.1.0'
-    compile 'com.google.zxing:core:3.3.1'
-    compile 'com.yalantis:ucrop:2.2.0'
-    compile 'io.reactivex:rxjava:1.3.2'
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'com.yanzhenjie:recyclerview-swipe:1.0.4'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
-    compile 'com.squareup.retrofit2:converter-scalars:2.3.0'
-    compile 'com.yalantis:phoenix:1.2.3'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
+    implementation files('libs/com.baidu.tts_2.3.0.jar')
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.android.support:support-v4:27.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.0.2'
+    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.android.support:support-vector-drawable:27.0.2'
+    implementation 'com.facebook.fresco:fresco:1.5.0'
+    implementation 'com.yanzhenjie:permission:1.1.2'
+    implementation 'com.google.zxing:core:3.3.1'
+    implementation 'com.yalantis:ucrop:2.2.0'
+    implementation 'io.reactivex:rxjava:1.3.2'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'com.yanzhenjie:recyclerview-swipe:1.0.4'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+    implementation 'com.yalantis:phoenix:1.2.3'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    compile 'com.github.ikidou:TypeBuilder:1.0'/**Gson泛型*/
-    compile 'com.amap.api:location:3.6.1'
+    implementation 'com.github.ikidou:TypeBuilder:1.0'/**Gson泛型*/
+    implementation 'com.amap.api:location:3.7.0'
 }
