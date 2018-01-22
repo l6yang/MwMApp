@@ -88,6 +88,17 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends BasicActiv
     }
 
     @Override
+    public void showErrorToast(int resId, Throwable e) {
+        showErrorToast(getString(resId), e);
+    }
+
+    @Override
+    public void showErrorToast(@NonNull String text, Throwable e) {
+        String error = null == e ? "" : ConnectUtil.getError(e);
+        showToast(replaceNull(text) + (TextUtils.isEmpty(error) ? "" : "\n" + error));
+    }
+
+    @Override
     public void showDialog(@NonNull String text) {
         showDialog(text, false);
     }
@@ -99,7 +110,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends BasicActiv
 
     @Override
     public String replaceNull(CharSequence sequence) {
-        return StringUtil.replaceNull(sequence);
+        return Str.replaceNull(sequence);
     }
 
     @Override

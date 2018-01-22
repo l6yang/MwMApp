@@ -14,7 +14,6 @@ import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.RxUtil;
-import com.mwm.loyal.utils.StringUtil;
 
 import butterknife.BindView;
 import rx.Observable;
@@ -80,7 +79,7 @@ public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> imp
 
     @Override
     public void onError(int what, Object tag, Throwable e) {
-        StringUtil.showErrorToast(this, e.toString());
+        showErrorToast("", e);
         System.out.println("onError--" + e.toString());
     }
 }

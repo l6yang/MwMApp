@@ -119,7 +119,7 @@ public class TimeUtil implements Contact {
     }
 
     public static String subEndTime(String time) {
-        String subTime = StringUtil.replaceNull(time).trim();
+        String subTime = Str.replaceNull(time).trim();
         return TextUtils.isEmpty(subTime) ? "" : subTime.
                 replace("00:00:00", "").replace(".0", "").trim();
     }

@@ -7,12 +7,14 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.text.TextUtils;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Spinner;
 
 import com.mwm.loyal.impl.IntentFrame;
 import com.mwm.loyal.impl.UIInterface;
+import com.mwm.loyal.utils.ConnectUtil;
 import com.mwm.loyal.utils.IntentUtil;
 import com.mwm.loyal.utils.StringUtil;
 import com.mwm.loyal.utils.TimeUtil;
@@ -50,6 +52,17 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
     }
 
     @Override
+    public void showErrorToast(int resId, Throwable e) {
+        showErrorToast(getString(resId), e);
+    }
+
+    @Override
+    public void showErrorToast(@NonNull String text, Throwable e) {
+        String error = null == e ? "" : ConnectUtil.getError(e);
+        showToast(replaceNull(text) + (TextUtils.isEmpty(error) ? "" : "\n" + error));
+    }
+
+    @Override
     public void showDialog(@NonNull String text) {
         showDialog(text, false);
     }
@@ -61,7 +74,7 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
 
     @Override
     public String replaceNull(CharSequence sequence) {
-        return StringUtil.replaceNull(sequence);
+        return Str.replaceNull(sequence);
     }
 
     @Override
@@ -136,10 +149,6 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
 
     public final void setResult(int resultCode, Intent intent) {
         activity.setResult(resultCode, intent);
-    }
-
-    protected final String replaceNull(Object object) {
-        return StringUtil.replaceNull(object);
     }
 
     private void initDialog(BaseActivity baseActivity) {

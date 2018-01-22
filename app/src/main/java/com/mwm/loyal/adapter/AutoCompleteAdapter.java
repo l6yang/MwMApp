@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseListAdapter;
 import com.mwm.loyal.beans.CityBean;
+import com.mwm.loyal.impl.Contact;
 import com.mwm.loyal.utils.StringUtil;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
+public class AutoCompleteAdapter extends BaseAdapter implements Filterable,Contact {
     private LayoutInflater inflater;
     private List<CityBean> beanList;
     private ListFilter listFilter;
@@ -65,7 +66,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
             convertView.setTag(holder);
         } else holder = (ViewHolder) convertView.getTag();
         CityBean cityBean = filterList.get(position);
-        String itemStr = cityBean == null ? "" : StringUtil.replaceNull(cityBean.getCityName());
+        String itemStr = cityBean == null ? "" : Str.replaceNull(cityBean.getCityName());
         holder.itemSpinner.setText(itemStr);
         return convertView;
     }
@@ -103,8 +104,8 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
                 List<CityBean> newList = new ArrayList<>(count);
                 for (int i = 0; i < count; i++) {
                     CityBean objList = beanList.get(i);
-                    String cityName = objList == null ? "" : StringUtil.replaceNull(objList.getCityName());
-                    String cityLetter = objList == null ? "" : StringUtil.replaceNull(objList.getCityLetter());
+                    String cityName = objList == null ? "" : Str.replaceNull(objList.getCityName());
+                    String cityLetter = objList == null ? "" : Str.replaceNull(objList.getCityLetter());
                     if (cityName.toUpperCase().startsWith(filterStr) || cityName.contains(filterStr) || TextUtils.equals(filterStr, cityLetter)) {
                         newList.add(objList);
                     }

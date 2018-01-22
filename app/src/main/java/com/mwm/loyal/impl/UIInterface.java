@@ -17,6 +17,10 @@ public interface UIInterface extends Contact {
 
     void showToast(@StringRes int resId);
 
+    void showErrorToast(@StringRes int resId, Throwable e);
+
+    void showErrorToast(@NonNull String text, Throwable e);
+
     void showErrorDialog(@NonNull String text, boolean finish);
 
     void showErrorDialog(@NonNull String text);

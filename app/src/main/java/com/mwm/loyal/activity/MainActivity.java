@@ -178,7 +178,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
                 if (data == null || TextUtils.isEmpty(data.getStringExtra("city")))
                     city = PreferencesUtil.getString(getApplicationContext(), Str.KEY_CITY, Str.defaultCity);
                 else city = data.getStringExtra("city");
-                resetCity(StringUtil.replaceNull(city));
+                resetCity(Str.replaceNull(city));
                 break;
         }
         if (RESULT_OK != resultCode)
@@ -201,7 +201,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
 
     //扫描并查询
     private void doScanQuery(String scanStr) {
-        if (StringUtil.isEmpty(scanStr)) {
+        if (TextUtils.isEmpty(scanStr)) {
             ToastUtil.showToast(this, "未扫描到信息");
             return;
         }
@@ -237,7 +237,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
     }
 
     private void doUpdateAccount(String account) {
-        if (StringUtil.isEmpty(account)) {
+        if (TextUtils.isEmpty(account)) {
             return;
         }
         RxProgressSubscriber<ResultBean> querySubscribe = new RxProgressSubscriber<>(this, this);

@@ -73,7 +73,7 @@ public class LocationService extends Service implements Contact, AMapLocationLis
                     AMapLocation location = (AMapLocation) msg.obj;
                     Intent intent = new Intent();
                     intent.setAction(Str.service_action_loc);
-                    intent.putExtra("city", null == location ? "" : StringUtil.replaceNull(location.getCity()));
+                    intent.putExtra("city", null == location ? "" : Str.replaceNull(location.getCity()));
                     LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
                     service.stopLocation();
                     service.stopSelf();

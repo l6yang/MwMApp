@@ -10,8 +10,6 @@ import com.mwm.loyal.impl.Contact;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.mwm.loyal.utils.StringUtil.replaceNull;
-
 public class PreferencesUtil implements Contact {
 
     private static String PREFERENCE_NAME = "MvvM";
@@ -51,9 +49,9 @@ public class PreferencesUtil implements Contact {
     public static boolean putLoginBean(Context context, LoginBean bean) {
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         Editor editor = settings.edit();
-        editor.putString(Str.KEY_ACCOUNT, replaceNull(bean.account.get()));
-        editor.putString(Str.KEY_PASSWORD, replaceNull(bean.password.get()));
-        editor.putString(Str.KEY_SERVER, replaceNull(bean.server.get()));
+        editor.putString(Str.KEY_ACCOUNT, bean.account.get());
+        editor.putString(Str.KEY_PASSWORD, bean.password.get());
+        editor.putString(Str.KEY_SERVER, bean.server.get());
         return editor.commit();
     }
 
@@ -62,7 +60,7 @@ public class PreferencesUtil implements Contact {
         String account = settings.getString(Str.KEY_ACCOUNT, "");
         String password = settings.getString(Str.KEY_PASSWORD, "");
         String server = settings.getString(Str.KEY_SERVER, "");
-        return new LoginBean(replaceNull(account), replaceNull(password), true, replaceNull(server));
+        return new LoginBean(account, password, true, server);
     }
 
     /**

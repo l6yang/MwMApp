@@ -211,8 +211,8 @@ public class BaseDialog extends Dialog implements Contact {
             btnCancel.setOnClickListener(this);
         }
 
-        private String replaceNull(Object object) {
-            return StringUtil.replaceNull(object);
+        private String replaceNull(CharSequence sequence) {
+            return Str.replaceNull(sequence);
         }
     }
 }

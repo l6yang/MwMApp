@@ -37,7 +37,7 @@ public class StateBarUtil {
 
     private static void setStateBarColor(Activity activity, @ColorInt int color) {
         // 设置状态栏颜色
-        ViewGroup contentLayout = (ViewGroup) activity.findViewById(android.R.id.content);
+        ViewGroup contentLayout = activity.findViewById(android.R.id.content);
         setupStatusBarView(activity, contentLayout, color);//Color.parseColor("#FF5677FC"));
         // 设置Activity layout的fitsSystemWindows
         View contentChild = contentLayout.getChildAt(0);

@@ -250,7 +250,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
                 if (delete)
                     //保存裁剪之后压缩的照片
                     upPath = ImageUtil.saveToFile(FileUtil.path_temp + loginBean.account.get() + ".jpg", ImageUtil.releasePics(path, 200));
-                if (!StringUtil.isEmpty(upPath))
+                if (!TextUtils.isEmpty(upPath))
                     //保存完之后删除裁剪的照片
                     FileUtil.deleteFile(FileUtil.path_temp, FileUtil.pic_UCrop);
                 return upPath;

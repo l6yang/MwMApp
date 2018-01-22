@@ -5,13 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.BaseAdapter;
 
-import com.mwm.loyal.utils.StringUtil;
+import com.mwm.loyal.impl.Contact;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseListAdapter<T> extends BaseAdapter {
+public abstract class BaseListAdapter<T> extends BaseAdapter implements Contact {
     protected final LayoutInflater inflater;
     private List<T> arrList;
 
@@ -44,8 +44,8 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
         return arrList;
     }
 
-    protected String replaceNull(Object object) {
-        return StringUtil.replaceNull(object);
+    protected String replaceNull(CharSequence sequence) {
+        return Str.replaceNull(sequence);
     }
 
     public static class ViewHolder {

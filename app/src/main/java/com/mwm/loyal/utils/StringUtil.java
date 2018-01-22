@@ -1,8 +1,6 @@
 package com.mwm.loyal.utils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Spinner;
 
@@ -22,10 +20,6 @@ public class StringUtil implements Contact {
             return true;
         }
         return false;
-    }
-
-    public static void showErrorDialog(@NonNull Activity context, String error, boolean isFinish) {
-        ToastUtil.showDialog(context, errorException(error), isFinish);
     }
 
     private static boolean showErrorToast(String error) {
@@ -71,20 +65,8 @@ public class StringUtil implements Contact {
         } else return error;
     }
 
-    public static String replaceNull(CharSequence sequence) {
-        return TextUtils.isEmpty(sequence) ? "" : sequence.toString().trim();
-    }
-
-    public static String replaceNull(Object object) {
-        return null == object ? "" : replaceNull(object.toString());
-    }
-
-    public static boolean isEmpty(String str) {
-        return ((str == null) || (str.trim().length() == 0));
-    }
-
     public static boolean ipValue(String address) {
-        if (isEmpty(address))
+        if (TextUtils.isEmpty(address))
             return false;
         String ipPattern = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
                 + "(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
@@ -122,9 +104,9 @@ public class StringUtil implements Contact {
             SpinBean spinBean = (SpinBean) spinner.getSelectedItem();
             switch (key) {
                 case "dm":
-                    return replaceNull(spinBean.getDm());
+                    return Str.replaceNull(spinBean.getDm());
                 case "glbm":
-                    return replaceNull(spinBean.getGlbm());
+                    return Str.replaceNull(spinBean.getGlbm());
                 default:
                     return "";
             }

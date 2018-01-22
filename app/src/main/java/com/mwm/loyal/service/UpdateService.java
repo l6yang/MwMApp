@@ -80,7 +80,7 @@ public class UpdateService extends IntentService implements Contact {
                     public void onNext(ResultBean resultBean) {
                         try {
                             if (resultBean.getResultCode() == 1) {
-                                String url = StringUtil.replaceNull(resultBean.getExceptMsg());
+                                String url = Str.replaceNull(resultBean.getExceptMsg());
                                 //发送广播，showPopWindowForDownLoad
                                 Intent intent = new Intent();
                                 intent.setAction(Str.method_apkVerCheck);

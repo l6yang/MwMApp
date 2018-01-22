@@ -117,10 +117,10 @@ public class AlbumActivity extends AppCompatActivity {
      * Initialize up.
      */
     private void initializeMain(int statusColor) {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mBtnPreview = (Button) findViewById(R.id.btn_preview);
-        mBtnSwitchFolder = (Button) findViewById(R.id.btn_switch_dir);
-        mRvContentList = (RecyclerView) findViewById(R.id.rv_content_list);
+        mToolbar = findViewById(R.id.toolbar);
+        mBtnPreview = findViewById(R.id.btn_preview);
+        mBtnSwitchFolder = findViewById(R.id.btn_switch_dir);
+        mRvContentList = findViewById(R.id.rv_content_list);
 
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null)

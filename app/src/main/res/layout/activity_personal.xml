@@ -5,7 +5,7 @@
 
         <import type="android.view.View" />
 
-        <import type="com.mwm.loyal.utils.StringUtil" />
+        <import type="android.text.TextUtils" />
 
         <variable
             name="loginBean"
@@ -112,8 +112,8 @@
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
                             android:paddingStart="8dp"
-                            android:text="@{StringUtil.isEmpty(loginBean.nickname)?@string/key_default:loginBean.nickname}"
-                            android:textColor="@{StringUtil.isEmpty(loginBean.nickname)?@color/text_personal:@color/black}"
+                            android:text="@{TextUtils.isEmpty(loginBean.nickname)?@string/key_default:loginBean.nickname}"
+                            android:textColor="@{TextUtils.isEmpty(loginBean.nickname)?@color/text_personal:@color/black}"
                             android:textSize="@dimen/text_sp_18"
                             android:visibility="@{loginBean.editable?View.GONE:View.VISIBLE}" />
 
@@ -170,8 +170,8 @@
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
                             android:paddingStart="8dp"
-                            android:text="@{StringUtil.isEmpty(loginBean.sign)?@string/key_default:loginBean.sign}"
-                            android:textColor="@{StringUtil.isEmpty(loginBean.sign)?@color/text_personal:@color/black}"
+                            android:text="@{TextUtils.isEmpty(loginBean.sign)?@string/key_default:loginBean.sign}"
+                            android:textColor="@{TextUtils.isEmpty(loginBean.sign)?@color/text_personal:@color/black}"
                             android:textSize="@dimen/text_sp_18"
                             android:visibility="@{loginBean.editable?View.GONE:View.VISIBLE}" />
 

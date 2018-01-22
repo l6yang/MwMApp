@@ -1,8 +1,6 @@
 package com.mwm.loyal.impl;
 
-import android.app.Activity;
-
-import com.mwm.loyal.utils.PreferencesUtil;
+import android.text.TextUtils;
 
 public interface Contact {
 
@@ -53,14 +51,12 @@ public interface Contact {
             return getBaseUrl() + action + method;
         }
 
-        public static String getIpAddress(Activity activity) {
-            if (activity != null)
-                return http + PreferencesUtil.getString(activity.getApplicationContext(), KEY_IP, ipAdd) + port;
-            else return "";
-        }
-
         public static String getBaseUrl() {
             return http + ipAdd + port + "/mwm/";
+        }
+
+        public static String replaceNull(CharSequence sequence) {
+            return TextUtils.isEmpty(sequence) ? "" : sequence.toString().trim();
         }
     }
 

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseViewHolder;
 import com.mwm.loyal.beans.FeedBackBean;
+import com.mwm.loyal.impl.Contact;
 import com.mwm.loyal.utils.StringUtil;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuAdapter;
 
@@ -16,7 +17,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder> {
+public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder> implements Contact{
     private List<FeedBackBean> beanList;
     private final LayoutInflater inflater;
     private BaseViewHolder.OnItemClickListener itemClickListener;
@@ -48,7 +49,7 @@ public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         FeedBackBean feedBackBean = beanList.get(position);
-        String time = StringUtil.replaceNull(feedBackBean.getTime());
+        String time = Str.replaceNull(feedBackBean.getTime());
         if (time.endsWith("00:00:00"))
             time = time.replace(" 00:00:00", "");
         holder.itemTime.setText(time);
