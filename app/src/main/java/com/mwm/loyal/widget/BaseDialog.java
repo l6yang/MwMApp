@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.impl.Contact;
 import com.mwm.loyal.impl.DialogClickListener;
-import com.mwm.loyal.utils.StringUtil;
 
 public class BaseDialog extends Dialog implements Contact {
 
@@ -197,12 +196,12 @@ public class BaseDialog extends Dialog implements Contact {
         }
 
         private void initDialogView() {
-            textTitle = (TextView) baseDialog.findViewById(R.id.text_title);
-            textContent = (TextView) baseDialog.findViewById(R.id.text_content);
+            textTitle = baseDialog.findViewById(R.id.text_title);
+            textContent = baseDialog.findViewById(R.id.text_content);
             layoutOk = baseDialog.findViewById(R.id.dialog_layout_ok);
             layoutCancel = baseDialog.findViewById(R.id.dialog_layout_cancel);
-            btnOk = (Button) baseDialog.findViewById(R.id.dialog_btn_ok);
-            btnCancel = (Button) baseDialog.findViewById(R.id.dialog_btn_cancel);
+            btnOk = baseDialog.findViewById(R.id.dialog_btn_ok);
+            btnCancel = baseDialog.findViewById(R.id.dialog_btn_cancel);
             textTitle.setText(replaceNull(sequenceTitle));
             textContent.setText(replaceNull(sequenceContent));
             btnOk.setText(sequenceOk);

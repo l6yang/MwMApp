@@ -53,9 +53,9 @@ public class AlbumPreviewDialog extends AppCompatDialog {
         this.mCheckListener = checkListener;
         this.mAlbumImages = albumImages;
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mCheckBox = (AppCompatCheckBox) findViewById(R.id.cb_album_check);
-        mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mToolbar = findViewById(R.id.toolbar);
+        mCheckBox = findViewById(R.id.cb_album_check);
+        mViewPager = findViewById(R.id.view_pager);
 
         initializeToolbar(toolbarColor);
         initializeCheckBox(toolbarColor);

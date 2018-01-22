@@ -36,7 +36,7 @@ public class AlbumFolderDialog extends BottomSheetDialog {
         setContentView(R.layout.album_dialog_floder);
         mItemClickListener = itemClickListener;
         fixRestart();
-        RecyclerView rvContentList = (RecyclerView) findViewById(R.id.rv_content_list);
+        RecyclerView rvContentList = findViewById(R.id.rv_content_list);
         if (rvContentList != null) {
             rvContentList.setHasFixedSize(true);
             rvContentList.setLayoutManager(new LinearLayoutManager(getContext()));
