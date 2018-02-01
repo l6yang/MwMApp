@@ -72,7 +72,7 @@ public class BaseuCropActivity extends BaseActivity {
     }
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return 0;
     }
 

@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loyal.base.util.GsonUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.base.RxProgressSubscriber;
@@ -23,9 +24,7 @@ import com.mwm.loyal.databinding.ActivityPersonalBinding;
 import com.mwm.loyal.handler.PersonalHandler;
 import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.FileUtil;
-import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.StringUtil;
@@ -54,13 +53,13 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
     private UpdateAccount mUpdateAuth;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_personal;
     }
 
     @Override
     public void afterOnCreate() {
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         binding.setClick(new PersonalHandler(this));
         queryAccount();
         initViews();
@@ -161,7 +160,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
             System.out.println(result);
             if (StringUtil.showErrorToast(PersonalActivity.this, result))
                 return;
-            ResultBean bean = GsonUtil.getBeanFromJson(result, ResultBean.class);
+            ResultBean bean = GsonUtil.json2Bean(result, ResultBean.class);
             if (bean.getResultCode() == 1)
                 ToastUtil.showToast(PersonalActivity.this, "信息更改成功");
             else
@@ -318,7 +317,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
                         .addFormDataPart(loginBean.account.get(), path, RequestBody.create(MediaType.parse("image/jpeg"), file))
                         .setType(MultipartBody.FORM)
                         .build();*/
-                //return OkHttpClientManager.getInstance().post_jsonDemo(StringUtil.getServiceUrl(Str.method_update_icon), body);
+                //return OkHttpClientManager.getInstance().post_jsonDemo(StringUtil.getServiceUrl(IStr.method_update_icon), body);
                 RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), file);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(loginBean.account.get(), file.getName(), body);
                 //Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateIcon(body, part);
@@ -340,7 +339,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
             mUpImageAuth = null;
             if (StringUtil.showErrorToast(PersonalActivity.this, result))
                 return;
-            ResultBean bean = GsonUtil.getBeanFromJson(result, ResultBean.class);
+            ResultBean bean = GsonUtil.json2Bean(result, ResultBean.class);
             if (bean.getResultCode() == 1) {
                 FileUtil.deleteFile(new File(path));
                 ImageUtil.clearFrescoTemp();
@@ -366,7 +365,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
         String account = getIntent().getStringExtra("account");
         if (binding.simplePersonalIcon == null)
             return;
-        binding.simplePersonalIcon.setImageURI(Uri.parse(Str.getServerUrl(Str.method_showIcon) + "&account=" + account));
+        binding.simplePersonalIcon.setImageURI(Uri.parse(IStr.getServerUrl(IStr.method_showIcon) + "&account=" + account));
     }
 
     @Override

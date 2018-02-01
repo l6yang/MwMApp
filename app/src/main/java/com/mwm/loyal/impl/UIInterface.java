@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.widget.Spinner;
 
-public interface UIInterface extends Contact {
+public interface UIInterface extends IContact {
     String subEndTime(@NonNull String time);
 
     String getSpinSelectStr(Spinner spinner, @NonNull String key);

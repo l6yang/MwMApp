@@ -12,15 +12,16 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Spinner;
 
-import com.mwm.loyal.impl.IntentFrame;
-import com.mwm.loyal.impl.UIInterface;
-import com.mwm.loyal.utils.ConnectUtil;
-import com.mwm.loyal.utils.IntentUtil;
-import com.mwm.loyal.utils.StringUtil;
-import com.mwm.loyal.utils.TimeUtil;
-import com.mwm.loyal.utils.ToastUtil;
+import com.loyal.base.impl.IUIInterface;
+import com.loyal.base.impl.IntentFrame;
+import com.loyal.base.util.ConnectUtil;
+import com.loyal.base.util.IntentUtil;
+import com.loyal.base.util.ObjectUtil;
+import com.loyal.base.util.TimeUtil;
+import com.loyal.base.util.ToastUtil;
+import com.mwm.loyal.impl.IContact;
 
-public abstract class BaseClickHandler<V extends ViewDataBinding> implements IntentFrame, UIInterface {
+public abstract class BaseClickHandler<V extends ViewDataBinding> implements IntentFrame.ActivityFrame, IUIInterface,IContact {
     protected ProgressDialog progressDialog;
     protected BaseActivity activity;
     protected V binding;
@@ -37,8 +38,30 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
         hasIntentParams(false);
     }
 
+    protected void hasIntentParams(boolean hasParam) {
+        builder = null;
+        if (hasParam)
+            builder = new IntentUtil(activity, activity.getIntent());
+        else builder = new IntentUtil(activity);
+    }
+
     public final String getString(@StringRes int resId) {
         return activity.getString(resId);
+    }
+
+    @Override
+    public void startActivityByAct(@Nullable Class<?> tClass) {
+        builder.startActivityByAct(tClass);
+    }
+
+    @Override
+    public void startActivityForResultByAct(@Nullable Class<?> tClass, @IntRange(from = 2) int reqCode) {
+        builder.startActivityForResultByAct(tClass, reqCode);
+    }
+
+    @Override
+    public void startServiceByAct(@Nullable Class<?> tClass) {
+        builder.startServiceByAct(tClass);
     }
 
     @Override
@@ -78,23 +101,23 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
     }
 
     @Override
-    public String subEndTime(@NonNull String t) {
-        return TimeUtil.subEndTime(t);
+    public String subEndTime(@NonNull CharSequence timeSequence) {
+        return TimeUtil.subEndTime(timeSequence);
     }
 
     @Override
     public String encodeStr2Utf(@NonNull String string) {
-        return StringUtil.encodeStr2Utf(string);
+        return Str.encodeStr2Utf(string);
     }
 
     @Override
     public String decodeStr2Utf(@NonNull String string) {
-        return StringUtil.decodeStr2Utf(string);
+        return Str.decodeStr2Utf(string);
     }
 
     @Override
-    public String getSpinSelectStr(Spinner spinner, @NonNull String key) {
-        return StringUtil.getSpinSelectStr(spinner, key);
+    public String getSpinSelectStr(Spinner spinner, @NonNull String methodName) {
+        return (String) ObjectUtil.getMethodValue(spinner.getSelectedItem(), methodName);
     }
 
     @Override
@@ -114,29 +137,8 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
 
     @Override
     public void showErrorDialog(@NonNull String text, Throwable e, boolean finish) {
-        ToastUtil.showDialog(activity, replaceNull(text) + (null == e ? "" : e.getMessage()), finish);
-    }
-
-    protected void hasIntentParams(boolean hasParam) {
-        builder = null;
-        if (hasParam)
-            builder = new IntentUtil(activity, activity.getIntent());
-        else builder = new IntentUtil(activity);
-    }
-
-    @Override
-    public void startActivity(@Nullable Class<?> tClass) {
-        builder.startActivity(tClass);
-    }
-
-    @Override
-    public void startActivityForResult(@Nullable Class<?> tClass, @IntRange(from = 2) int reqCode) {
-        builder.startActivityForResult(tClass, reqCode);
-    }
-
-    @Override
-    public void startService(@Nullable Class<?> tClass) {
-        builder.startService(tClass);
+        String error = null == e ? "" : ConnectUtil.getError(e);
+        showDialog(replaceNull(text) + (TextUtils.isEmpty(error) ? "" : "\n" + error), finish);
     }
 
     public final void finish() {

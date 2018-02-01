@@ -15,8 +15,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
@@ -34,8 +34,6 @@ import java.util.Collection;
 import java.util.Map;
 
 public abstract class BaseCaptureActivity extends AppCompatActivity implements SurfaceHolder.Callback {
-
-    private static final String TAG = BaseCaptureActivity.class.getSimpleName();
 
     private static final String SCHEME = "package";
     /**
@@ -175,9 +173,6 @@ public abstract class BaseCaptureActivity extends AppCompatActivity implements S
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        if (holder == null) {
-            Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
-        }
         if (!hasSurface) {
             hasSurface = true;
             initCamera(holder);
@@ -200,7 +195,7 @@ public abstract class BaseCaptureActivity extends AppCompatActivity implements S
             Message message = Message.obtain(handler, R.id.pub_decode_succeeded, result);
             handler.sendMessage(message);
         } else {
-            Log.i(TAG, "decodeOrStoreSavedBitmap ~~~~~~~ not yet have ");
+            //
         }
     }
 
@@ -209,7 +204,6 @@ public abstract class BaseCaptureActivity extends AppCompatActivity implements S
             throw new IllegalStateException("No SurfaceHolder provided");
         }
         if (cameraManager.isOpen()) {
-            Log.w(TAG, "initCamera() while already open -- late SurfaceView callback?");
             return;
         }
         try {
@@ -220,12 +214,10 @@ public abstract class BaseCaptureActivity extends AppCompatActivity implements S
             }
             decodeOrStoreSavedBitmap(null, null);
         } catch (IOException ioe) {
-            Log.w(TAG, ioe);
             displayFrameworkBugMessageAndExit();
         } catch (RuntimeException e) {
             // Barcode Scanner has seen crashes in the wild of this variety:
             // java.?lang.?RuntimeException: Fail to connect to camera service
-            Log.w(TAG, "Unexpected error initializing camera", e);
             displayFrameworkBugMessageAndExit();
         }
     }
@@ -307,7 +299,7 @@ public abstract class BaseCaptureActivity extends AppCompatActivity implements S
         if (points != null && points.length > 0) {
             Canvas canvas = new Canvas(barcode);
             Paint paint = new Paint();
-            paint.setColor(getResources().getColor(R.color.result_points));
+            paint.setColor(ContextCompat.getColor(this, R.color.result_points));
             if (points.length == 2) {
                 paint.setStrokeWidth(4.0f);
                 drawLine(canvas, paint, points[0], points[1], scaleFactor);

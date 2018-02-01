@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.loyal.base.util.TimeUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.FeedBackActivity;
 import com.mwm.loyal.base.BaseClickHandler;
@@ -13,7 +14,6 @@ import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityFeedbackBinding;
 import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.RxUtil;
-import com.mwm.loyal.utils.TimeUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
 public class FeedBackHandler extends BaseClickHandler implements SubscribeListener<ResultBean> {

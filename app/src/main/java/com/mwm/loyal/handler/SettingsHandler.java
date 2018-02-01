@@ -19,14 +19,14 @@ public class SettingsHandler extends BaseClickHandler<ActivitySettingsBinding> {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.settings_about:
-                startActivity(AboutActivity.class);
+                startActivityByAct(AboutActivity.class);
                 break;
             case R.id.settings_switch:
                 activity.setResult(Activity.RESULT_OK);
                 activity.finish();
                 break;
             case R.id.settings_security:
-                startActivityForResult(AccountSafetyActivity.class, Int.reqCode_Settings_account);
+                startActivityForResultByAct(AccountSafetyActivity.class, Int.reqCode_Settings_account);
                 break;
         }
     }

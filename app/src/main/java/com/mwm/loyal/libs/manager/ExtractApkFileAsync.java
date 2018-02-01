@@ -9,7 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.IContact;
 import com.mwm.loyal.utils.ToastUtil;
 
 public class ExtractApkFileAsync extends AsyncTask<Void, String, Boolean> {
@@ -51,7 +51,7 @@ public class ExtractApkFileAsync extends AsyncTask<Void, String, Boolean> {
     protected void onPostExecute(Boolean status) {
         super.onPostExecute(status);
         progressDialog.dismiss();
-        Message message = Message.obtain(mHandler, Contact.Int.async2Null);
+        Message message = Message.obtain(mHandler, IContact.Int.async2Null);
         message.sendToTarget();
         if (status) {
             ToastUtil.showToast(context, String.format(context.getString(R.string.dialog_saved_description), appBean.getName(), UtilsApp.getAPKFilename(appBean)));

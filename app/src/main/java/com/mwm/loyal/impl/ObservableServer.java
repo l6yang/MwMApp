@@ -16,7 +16,7 @@ import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 import rx.Observable;
 
-import static com.mwm.loyal.impl.Contact.Str.*;
+import static com.mwm.loyal.impl.IContact.IStr.*;
 
 public interface ObservableServer {
 

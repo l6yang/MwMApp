@@ -25,7 +25,7 @@ public class AboutHandler extends BaseClickHandler<ActivityAboutBinding> {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.about_feedBack:
-                startActivity(FeedBackActivity.class);
+                startActivityByAct(FeedBackActivity.class);
                 break;
             case R.id.about_version:
                 progressDialog.setMessage("正在检查中");

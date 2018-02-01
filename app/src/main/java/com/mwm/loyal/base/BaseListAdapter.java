@@ -1,57 +1,38 @@
 package com.mwm.loyal.base;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.BaseAdapter;
 
-import com.mwm.loyal.impl.Contact;
+import com.loyal.base.adapter.ABasicListAdapter;
+import com.mwm.loyal.impl.IContact;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseListAdapter<T> extends BaseAdapter implements Contact {
-    protected final LayoutInflater inflater;
-    private List<T> arrList;
+public abstract class BaseListAdapter<T, V extends ABasicListAdapter.ViewHolder> extends ABasicListAdapter<T, V> implements IContact {
+
+    public BaseListAdapter(Context context) {
+        super(context);
+    }
 
     public BaseListAdapter(Context context, List<T> arrList) {
-        inflater = LayoutInflater.from(context);
-        this.arrList = arrList;
+        super(context, arrList);
     }
 
-    public void refreshList(List<T> arrList) {
-        this.arrList = arrList;
-        notifyDataSetChanged();
+    public BaseListAdapter(Context context, String json, Class<T> t, boolean fromRes) {
+        super(context, json, t, fromRes);
     }
 
-    @Override
-    public Object getItem(int position) {
-        return arrList == null ? null : arrList.get(position);
-    }
+    public class ViewHolder extends ABasicListAdapter.ViewHolder {
 
-    @Override
-    public int getCount() {
-        return arrList == null ? 0 : arrList.size();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    protected List<T> getArrList() {
-        return arrList;
-    }
-
-    protected String replaceNull(CharSequence sequence) {
-        return Str.replaceNull(sequence);
-    }
-
-    public static class ViewHolder {
+        @Override
+        public void bindViews(View view) {
+            ButterKnife.bind(this, view);
+        }
 
         public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
+            super(view);
         }
     }
 }

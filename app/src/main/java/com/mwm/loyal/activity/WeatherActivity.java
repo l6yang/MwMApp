@@ -9,14 +9,14 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loyal.base.util.TimeUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.adapter.WeatherAdapter;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.WeatherBean;
 import com.mwm.loyal.databinding.ActivityWeatherBinding;
+import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
-import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.TimeUtil;
 import com.mwm.loyal.utils.WeatherUtil;
 
 import java.io.UnsupportedEncodingException;
@@ -40,13 +40,13 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
     private WeatherAdapter weatherAdapter;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_weather;
     }
 
     @Override
     public void afterOnCreate() {
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         mHandler = new HandlerClass(this);
         initViews();
     }
@@ -59,7 +59,7 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
     private void initViews() {
         String city = getIntent().getStringExtra("city");
         binding.setCity(city);
-        binding.setDateTime(TimeUtil.getDateTime(Str.TIME_WEEK));
+        binding.setDateTime(TimeUtil.getDateTime(IStr.TIME_WEEK));
         pubMenu.setVisibility(View.GONE);
         pubTitle.setText(getString(R.string.MwMWeather));
         pubBack.setOnClickListener(this);
@@ -102,7 +102,7 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
                 if (TextUtils.isEmpty(cityName))
                     return;
                 binding.setCity(cityName);
-                PreferencesUtil.putString(getApplicationContext(), Str.KEY_CITY, cityName);
+                PreferencesUtil.putString(getApplicationContext(), IStr.KEY_CITY, cityName);
                 try {
                     WeatherUtil.getCityWeather(cityName, mHandler);
                 } catch (UnsupportedEncodingException e) {
@@ -140,7 +140,7 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
                         String high = weatherBean.getData().getForecast().get(0).getHigh();
                         String low = weatherBean.getData().getForecast().get(0).getLow();
                         activity.binding.setWeatherAndTemper(weather + "      " + low.replace("低温", "").trim() + "/" + high.replace("高温", "").trim());
-                        activity.binding.setWeatherImg(ResUtil.getBackground(activity, R.mipmap.ic_weather_cloudy, false));
+                        activity.binding.setWeatherImg(ImageUtil.getBackground(activity, R.mipmap.ic_weather_cloudy, false));
                         activity.binding.setGanmao(weatherBean.getData().getGanmao());
                         if (activity.weatherAdapter != null)
                             activity.weatherAdapter.refreshList(weatherBean.getData().getForecast());

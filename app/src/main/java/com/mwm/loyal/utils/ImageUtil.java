@@ -1,9 +1,14 @@
 package com.mwm.loyal.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.loyal.base.util.IOUtil;
+import com.mwm.loyal.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -270,6 +275,32 @@ public class ImageUtil {
         } finally {
             IOUtil.closeStream(inputStream);
         }
+    }
+
+    public static Drawable getBackground(Context context) {
+        return getBackground(context, R.mipmap.img_blue_background, true);
+    }
+
+    public static Drawable getBackground(Context context, int resId, boolean scale) {
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
+        if (!scale)
+            return new BitmapDrawable(context.getResources(), bitmap);
+        else {
+            Bitmap newBitmap = createScaledBitmap(bitmap, true);
+            if (bitmap != null)
+                bitmap.recycle();
+            return new BitmapDrawable(context.getResources(), newBitmap);
+        }
+    }
+
+    private static Bitmap createScaledBitmap(Bitmap src, boolean filter) {
+        int scaleRatio = 10;
+        int blurRadius = 8;
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(src,
+                src.getWidth() / scaleRatio,
+                src.getHeight() / scaleRatio,
+                filter);
+        return ImageUtil.doBlur(scaledBitmap, blurRadius, true);
     }
 
     public static void clearFrescoTemp() {

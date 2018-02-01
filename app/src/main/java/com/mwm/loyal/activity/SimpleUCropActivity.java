@@ -10,18 +10,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mwm.loyal.R;
+import com.mwm.loyal.databinding.ActivitySimpleUcropBinding;
+import com.mwm.loyal.utils.DisplayUtil;
+import com.mwm.loyal.utils.FileUtil;
+import com.mwm.loyal.utils.ImageUtil;
+import com.mwm.loyal.utils.ToastUtil;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.mwm.loyal.R;
-import com.mwm.loyal.databinding.ActivitySimpleUcropBinding;
-import com.mwm.loyal.utils.FileUtil;
-import com.mwm.loyal.utils.ResUtil;
-import com.mwm.loyal.utils.ToastUtil;
-import com.mwm.loyal.utils.DisplayUtil;
 
 public class SimpleUCropActivity extends AppCompatActivity implements View.OnClickListener {
     @BindView(R.id.pub_title)
@@ -37,7 +37,7 @@ public class SimpleUCropActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivitySimpleUcropBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_simple_ucrop);
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         ButterKnife.bind(this);
         initViews();
     }

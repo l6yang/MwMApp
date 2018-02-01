@@ -2,10 +2,7 @@ package com.mwm.loyal.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -13,29 +10,20 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseListAdapter;
 import com.mwm.loyal.beans.CityBean;
-import com.mwm.loyal.impl.Contact;
-import com.mwm.loyal.utils.StringUtil;
+import com.mwm.loyal.impl.IContact;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class AutoCompleteAdapter extends BaseAdapter implements Filterable,Contact {
-    private LayoutInflater inflater;
-    private List<CityBean> beanList;
+public class AutoCompleteAdapter extends BaseListAdapter<CityBean, AutoCompleteAdapter.ViewHolder> implements Filterable, IContact {
     private ListFilter listFilter;
     private List<CityBean> filterList = new ArrayList<>();
     private final Object objLock = new Object();
 
     public AutoCompleteAdapter(Context context, List<CityBean> beanList) {
-        inflater = LayoutInflater.from(context);
-        this.beanList = beanList;
-    }
-
-    public void refreshData(List<CityBean> beanList) {
-        this.beanList = beanList;
-        notifyDataSetChanged();
+        super(context, beanList);
     }
 
     public List<CityBean> getFilterList() {
@@ -48,7 +36,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable,Conta
     }
 
     @Override
-    public Object getItem(int position) {
+    public CityBean getItem(int position) {
         return filterList == null ? null : filterList.get(position);
     }
 
@@ -58,24 +46,27 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable,Conta
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_grid_city, parent, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        } else holder = (ViewHolder) convertView.getTag();
-        CityBean cityBean = filterList.get(position);
-        String itemStr = cityBean == null ? "" : Str.replaceNull(cityBean.getCityName());
-        holder.itemSpinner.setText(itemStr);
-        return convertView;
+    protected int adapterLayout() {
+        return R.layout.item_grid_city;
     }
 
-    static class ViewHolder extends BaseListAdapter.ViewHolder {
+    @Override
+    public ViewHolder createViewHolder(View view) {
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onViewHolder(ViewHolder holder, int position) {
+        CityBean cityBean = filterList.get(position);
+        String itemStr = cityBean == null ? "" : IStr.replaceNull(cityBean.getCityName());
+        holder.itemSpinner.setText(itemStr);
+    }
+
+    class ViewHolder extends BaseListAdapter.ViewHolder {
         @BindView(R.id.item_grid_city)
         TextView itemSpinner;
 
-        ViewHolder(View view) {
+        public ViewHolder(View view) {
             super(view);
         }
     }
@@ -91,6 +82,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable,Conta
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+            List<CityBean> beanList = getArrList();
             FilterResults results = new FilterResults();
             if (TextUtils.isEmpty(constraint)) {
                 synchronized (objLock) {
@@ -104,8 +96,8 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable,Conta
                 List<CityBean> newList = new ArrayList<>(count);
                 for (int i = 0; i < count; i++) {
                     CityBean objList = beanList.get(i);
-                    String cityName = objList == null ? "" : Str.replaceNull(objList.getCityName());
-                    String cityLetter = objList == null ? "" : Str.replaceNull(objList.getCityLetter());
+                    String cityName = objList == null ? "" : IStr.replaceNull(objList.getCityName());
+                    String cityLetter = objList == null ? "" : IStr.replaceNull(objList.getCityLetter());
                     if (cityName.toUpperCase().startsWith(filterStr) || cityName.contains(filterStr) || TextUtils.equals(filterStr, cityLetter)) {
                         newList.add(objList);
                     }

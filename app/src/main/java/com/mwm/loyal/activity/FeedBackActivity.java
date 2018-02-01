@@ -8,7 +8,7 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityFeedbackBinding;
 import com.mwm.loyal.handler.FeedBackHandler;
-import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
 import butterknife.BindView;
@@ -22,14 +22,14 @@ public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedbackBinding>
     ImageView pubMenu;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_feedback;
     }
 
     @Override
     public void afterOnCreate() {
         binding.setClick(new FeedBackHandler(this, binding));
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         initViews();
     }
 
@@ -58,7 +58,7 @@ public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedbackBinding>
                 finish();
                 break;
             case R.id.pub_menu:
-                startActivity(ListFeedBackActivity.class);
+                startActivityByAct(ListFeedBackActivity.class);
                 break;
         }
     }

@@ -15,8 +15,8 @@ import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityShareBinding;
 import com.mwm.loyal.libs.manager.AppAdapter;
 import com.mwm.loyal.libs.manager.AppBean;
+import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
-import com.mwm.loyal.utils.ResUtil;
 import com.yalantis.phoenix.PullToRefreshView;
 
 import java.util.ArrayList;
@@ -43,13 +43,13 @@ public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> imple
     private AppAdapter appAdapter;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_share;
     }
 
     @Override
     public void afterOnCreate() {
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         initViews();
         appAdapter = new AppAdapter(this, appList);
         recyclerView.setAdapter(appAdapter);

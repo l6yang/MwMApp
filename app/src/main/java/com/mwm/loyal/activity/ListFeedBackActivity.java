@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loyal.base.util.GsonUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.adapter.FeedBackAdapter;
 import com.mwm.loyal.base.BaseSwipeActivity;
@@ -17,8 +18,7 @@ import com.mwm.loyal.databinding.ActivityListFeedbackBinding;
 import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.libs.swipback.utils.SwipeBackLayout;
 import com.mwm.loyal.utils.DividerItemDecoration;
-import com.mwm.loyal.utils.GsonUtil;
-import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.RxUtil;
 import com.yanzhenjie.recyclerview.swipe.Closeable;
 import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
@@ -45,13 +45,13 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
     private FeedBackAdapter feedBackAdapter;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_list_feedback;
     }
 
     @Override
     public void afterOnCreate() {
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         queryHistory();
         initViews();
     }
@@ -103,7 +103,7 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
     public void onResult(int what, Object tag, ResultBean resultBean) {
         try {
             if (1 == resultBean.getResultCode()) {
-                List<FeedBackBean> beanList = GsonUtil.getBeanListFromJson(resultBean.getResultMsg(), FeedBackBean.class);
+                List<FeedBackBean> beanList = GsonUtil.json2BeanList(resultBean.getResultMsg(), FeedBackBean.class);
                 this.beanList = null == beanList ? new ArrayList<FeedBackBean>() : beanList;
                 if (null != feedBackAdapter) {
                     feedBackAdapter.refreshList(this.beanList);

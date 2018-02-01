@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.mwm.loyal.base.RxProgressSubscriber;
-import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.IContact;
 import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ImageUtil;
@@ -19,7 +19,7 @@ import okhttp3.ResponseBody;
 /**
  * 缓存照片
  */
-public class ImageService extends IntentService implements Contact, SubscribeListener<ResponseBody> {
+public class ImageService extends IntentService implements IContact, SubscribeListener<ResponseBody> {
 
     public ImageService() {
         super("ImageService");
@@ -35,7 +35,7 @@ public class ImageService extends IntentService implements Contact, SubscribeLis
         if (intent != null) {
             final String action = intent.getAction();
             System.out.println("onHandleIntent::" + action);
-            if (Str.actionDownload.equals(action)) {
+            if (IStr.actionDownload.equals(action)) {
                 handleAction(intent);
             } else {
                 stopSelf();
@@ -50,7 +50,7 @@ public class ImageService extends IntentService implements Contact, SubscribeLis
         String account = intent.getStringExtra("account");
         RxProgressSubscriber<ResponseBody> subscriber = new RxProgressSubscriber<>(this, this);
         subscriber.setShowDialog(false).setTag(account);
-        String url = Str.getServerUrl(Str.method_showIcon) + "&account=" + account;
+        String url = IStr.getServerUrl(IStr.method_showIcon) + "&account=" + account;
         RxUtil.rxExecutedByIO(subscriber.downloadImage(url), subscriber);
     }
 

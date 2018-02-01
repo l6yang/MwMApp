@@ -1,12 +1,15 @@
 package com.mwm.loyal.libs.zxing;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -119,7 +122,8 @@ public class AutoScannerView extends View {
             lineRect.top = frame.top + lineOffsetCount;
             lineRect.right = frame.right;
             lineRect.bottom = frame.top + dp2px(10) + lineOffsetCount;
-            canvas.drawBitmap(((BitmapDrawable) (getResources().getDrawable(R.mipmap.scanline))).getBitmap(), null, lineRect, linePaint);
+            Drawable drawable = ContextCompat.getDrawable(getContext(), R.mipmap.scanline);
+            canvas.drawBitmap(((BitmapDrawable) drawable).getBitmap(), null, lineRect, linePaint);
         }
         postInvalidateDelayed(10L, frame.left, frame.top, frame.right, frame.bottom);
     }

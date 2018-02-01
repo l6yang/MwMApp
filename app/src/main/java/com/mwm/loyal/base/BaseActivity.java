@@ -5,31 +5,49 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Spinner;
 
+import com.loyal.base.ui.activity.ABasicActivity;
+import com.loyal.base.widget.BaseDialog;
 import com.mwm.loyal.R;
-import com.mwm.loyal.impl.DialogClickListener;
-import com.mwm.loyal.impl.UIInterface;
+import com.mwm.loyal.app.MwMApplication;
+import com.mwm.loyal.impl.IContact;
 import com.mwm.loyal.service.UpdateService;
-import com.mwm.loyal.utils.ConnectUtil;
-import com.mwm.loyal.utils.StringUtil;
-import com.mwm.loyal.utils.TimeUtil;
-import com.mwm.loyal.utils.ToastUtil;
-import com.mwm.loyal.widget.BaseDialog;
 
-public abstract class BaseActivity<T extends ViewDataBinding> extends BasicActivity<T> implements UIInterface, DialogClickListener {
+import butterknife.ButterKnife;
+
+public abstract class BaseActivity<T extends ViewDataBinding> extends ABasicActivity implements IContact, BaseDialog.DialogClickListener {
     private UpdateReceiver updateReceiver;
     protected ProgressDialog progressDialog;
+    protected T binding;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, actLayoutRes());
+    }
+
+    @Override
+    public void bindViews() {
+        ButterKnife.bind(this);
+    }
+
+    protected void setCurrentTag(BaseActivity activity) {
+        String tag = activity.getClass().getName();
+        MwMApplication.getInstance().setActivityTag(tag);
+    }
+
+    protected String getCurrentTag() {
+        return MwMApplication.getInstance().getActivityTag();
+    }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
@@ -71,87 +89,11 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends BasicActiv
     @Override
     protected void onResume() {
         super.onResume();
+        setCurrentTag(this);
         updateReceiver = new UpdateReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Str.method_apkVerCheck);
+        intentFilter.addAction(IStr.method_apkVerCheck);
         LocalBroadcastManager.getInstance(this).registerReceiver(updateReceiver, intentFilter);
-    }
-
-    @Override
-    public void showToast(@NonNull String text) {
-        ToastUtil.showToast(this, text);
-    }
-
-    @Override
-    public void showToast(@StringRes int resId) {
-        showToast(getString(resId));
-    }
-
-    @Override
-    public void showErrorToast(int resId, Throwable e) {
-        showErrorToast(getString(resId), e);
-    }
-
-    @Override
-    public void showErrorToast(@NonNull String text, Throwable e) {
-        String error = null == e ? "" : ConnectUtil.getError(e);
-        showToast(replaceNull(text) + (TextUtils.isEmpty(error) ? "" : "\n" + error));
-    }
-
-    @Override
-    public void showDialog(@NonNull String text) {
-        showDialog(text, false);
-    }
-
-    @Override
-    public void showDialog(@NonNull String text, boolean finish) {
-        ToastUtil.showDialog(this, replaceNull(text), finish);
-    }
-
-    @Override
-    public String replaceNull(CharSequence sequence) {
-        return Str.replaceNull(sequence);
-    }
-
-    @Override
-    public String subEndTime(@NonNull String t) {
-        return TimeUtil.subEndTime(t);
-    }
-
-    @Override
-    public String encodeStr2Utf(@NonNull String string) {
-        return StringUtil.encodeStr2Utf(string);
-    }
-
-    @Override
-    public String decodeStr2Utf(@NonNull String string) {
-        return StringUtil.decodeStr2Utf(string);
-    }
-
-    @Override
-    public String getSpinSelectStr(Spinner spinner, @NonNull String key) {
-        return StringUtil.getSpinSelectStr(spinner, key);
-    }
-
-    @Override
-    public void showErrorDialog(@NonNull String text) {
-        showErrorDialog(text, false);
-    }
-
-    @Override
-    public void showErrorDialog(@NonNull String text, boolean finish) {
-        showErrorDialog(text, null, finish);
-    }
-
-    @Override
-    public void showErrorDialog(@NonNull String text, Throwable e) {
-        showErrorDialog(text, e, false);
-    }
-
-    @Override
-    public void showErrorDialog(@NonNull String text, Throwable e, boolean finish) {
-        String error = null == e ? "" : ConnectUtil.getError(e);
-        showDialog(replaceNull(text) + (TextUtils.isEmpty(error) ? "" : "\n" + error), finish);
     }
 
     @Override
@@ -168,7 +110,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends BasicActiv
     }
 
     @Override
-    public void onClick(BaseDialog dialog, View view) {
+    public void onClick(BaseDialog dialog, View view, Object tag) {
         if (null != dialog && dialog.isShowing())
             dialog.dismiss();
         String apkUrl = null == dialog ? "" : (String) dialog.getTag();
@@ -178,7 +120,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends BasicActiv
                     showToast("apk路径地址错误");
                     return;
                 }
-                UpdateService.startActionUpdate(BaseActivity.this, Str.actionDownload, apkUrl);
+                UpdateService.startActionUpdate(BaseActivity.this, IStr.actionDownload, apkUrl);
                 break;
             case R.id.dialog_btn_cancel:
                 break;
@@ -193,7 +135,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends BasicActiv
                 return;
             String action = intent.getAction();
             String apkUrl = intent.getStringExtra("apkUrl");
-            if (TextUtils.equals(Str.method_apkVerCheck, action)) {
+            if (TextUtils.equals(IStr.method_apkVerCheck, action)) {
                 if (!TextUtils.isEmpty(apkUrl) && apkUrl.endsWith(".apk")) {
                     showUpdateDialog("检测到有新的版本，是否更新?", apkUrl);
                 }

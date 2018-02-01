@@ -5,6 +5,7 @@ import android.support.annotation.IdRes;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.loyal.base.util.GsonUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.ForgetActivity;
 import com.mwm.loyal.activity.LoginActivity;
@@ -17,7 +18,6 @@ import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityLoginBinding;
 import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.service.ImageService;
-import com.mwm.loyal.utils.GsonUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.ToastUtil;
@@ -44,7 +44,7 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
                 binding.server.getText().clear();
                 break;
             case R.id.mm_forget:
-                startActivity(ForgetActivity.class);
+                startActivityByAct(ForgetActivity.class);
                 break;
             case R.id.register:
                 toRegister(R.id.pub_submit);
@@ -73,7 +73,7 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
     private void toRegister(@IdRes int resId) {
         builder.putExtra("resId", resId);
         builder.putExtra("account", "");
-        startActivityForResult(RegisterActivity.class, Int.reqCode_register);
+        startActivityForResultByAct(RegisterActivity.class, Int.reqCode_register);
     }
 
     @Override
@@ -85,8 +85,8 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
                 if (1 == resultBean.getResultCode()) {
                     PreferencesUtil.putLoginBean(activity, loginBean);
                     builder.putExtra("account", loginBean.account.get());
-                    startActivity(MainActivity.class);
-                    Intent imageIntent = new Intent().setAction(Str.actionDownload).putExtra("account", loginBean.account.get());
+                    startActivityByAct(MainActivity.class);
+                    Intent imageIntent = new Intent().setAction(IStr.actionDownload).putExtra("account", loginBean.account.get());
                     ImageService.startAction(activity, imageIntent);
                     finish();
                 } else showDialog(resultBean.getResultMsg());

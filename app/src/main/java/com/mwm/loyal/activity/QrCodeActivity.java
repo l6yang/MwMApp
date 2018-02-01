@@ -14,15 +14,14 @@ import com.mwm.loyal.utils.CipherUtil;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.QRCodeUtil;
-import com.mwm.loyal.utils.ResUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
 import java.io.File;
 
 import butterknife.BindView;
 
-import static com.mwm.loyal.impl.Contact.Str.action;
-import static com.mwm.loyal.impl.Contact.Str.method_scan;
+import static com.mwm.loyal.impl.IContact.IStr.action;
+import static com.mwm.loyal.impl.IContact.IStr.method_scan;
 
 public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)
@@ -45,13 +44,13 @@ public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> imp
     private String account;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_qr_code;
     }
 
     @Override
     public void afterOnCreate() {
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         initViews();
     }
 
@@ -67,7 +66,7 @@ public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> imp
         pubBack.setOnClickListener(this);
         account = getIntent().getStringExtra("account");
         Bitmap logoBitmap = BitmapFactory.decodeFile(FileUtil.path_icon + "icon_" + account + ".jpg");
-        String str = Str.getBaseUrl() + action + method_scan + "&k=" + CipherUtil.encodeStr(account);
+        String str = IStr.getBaseUrl() + action + method_scan + "&k=" + CipherUtil.encodeStr(account);
         pubMenuSave.setOnClickListener(this);
         pubMenuScan.setOnClickListener(this);
         pubMenuShare.setOnClickListener(this);

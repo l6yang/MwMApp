@@ -18,7 +18,7 @@ import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityVoiceBinding;
 import com.mwm.loyal.utils.FileUtil;
-import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.ToastUtil;
 import com.mwm.loyal.utils.VoiceUtil;
 
@@ -40,14 +40,14 @@ public class VoiceActivity extends BaseSwipeActivity<ActivityVoiceBinding> imple
     private SpeechSynthesizer mSpeechSynthesizer;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_voice;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         mHandler = new HandlerClass(this);
         afterOnCreate();
         initPresenter();
@@ -60,7 +60,7 @@ public class VoiceActivity extends BaseSwipeActivity<ActivityVoiceBinding> imple
 
     @Override
     public void afterOnCreate() {
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         mHandler = new HandlerClass(this);
         FileUtil.createFiles();
         pubBack.setOnClickListener(this);

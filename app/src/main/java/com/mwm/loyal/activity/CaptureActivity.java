@@ -10,11 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.zxing.Result;
+import com.loyal.base.util.StateBarUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.libs.zxing.AutoScannerView;
 import com.mwm.loyal.libs.zxing.BaseCaptureActivity;
 import com.mwm.loyal.libs.zxing.ViewfinderView;
-import com.mwm.loyal.utils.StateBarUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

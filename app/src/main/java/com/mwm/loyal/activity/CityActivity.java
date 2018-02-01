@@ -8,15 +8,16 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loyal.base.util.GsonUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.adapter.AutoCompleteAdapter;
 import com.mwm.loyal.adapter.PinnedCityAdapter;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.CityBean;
 import com.mwm.loyal.databinding.ActivityCityBinding;
-import com.mwm.loyal.utils.GsonUtil;
+import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.Low2UpCase;
-import com.mwm.loyal.utils.ResUtil;
+import com.loyal.base.util.ResUtil;
 import com.mwm.loyal.utils.SortCity;
 import com.mwm.loyal.utils.ToastUtil;
 import com.mwm.loyal.views.PinnedHeaderListView;
@@ -60,13 +61,13 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
     private AutoCompleteAdapter completeAdapter;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_city;
     }
 
     @Override
     public void afterOnCreate() {
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         initViews();
         initData();
     }
@@ -95,7 +96,7 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
             @Override
             public List<CityBean> call(String s) {
                 String json = ResUtil.getStrFromRes(CityActivity.this, s);
-                return GsonUtil.getBeanListFromJson(json, CityBean.class);
+                return GsonUtil.json2BeanList(json, CityBean.class);
             }
         }).subscribe(new Action1<List<CityBean>>() {
             @Override
@@ -111,7 +112,7 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
                     getList.add(cityBean);
                 }
                 pinnedCityAdapter.refreshData(linkedHashMap);
-                completeAdapter.refreshData(beanList);
+                completeAdapter.refreshList(beanList);
             }
         });
         sideBar.setTextView(textSideBar);

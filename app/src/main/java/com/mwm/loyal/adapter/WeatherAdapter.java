@@ -3,7 +3,6 @@ package com.mwm.loyal.adapter;
 import android.content.Context;
 import android.net.Uri;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -16,27 +15,31 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class WeatherAdapter extends BaseListAdapter<WeatherBean.DataBean.ForecastBean> {
+public class WeatherAdapter extends BaseListAdapter<WeatherBean.DataBean.ForecastBean, WeatherAdapter.ViewHolder> {
 
     public WeatherAdapter(Context context, List<WeatherBean.DataBean.ForecastBean> arrList) {
         super(context, arrList);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_grid_weather, parent, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        } else holder = (ViewHolder) convertView.getTag();
+    protected int adapterLayout() {
+        return R.layout.item_grid_weather;
+    }
+
+    @Override
+    public ViewHolder createViewHolder(View view) {
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onViewHolder(ViewHolder holder, int position) {
         try {
             WeatherBean.DataBean.ForecastBean forecastBean = getArrList().get(position);
             String when = replaceNull(forecastBean.getDate());
             int t = when.lastIndexOf("星期");
             String date = when.substring(0, t);
             String week = when.substring(t, when.length());
-            holder.itemWeatherDate.setText(date + "\n" + week);
+            holder.itemWeatherDate.setText(String.format("%s\n%s", date, week));
             String type = replaceNull(forecastBean.getType());
             holder.itemWeatherType.setText(type);
             int resId = WeatherUtil.getWeatherImg(type);
@@ -47,14 +50,13 @@ public class WeatherAdapter extends BaseListAdapter<WeatherBean.DataBean.Forecas
             holder.itemWeatherLow.setText(low.replace("低温", "").trim());
             String wind = replaceNull(forecastBean.getFengli());
             String windPoint = replaceNull(forecastBean.getFengxiang());
-            holder.itemWeatherWind.setText(windPoint + "\n" + wind);
+            holder.itemWeatherWind.setText(String.format("%s\n%s", windPoint, wind));
         } catch (Exception e) {
-            System.out.println("WeatherAdapter Err::" + e.toString());
+            System.out.println("WeatherAdapter Err::" + e);
         }
-        return convertView;
     }
 
-    static class ViewHolder extends BaseListAdapter.ViewHolder {
+    class ViewHolder extends BaseListAdapter.ViewHolder {
         @BindView(R.id.item_weather_date)
         TextView itemWeatherDate;
         @BindView(R.id.item_weather_type)
@@ -68,7 +70,7 @@ public class WeatherAdapter extends BaseListAdapter<WeatherBean.DataBean.Forecas
         @BindView(R.id.item_weather_wind)
         TextView itemWeatherWind;
 
-        ViewHolder(View view) {
+        public ViewHolder(View view) {
             super(view);
         }
     }

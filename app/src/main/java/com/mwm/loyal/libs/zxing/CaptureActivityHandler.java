@@ -28,7 +28,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Browser;
-import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
@@ -45,8 +44,6 @@ import java.util.Map;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class CaptureActivityHandler extends Handler {
-
-    private static final String TAG = CaptureActivityHandler.class.getSimpleName();
 
     private final BaseCaptureActivity activity;
     private final DecodeThread decodeThread;
@@ -109,17 +106,13 @@ public final class CaptureActivityHandler extends Handler {
                 break;
             case R.id.pub_launch_product_query:
                 String url = (String) message.obj;
-
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
                 intent.setData(Uri.parse(url));
-
-                ResolveInfo resolveInfo =
-                        activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                ResolveInfo resolveInfo = activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
                 String browserPackageName = null;
                 if (resolveInfo != null && resolveInfo.activityInfo != null) {
                     browserPackageName = resolveInfo.activityInfo.packageName;
-                    Log.d(TAG, "Using browser in package " + browserPackageName);
                 }
 
                 // Needed for default Android browser / Chrome only apparently
@@ -132,7 +125,7 @@ public final class CaptureActivityHandler extends Handler {
                 try {
                     activity.startActivity(intent);
                 } catch (ActivityNotFoundException ignored) {
-                    Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
+                    //
                 }
                 break;
         }
@@ -162,5 +155,4 @@ public final class CaptureActivityHandler extends Handler {
             activity.drawViewfinder();
         }
     }
-
 }

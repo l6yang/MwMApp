@@ -1,19 +1,13 @@
 package com.mwm.loyal.impl;
 
-import android.text.TextUtils;
+import com.loyal.base.impl.IContacts;
 
-public interface Contact {
+public interface IContact extends IContacts{
 
-    class Str {
+    class IStr extends IContacts.Str {
         public static final String appId = "9319579";
         public static final String appKey = "QAZQ5Gh8H6nAG2GOuPM0THDZ";
         public static final String secretKey = "c4f7e878acdb1314a1b5fe3ae502d645";
-        public static final String TIME_ALL = "yyyy-MM-dd HH:mm:ss";
-        public static final String TIME_WEEK = "yyyy-MM-dd EEEE";
-        public static final String TIME_YEAR_MONTH_DAY = "yyyy-MM-dd";
-        public static final String HOURS_MIN = "HH:mm";
-        public static final String MONTH_DAY_HOUR_MIN = "MM-dd HH:mm";
-        public static final String YEAR_MONTH = "yyyy-MM";
         public static final String KEY_IP = "ip";
         public static final String KEY_ACCOUNT = "account";
         public static final String KEY_CITY = "city";
@@ -54,10 +48,6 @@ public interface Contact {
         public static String getBaseUrl() {
             return http + ipAdd + port + "/mwm/";
         }
-
-        public static String replaceNull(CharSequence sequence) {
-            return TextUtils.isEmpty(sequence) ? "" : sequence.toString().trim();
-        }
     }
 
     class Int {
@@ -81,9 +71,5 @@ public interface Contact {
         //异步
         public static final int async2Null = -102;
         public static final int delayed2Activity = -103;
-    }
-
-    enum TYPE {
-        NONE, LEFT, RIGHT
     }
 }

@@ -5,9 +5,9 @@ import android.os.Bundle;
 
 import com.mwm.loyal.libs.swipback.app.SwipeBackActivity;
 import com.mwm.loyal.libs.swipback.utils.SwipeBackLayout;
-import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.IContact;
 
-public abstract class BaseSwipeActivity<T extends ViewDataBinding> extends SwipeBackActivity<T> implements SwipeBackLayout.SwipeListener, Contact {
+public abstract class BaseSwipeActivity<T extends ViewDataBinding> extends SwipeBackActivity<T> implements SwipeBackLayout.SwipeListener, IContact {
     protected int LEFT = SwipeBackLayout.EDGE_LEFT;
     protected int RIGHT = SwipeBackLayout.EDGE_RIGHT;
     protected int BOTTOM = SwipeBackLayout.EDGE_BOTTOM;

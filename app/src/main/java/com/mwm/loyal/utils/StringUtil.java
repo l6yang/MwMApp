@@ -5,14 +5,14 @@ import android.text.TextUtils;
 import android.widget.Spinner;
 
 import com.mwm.loyal.beans.SpinBean;
-import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.IContact;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringUtil implements Contact {
+public class StringUtil implements IContact {
 
     public static boolean showErrorToast(Context context, String error) {
         if (showErrorToast(error)) {
@@ -104,9 +104,9 @@ public class StringUtil implements Contact {
             SpinBean spinBean = (SpinBean) spinner.getSelectedItem();
             switch (key) {
                 case "dm":
-                    return Str.replaceNull(spinBean.getDm());
+                    return IStr.replaceNull(spinBean.getDm());
                 case "glbm":
-                    return Str.replaceNull(spinBean.getGlbm());
+                    return IStr.replaceNull(spinBean.getGlbm());
                 default:
                     return "";
             }

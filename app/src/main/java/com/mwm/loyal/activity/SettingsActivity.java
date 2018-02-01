@@ -9,7 +9,7 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivitySettingsBinding;
 import com.mwm.loyal.handler.SettingsHandler;
-import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.ImageUtil;
 
 import butterknife.BindView;
 
@@ -22,13 +22,13 @@ public class SettingsActivity extends BaseSwipeActivity<ActivitySettingsBinding>
     ImageView pubMenu;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_settings;
     }
 
     @Override
     public void afterOnCreate() {
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         binding.setClick(new SettingsHandler(this));
         initViews();
     }

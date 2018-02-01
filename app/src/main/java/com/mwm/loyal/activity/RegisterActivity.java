@@ -11,7 +11,7 @@ import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.databinding.ActivityRegisterBinding;
 import com.mwm.loyal.handler.RegisterHandler;
 import com.mwm.loyal.impl.TextChangedListener;
-import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.ImageUtil;
 
 import butterknife.BindView;
 
@@ -24,7 +24,7 @@ public class RegisterActivity extends BaseSwipeActivity<ActivityRegisterBinding>
     ImageView pubMenu;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_register;
     }
 
@@ -35,7 +35,7 @@ public class RegisterActivity extends BaseSwipeActivity<ActivityRegisterBinding>
         String account = getIntent().getStringExtra("account");
         loginBean.account.set(account);
         loginBean.editable.set(TextUtils.isEmpty(account));
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         boolean fromLogin = TextUtils.isEmpty(account);
         String extra = getIntent().getStringExtra("extra");
         binding.setClick(new RegisterHandler(this, binding));

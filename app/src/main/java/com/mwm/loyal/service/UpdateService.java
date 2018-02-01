@@ -11,7 +11,7 @@ import android.text.TextUtils;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.beans.ResultBean;
-import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.IContact;
 import com.mwm.loyal.libs.network.DownLoadAPI;
 import com.mwm.loyal.libs.network.DownLoadBean;
 import com.mwm.loyal.libs.network.imp.DownLoadListener;
@@ -31,7 +31,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class UpdateService extends IntentService implements Contact {
+public class UpdateService extends IntentService implements IContact {
     private static final String NOTIFY_TAG = "Update";
 
     public UpdateService() {
@@ -54,9 +54,9 @@ public class UpdateService extends IntentService implements Contact {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-            if (Str.actionUpdate.equals(action)) {
+            if (IStr.actionUpdate.equals(action)) {
                 handleActionUpdate();
-            } else if (Str.actionDownload.equals(action)) {
+            } else if (IStr.actionDownload.equals(action)) {
                 String apkUrl = intent.getStringExtra("apkUrl");
                 handleActionDownLoad(apkUrl);
             } else stopSelf();
@@ -80,10 +80,10 @@ public class UpdateService extends IntentService implements Contact {
                     public void onNext(ResultBean resultBean) {
                         try {
                             if (resultBean.getResultCode() == 1) {
-                                String url = Str.replaceNull(resultBean.getExceptMsg());
+                                String url = IStr.replaceNull(resultBean.getExceptMsg());
                                 //发送广播，showPopWindowForDownLoad
                                 Intent intent = new Intent();
-                                intent.setAction(Str.method_apkVerCheck);
+                                intent.setAction(IStr.method_apkVerCheck);
                                 intent.putExtra("apkUrl", url);
                                 LocalBroadcastManager.getInstance(UpdateService.this).sendBroadcast(intent);
                             }

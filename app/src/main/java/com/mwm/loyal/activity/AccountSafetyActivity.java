@@ -13,7 +13,7 @@ import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAccountBinding;
 import com.mwm.loyal.handler.AccountSafetyHandler;
 import com.mwm.loyal.impl.SubscribeListener;
-import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.RxUtil;
 
 import butterknife.BindView;
@@ -27,14 +27,14 @@ public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBind
     ImageView pubMenu;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_account;
     }
 
     @Override
     public void afterOnCreate() {
         binding.setClick(new AccountSafetyHandler(this, binding));
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         initViews();
         checkLocked();
     }

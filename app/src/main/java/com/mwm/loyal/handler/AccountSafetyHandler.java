@@ -24,7 +24,7 @@ public class AccountSafetyHandler extends BaseClickHandler<ActivityAccountBindin
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.account_mm_reset:
-                startActivityForResult(RegisterActivity.class, Int.reqCode_UpdateMM);
+                startActivityForResultByAct(RegisterActivity.class, Int.reqCode_UpdateMM);
                 break;
             case R.id.account_device_lock:
                 String des = binding.accountDeviceLock.getContentDescription().toString();
@@ -38,7 +38,7 @@ public class AccountSafetyHandler extends BaseClickHandler<ActivityAccountBindin
                 break;
             case R.id.account_destroy:
                 builder.putExtra("extra", "destroy");
-                startActivityForResult(RegisterActivity.class, Int.reqCode_destroy);
+                startActivityForResultByAct(RegisterActivity.class, Int.reqCode_destroy);
                 break;
         }
     }

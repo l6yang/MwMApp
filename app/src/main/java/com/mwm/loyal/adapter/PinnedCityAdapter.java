@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.BaseListAdapter;
-import com.mwm.loyal.beans.CityBean;
+import com.mwm.loyal.base.BaseViewHolder;
 import com.mwm.loyal.base.SectionedBaseAdapter;
+import com.mwm.loyal.beans.CityBean;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -115,7 +115,7 @@ public class PinnedCityAdapter extends SectionedBaseAdapter {
     }
 
     //组
-    static class ViewHolderHead extends BaseListAdapter.ViewHolder {
+    class ViewHolderHead extends BaseViewHolder {
         @BindView(R.id.item_cityLetter_list)
         TextView cityLetter;
 
@@ -125,7 +125,7 @@ public class PinnedCityAdapter extends SectionedBaseAdapter {
     }
 
     //子项
-    static class ViewHolderItem extends BaseListAdapter.ViewHolder {
+    class ViewHolderItem extends BaseViewHolder {
 
         @BindView(R.id.item_cityName_list)
         TextView cityName;

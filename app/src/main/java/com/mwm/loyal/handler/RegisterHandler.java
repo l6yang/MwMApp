@@ -16,7 +16,6 @@ import com.mwm.loyal.databinding.ActivityRegisterBinding;
 import com.mwm.loyal.impl.OperaOnClickListener;
 import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.OperateDialog;
-import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.ToastUtil;
 

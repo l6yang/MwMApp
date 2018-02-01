@@ -1,6 +1,6 @@
 package com.mwm.loyal.libs.network;
 
-import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.IContact;
 import com.mwm.loyal.libs.network.imp.DownLoadListener;
 import com.mwm.loyal.utils.FileUtil;
 
@@ -22,7 +22,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class DownLoadAPI implements Contact {
+public class DownLoadAPI implements IContact {
     private static final int DEFAULT_TIMEOUT = 15;
     private Retrofit.Builder retrofit;
 
@@ -38,7 +38,7 @@ public class DownLoadAPI implements Contact {
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .build();
         retrofit = new Retrofit.Builder()
-                .baseUrl(Str.getBaseUrl())
+                .baseUrl(IStr.getBaseUrl())
                 .client(client)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
     }

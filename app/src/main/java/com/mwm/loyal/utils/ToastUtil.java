@@ -9,12 +9,11 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.mwm.loyal.impl.Contact;
-import com.mwm.loyal.impl.DialogClickListener;
+import com.mwm.loyal.impl.IContact;
 import com.mwm.loyal.impl.OperaOnClickListener;
-import com.mwm.loyal.widget.BaseDialog;
+import com.loyal.base.widget.BaseDialog;
 
-public class ToastUtil implements Contact {
+public class ToastUtil implements IContact {
     private static Toast toast = null;
 
     public static void showToast(@NonNull Context context, @NonNull String text) {
@@ -44,9 +43,9 @@ public class ToastUtil implements Contact {
     public static void showDialog(final Activity context, String content, final boolean isFinish) {
         BaseDialog.Builder builder = new BaseDialog.Builder(context);
         builder.setContent(content).setOutsideCancel(false).setOutsideCancel(false);
-        builder.setBottomBtnType(isFinish ? TYPE.RIGHT : TYPE.LEFT).setBtnText(new String[]{"确定"}).setClickListener(new DialogClickListener() {
+        builder.setBottomBtnType(isFinish ? TYPE.RIGHT : TYPE.LEFT).setBtnText(new String[]{"确定"}).setClickListener(new BaseDialog.DialogClickListener() {
             @Override
-            public void onClick(BaseDialog dialog, View view) {
+            public void onClick(BaseDialog dialog, View view, Object object) {
                 if (dialog != null && dialog.isShowing())
                     dialog.dismiss();
                 if (isFinish) context.finish();

@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.IContact;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -115,7 +115,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             super.handleMessage(msg);
             AppAdapter adapter = weakReference.get();
             switch (msg.what) {
-                case Contact.Int.async2Null:
+                case IContact.Int.async2Null:
                     adapter.mExtraAuth = null;
                     break;
             }

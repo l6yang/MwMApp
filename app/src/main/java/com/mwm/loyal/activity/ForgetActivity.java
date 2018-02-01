@@ -11,7 +11,7 @@ import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.databinding.ActivityForgetBinding;
 import com.mwm.loyal.impl.ObservableServer;
 import com.mwm.loyal.impl.SubscribeListener;
-import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.RxUtil;
 
@@ -29,13 +29,13 @@ public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> imp
     Button button;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_forget;
     }
 
     @Override
     public void afterOnCreate() {
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         initViews();
     }
 

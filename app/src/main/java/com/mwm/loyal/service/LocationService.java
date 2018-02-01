@@ -11,12 +11,11 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.mwm.loyal.impl.Contact;
-import com.mwm.loyal.utils.StringUtil;
+import com.mwm.loyal.impl.IContact;
 
 import java.lang.ref.WeakReference;
 
-public class LocationService extends Service implements Contact, AMapLocationListener {
+public class LocationService extends Service implements IContact, AMapLocationListener {
     private HandlerClass handler;
     private static final int LocatedStart = -100;
     private static final int LocatedStop = -200;
@@ -72,8 +71,8 @@ public class LocationService extends Service implements Contact, AMapLocationLis
                 case LocatedStop:
                     AMapLocation location = (AMapLocation) msg.obj;
                     Intent intent = new Intent();
-                    intent.setAction(Str.service_action_loc);
-                    intent.putExtra("city", null == location ? "" : Str.replaceNull(location.getCity()));
+                    intent.setAction(IStr.service_action_loc);
+                    intent.putExtra("city", null == location ? "" : IStr.replaceNull(location.getCity()));
                     LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
                     service.stopLocation();
                     service.stopSelf();

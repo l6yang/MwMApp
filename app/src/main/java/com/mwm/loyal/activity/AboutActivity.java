@@ -9,7 +9,7 @@ import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityAboutBinding;
 import com.mwm.loyal.handler.AboutHandler;
 import com.mwm.loyal.utils.ApkUtil;
-import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.ImageUtil;
 
 import butterknife.BindView;
 
@@ -22,14 +22,14 @@ public class AboutActivity extends BaseSwipeActivity<ActivityAboutBinding> imple
     ImageView pubMenu;
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_about;
     }
 
     @Override
     public void afterOnCreate() {
         binding.setVersion(ApkUtil.getApkVersion(this));
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
         binding.setClick(new AboutHandler(this));
         initViews();
     }

@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.loyal.base.util.IOUtil;
+
 public class FileUtil {
     // sd卡路径
     private static final String SD_PATH = Environment.getExternalStorageDirectory().getPath();

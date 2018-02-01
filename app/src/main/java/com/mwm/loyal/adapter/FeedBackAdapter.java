@@ -7,20 +7,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.BaseViewHolder;
+import com.mwm.loyal.base.BaseRecyclerViewHolder;
 import com.mwm.loyal.beans.FeedBackBean;
-import com.mwm.loyal.impl.Contact;
-import com.mwm.loyal.utils.StringUtil;
+import com.mwm.loyal.impl.IContact;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuAdapter;
 
 import java.util.List;
 
 import butterknife.BindView;
 
-public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder> implements Contact{
+public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder> implements IContact {
     private List<FeedBackBean> beanList;
     private final LayoutInflater inflater;
-    private BaseViewHolder.OnItemClickListener itemClickListener;
+    private BaseRecyclerViewHolder.OnItemClickListener itemClickListener;
 
     public FeedBackAdapter(Context context, List<FeedBackBean> list) {
         inflater = LayoutInflater.from(context);
@@ -32,7 +31,7 @@ public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    public void setOnItemClickListener(BaseViewHolder.OnItemClickListener clickListener) {
+    public void setOnItemClickListener(BaseRecyclerViewHolder.OnItemClickListener clickListener) {
         itemClickListener = clickListener;
     }
 
@@ -49,7 +48,7 @@ public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         FeedBackBean feedBackBean = beanList.get(position);
-        String time = Str.replaceNull(feedBackBean.getTime());
+        String time = IStr.replaceNull(feedBackBean.getTime());
         if (time.endsWith("00:00:00"))
             time = time.replace(" 00:00:00", "");
         holder.itemTime.setText(time);
@@ -61,7 +60,7 @@ public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder
         return null == beanList ? 0 : beanList.size();
     }
 
-    static class ViewHolder extends BaseViewHolder {
+    static class ViewHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.item_time)
         TextView itemTime;
         @BindView(R.id.item_content)

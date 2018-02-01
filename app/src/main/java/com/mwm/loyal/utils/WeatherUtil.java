@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.beans.WeatherBean;
-import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.IContact;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -14,7 +14,7 @@ import java.net.URLEncoder;
 import rx.Observable;
 import rx.Subscriber;
 
-public class WeatherUtil implements Contact {
+public class WeatherUtil implements IContact {
     public static void getCityWeather(String city, final Handler handler) throws UnsupportedEncodingException {
         if (city.endsWith("市"))
             city = city.substring(0, city.length() - "市".length());

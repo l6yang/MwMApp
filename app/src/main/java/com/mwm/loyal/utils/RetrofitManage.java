@@ -1,6 +1,6 @@
 package com.mwm.loyal.utils;
 
-import com.mwm.loyal.impl.Contact;
+import com.mwm.loyal.impl.IContact;
 import com.mwm.loyal.impl.ObservableServer;
 import com.mwm.loyal.impl.RequestServer;
 
@@ -17,13 +17,13 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class RetrofitManage implements Contact {
+public class RetrofitManage implements IContact {
     private static RetrofitManage mInstance;
     private static Retrofit.Builder retrofit;
 
     private Retrofit.Builder getBuild() {
         return new Retrofit.Builder()
-                .baseUrl(Str.getBaseUrl())
+                .baseUrl(IStr.getBaseUrl())
                 //增加返回值为String的支持
                 .addConverterFactory(ScalarsConverterFactory.create())
                 //增加返回值为Gson的支持(以实体类返回)

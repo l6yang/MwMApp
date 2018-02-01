@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.databinding.ActivitySplashBinding;
-import com.mwm.loyal.utils.ResUtil;
+import com.mwm.loyal.utils.ImageUtil;
 
 import butterknife.BindView;
 
@@ -18,13 +18,13 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
     private final SplashRunnable runnable = new SplashRunnable(3);
 
     @Override
-    protected int getLayoutRes() {
+    protected int actLayoutRes() {
         return R.layout.activity_splash;
     }
 
     @Override
     public void afterOnCreate() {
-        binding.setDrawable(ResUtil.getBackground(this));
+        binding.setDrawable(ImageUtil.getBackground(this));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
 
     public void onClick(View view) {
         mContentView.removeCallbacks(runnable);
-        startActivity(LoginActivity.class);
+        startActivityByAct(LoginActivity.class);
         finish();
     }
 
