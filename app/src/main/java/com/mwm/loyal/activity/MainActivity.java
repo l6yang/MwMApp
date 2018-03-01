@@ -104,13 +104,13 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         View view = navigationView.getHeaderView(0);
-        navIcon = view.findViewById(R.id.nav_icon);
+        navIcon = (SimpleDraweeView) view.findViewById(R.id.nav_icon);
         view.findViewById(R.id.nav_zxing).setOnClickListener(this);
         if (navIcon != null) {
             navIcon.setOnClickListener(this);
         }
-        navNickName = view.findViewById(R.id.nav_nickName);
-        navSignature = view.findViewById(R.id.nav_signature);
+        navNickName = (TextView) view.findViewById(R.id.nav_nickName);
+        navSignature = (TextView) view.findViewById(R.id.nav_signature);
         updateAccount();
         appBarLayout.addOnOffsetChangedListener(this);
     }

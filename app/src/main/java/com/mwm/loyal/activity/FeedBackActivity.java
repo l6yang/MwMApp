@@ -15,7 +15,7 @@ import butterknife.BindView;
 
 public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedbackBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)
-    ImageView pubBack;
+    View pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_menu)
@@ -39,6 +39,7 @@ public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedbackBinding>
     }
 
     private void initViews() {
+        pubMenu.setVisibility(View.VISIBLE);
         pubMenu.setImageResource(R.drawable.src_history_img);
         pubMenu.setOnClickListener(this);
         pubBack.setOnClickListener(this);

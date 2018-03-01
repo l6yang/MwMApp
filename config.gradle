@@ -30,7 +30,7 @@ ext {
             phoenix             : 'com.yalantis:phoenix:1.2.3',
             butterknife         : "com.jakewharton:butterknife:${app.butterknife}",
             butterknifeProcessor: "com.jakewharton:butterknife-compiler:${app.butterknife}",
-            baseCommon          : 'com.loyal:baseCommon:1.0.6',
+            baseCommon          : 'com.loyal:baseCommon:1.0.8',
             location_amap       : 'com.amap.api:location:3.7.0'//高德地图
     ]
 }

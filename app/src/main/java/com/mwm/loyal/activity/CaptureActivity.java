@@ -3,7 +3,6 @@ package com.mwm.loyal.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,14 +23,12 @@ import butterknife.ButterKnife;
  */
 public class CaptureActivity extends BaseCaptureActivity implements View.OnClickListener {
 
-    private static final String TAG = CaptureActivity.class.getSimpleName();
-
     @BindView(R.id.surfaceView)
     SurfaceView surfaceView;
     @BindView(R.id.viewfinder_view)
     ViewfinderView viewfinderView;
     @BindView(R.id.pub_back)
-    ImageView pubBack;
+    View pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_menu)
@@ -52,17 +49,13 @@ public class CaptureActivity extends BaseCaptureActivity implements View.OnClick
         autoScan = getIntent().getBooleanExtra("auto", false);
         pubBack.setOnClickListener(this);
         pubTitle.setText(getIntent().getStringExtra("title"));
+        pubMenu.setVisibility(View.VISIBLE);
         pubMenu.setImageResource(R.drawable.src_flash_img);
         pubLayout.setBackgroundResource(R.color.pub_color_title);
         autoScannerView.setVisibility(autoScan ? View.VISIBLE : View.GONE);
         viewfinderView.setVisibility(autoScan ? View.GONE : View.VISIBLE);
         pubMenu.setOnClickListener(this);
     }
-
-   /* @Override
-    public int setEdgePosition() {
-        return LEFT;
-    }*/
 
     @Override
     public void onClick(View view) {
@@ -104,7 +97,7 @@ public class CaptureActivity extends BaseCaptureActivity implements View.OnClick
 
     @Override
     public void dealDecode(Result rawResult, Bitmap barcode, float scaleFactor) {
-        Log.i(TAG, "dealDecode ~~~~~ " + rawResult.getText() + " " + barcode + " " + scaleFactor);
+        System.out.println("dealDecode ~~~~~ " + rawResult.getText() + " " + barcode + " " + scaleFactor);
         playBeepSoundAndVibrate();
         Intent intent = new Intent();
         intent.putExtra("mwm_id", rawResult.getText());

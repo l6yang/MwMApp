@@ -2,7 +2,6 @@ package com.mwm.loyal.activity;
 
 import android.content.Intent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
@@ -15,11 +14,9 @@ import butterknife.BindView;
 
 public class SettingsActivity extends BaseSwipeActivity<ActivitySettingsBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)
-    ImageView pubBack;
+    View pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
 
     @Override
     protected int actLayoutRes() {
@@ -40,7 +37,6 @@ public class SettingsActivity extends BaseSwipeActivity<ActivitySettingsBinding>
 
     private void initViews() {
         pubTitle.setText("设置");
-        pubMenu.setVisibility(View.GONE);
         pubBack.setOnClickListener(this);
     }
 

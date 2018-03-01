@@ -65,8 +65,8 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
     }
 
     @Override
-    public void showToast(@NonNull String text) {
-        ToastUtil.showToast(activity, text);
+    public void showToast(@NonNull CharSequence sequence) {
+        ToastUtil.showToast(activity, sequence);
     }
 
     @Override
@@ -80,19 +80,19 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
     }
 
     @Override
-    public void showErrorToast(@NonNull String text, Throwable e) {
+    public void showErrorToast(@NonNull CharSequence sequence, Throwable e) {
         String error = null == e ? "" : ConnectUtil.getError(e);
-        showToast(replaceNull(text) + (TextUtils.isEmpty(error) ? "" : "\n" + error));
+        showToast(replaceNull(sequence) + (TextUtils.isEmpty(error) ? "" : "\n" + error));
     }
 
     @Override
-    public void showDialog(@NonNull String text) {
-        showDialog(text, false);
+    public void showDialog(@NonNull CharSequence sequence) {
+        showDialog(sequence, false);
     }
 
     @Override
-    public void showDialog(@NonNull String text, boolean finish) {
-        ToastUtil.showDialog(activity, replaceNull(text), finish);
+    public void showDialog(@NonNull CharSequence sequence, boolean finish) {
+        ToastUtil.showDialog(activity, replaceNull(sequence), finish);
     }
 
     @Override
@@ -121,24 +121,24 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
     }
 
     @Override
-    public void showErrorDialog(@NonNull String text) {
-        showErrorDialog(text, false);
+    public void showErrorDialog(@NonNull CharSequence sequence) {
+        showErrorDialog(sequence, false);
     }
 
     @Override
-    public void showErrorDialog(@NonNull String text, boolean finish) {
-        showErrorDialog(text, null, finish);
+    public void showErrorDialog(@NonNull CharSequence sequence, boolean finish) {
+        showErrorDialog(sequence, null, finish);
     }
 
     @Override
-    public void showErrorDialog(@NonNull String text, Throwable e) {
-        showErrorDialog(text, e, false);
+    public void showErrorDialog(@NonNull CharSequence sequence, Throwable e) {
+        showErrorDialog(sequence, e, false);
     }
 
     @Override
-    public void showErrorDialog(@NonNull String text, Throwable e, boolean finish) {
+    public void showErrorDialog(@NonNull CharSequence sequence, Throwable e, boolean finish) {
         String error = null == e ? "" : ConnectUtil.getError(e);
-        showDialog(replaceNull(text) + (TextUtils.isEmpty(error) ? "" : "\n" + error), finish);
+        showDialog(replaceNull(sequence) + (TextUtils.isEmpty(error) ? "" : "\n" + error), finish);
     }
 
     public final void finish() {

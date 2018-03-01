@@ -24,6 +24,7 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
 
     @Override
     public void afterOnCreate() {
+        System.out.println("null==binding--" + (null == binding));
         binding.setDrawable(ImageUtil.getBackground(this));
     }
 

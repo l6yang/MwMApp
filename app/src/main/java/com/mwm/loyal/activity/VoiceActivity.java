@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.tts.auth.AuthInfo;
@@ -33,9 +32,8 @@ public class VoiceActivity extends BaseSwipeActivity<ActivityVoiceBinding> imple
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_back)
-    ImageView pubBack;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
+    View pubBack;
+
     private HandlerClass mHandler;
     private SpeechSynthesizer mSpeechSynthesizer;
 
@@ -64,7 +62,6 @@ public class VoiceActivity extends BaseSwipeActivity<ActivityVoiceBinding> imple
         mHandler = new HandlerClass(this);
         FileUtil.createFiles();
         pubBack.setOnClickListener(this);
-        pubMenu.setVisibility(View.GONE);
         pubTitle.setText(R.string.action_voice);
         VoiceUtil voiceUtil = new VoiceUtil(this);
         mSpeechSynthesizer = voiceUtil.getSpeechSynthesizer();

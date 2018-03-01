@@ -2,7 +2,6 @@ package com.mwm.loyal.activity;
 
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
@@ -20,11 +19,9 @@ import rx.Observable;
 
 public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> implements View.OnClickListener, SubscribeListener<String> {
     @BindView(R.id.pub_back)
-    ImageView pubBack;
+    View pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
     @BindView(R.id.forget_test)
     Button button;
 
@@ -47,7 +44,6 @@ public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> imp
     private void initViews() {
         pubTitle.setText("重置密码");
         pubBack.setOnClickListener(this);
-        pubMenu.setVisibility(View.GONE);
         button.setOnClickListener(this);
     }
 

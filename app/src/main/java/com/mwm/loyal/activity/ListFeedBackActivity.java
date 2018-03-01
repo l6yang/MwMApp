@@ -16,7 +16,6 @@ import com.mwm.loyal.beans.FeedBackBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityListFeedbackBinding;
 import com.mwm.loyal.impl.SubscribeListener;
-import com.mwm.loyal.libs.swipback.utils.SwipeBackLayout;
 import com.mwm.loyal.utils.DividerItemDecoration;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.RxUtil;
@@ -34,7 +33,7 @@ import butterknife.BindView;
 
 public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedbackBinding> implements View.OnClickListener, SubscribeListener<ResultBean>, SwipeMenuCreator, OnSwipeMenuItemClickListener {
     @BindView(R.id.pub_back)
-    ImageView pubBack;
+    View pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_menu)
@@ -58,7 +57,7 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
 
     @Override
     public int setEdgePosition() {
-        return SwipeBackLayout.EDGE_LEFT;
+        return LEFT;
     }
 
     private void queryHistory() {
@@ -68,6 +67,7 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
     }
 
     private void initViews() {
+        pubMenu.setVisibility(View.VISIBLE);
         pubMenu.setImageResource(R.drawable.src_sync_img);
         pubMenu.setOnClickListener(this);
         pubBack.setOnClickListener(this);

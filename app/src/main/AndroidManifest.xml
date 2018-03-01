@@ -149,7 +149,13 @@
 
         <activity
             android:name=".activity.ShareActivity"
-            android:theme="@style/BaseSwipeTheme" />
+            android:theme="@style/BaseSwipeTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.ListFeedBackActivity"
             android:theme="@style/BaseSwipeTheme"

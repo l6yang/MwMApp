@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.loyal.base.ui.activity.ABasicActivity;
+import com.loyal.base.ui.activity.ABasicBindActivity;
 import com.loyal.base.widget.BaseDialog;
 import com.mwm.loyal.R;
 import com.mwm.loyal.app.MwMApplication;
@@ -24,14 +24,13 @@ import com.mwm.loyal.service.UpdateService;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseActivity<T extends ViewDataBinding> extends ABasicActivity implements IContact, BaseDialog.DialogClickListener {
+public abstract class BaseActivity<T extends ViewDataBinding> extends ABasicBindActivity implements IContact, BaseDialog.DialogClickListener {
     private UpdateReceiver updateReceiver;
     protected ProgressDialog progressDialog;
     protected T binding;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void setContentView() {
         binding = DataBindingUtil.setContentView(this, actLayoutRes());
     }
 

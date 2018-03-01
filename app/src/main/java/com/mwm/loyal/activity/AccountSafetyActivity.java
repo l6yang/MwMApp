@@ -3,7 +3,6 @@ package com.mwm.loyal.activity;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
@@ -20,11 +19,9 @@ import butterknife.BindView;
 
 public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBinding> implements View.OnClickListener, SubscribeListener<ResultBean> {
     @BindView(R.id.pub_back)
-    ImageView pubBack;
+    View pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
 
     @Override
     protected int actLayoutRes() {
@@ -46,7 +43,6 @@ public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBind
 
     private void initViews() {
         pubTitle.setText("账号与安全");
-        pubMenu.setVisibility(View.GONE);
         pubBack.setOnClickListener(this);
         binding.accountDeviceLock.setOnClickListener(this);
     }
@@ -102,7 +98,7 @@ public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBind
 
     @Override
     public void onError(int what, Object tag, Throwable e) {
-        showErrorDialog(e.toString(), false);
+        showErrorDialog("失败", e);
     }
 
 }

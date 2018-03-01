@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.loyal.base.util.GsonUtil;
@@ -39,9 +38,7 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_back)
-    ImageView pubBack;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
+    View pubBack;
     @BindView(R.id.edit_cityName)
     AutoCompleteTextView editCity;
     @BindView(R.id.view_layout)
@@ -83,7 +80,6 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
     }
 
     private void initViews() {
-        pubMenu.setVisibility(View.GONE);
         pubTitle.setText("选择城市");
         pubBack.setOnClickListener(this);
         changeInput(false);

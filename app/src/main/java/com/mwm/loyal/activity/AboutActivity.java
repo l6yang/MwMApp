@@ -1,7 +1,6 @@
 package com.mwm.loyal.activity;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
@@ -17,9 +16,7 @@ public class AboutActivity extends BaseSwipeActivity<ActivityAboutBinding> imple
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_back)
-    ImageView pubBack;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
+    View pubBack;
 
     @Override
     protected int actLayoutRes() {
@@ -40,7 +37,6 @@ public class AboutActivity extends BaseSwipeActivity<ActivityAboutBinding> imple
     }
 
     private void initViews() {
-        pubMenu.setVisibility(View.GONE);
         pubTitle.setText("关于我们");
         pubBack.setOnClickListener(this);
     }

@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
@@ -31,9 +30,7 @@ public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> imple
     @BindView(R.id.pub_title)
     TextView pubTitle;
     @BindView(R.id.pub_back)
-    ImageView pubBack;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
+    View pubBack;
     @BindView(R.id.recycle_list)
     RecyclerView recyclerView;
     @BindView(R.id.pull_to_refresh)
@@ -69,7 +66,6 @@ public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> imple
     }
 
     private void initViews() {
-        pubMenu.setVisibility(View.GONE);
         pubTitle.setText("分享");
         pubBack.setOnClickListener(this);
         pullToRefreshView.setEnabled(false);

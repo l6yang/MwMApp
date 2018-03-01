@@ -44,7 +44,7 @@ import retrofit2.Call;
 
 public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding> implements View.OnClickListener, SubscribeListener<ResultBean> {
     @BindView(R.id.pub_back)
-    ImageView pubBack;
+    View pubBack;
     @BindView(R.id.pub_menu)
     ImageView pubMenu;
     @BindView(R.id.pub_title)
@@ -78,6 +78,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
 
     private void initViews() {
         pubTitle.setText("个人资料");
+        pubMenu.setVisibility(View.VISIBLE);
         pubMenu.setImageResource(R.drawable.src_edit_img);
         pubMenu.setOnClickListener(this);
         pubBack.setOnClickListener(this);

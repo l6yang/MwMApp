@@ -25,7 +25,7 @@ import static com.mwm.loyal.impl.IContact.IStr.method_scan;
 
 public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)
-    ImageView pubBack;
+    View pubBack;
     @BindView(R.id.pub_menu)
     ImageView pubMenu;
     @BindView(R.id.pub_title)
@@ -61,6 +61,7 @@ public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> imp
 
     private void initViews() {
         pubTitle.setText("我的二维码");
+        pubMenu.setVisibility(View.VISIBLE);
         pubMenu.setImageResource(R.drawable.src_menu_img);
         pubMenu.setOnClickListener(this);
         pubBack.setOnClickListener(this);

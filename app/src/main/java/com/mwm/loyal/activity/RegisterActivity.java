@@ -2,7 +2,6 @@ package com.mwm.loyal.activity;
 
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwm.loyal.R;
@@ -17,11 +16,9 @@ import butterknife.BindView;
 
 public class RegisterActivity extends BaseSwipeActivity<ActivityRegisterBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)
-    ImageView pubBack;
+    View pubBack;
     @BindView(R.id.pub_title)
     TextView pubTitle;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
 
     @Override
     protected int actLayoutRes() {
@@ -49,7 +46,6 @@ public class RegisterActivity extends BaseSwipeActivity<ActivityRegisterBinding>
 
     private void initViews(boolean fromLogin, String extra) {
         pubBack.setOnClickListener(this);
-        pubMenu.setVisibility(View.GONE);
         if (TextUtils.isEmpty(extra)) {
             pubTitle.setText(fromLogin ? "快速注册" : "修改密码");
             binding.accountClear.setImageResource(fromLogin ? R.mipmap.edit_clear : R.color.white);
