@@ -130,9 +130,7 @@ public class ApkUtil {
                         break;
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
+            }finally {
                 if (zipfile != null) {
                     try {
                         zipfile.close();

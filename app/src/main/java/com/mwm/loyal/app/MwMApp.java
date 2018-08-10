@@ -4,8 +4,8 @@ import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
-public class MwMApplication extends Application {
-    private static MwMApplication application;
+public class MwMApp extends Application {
+    private static MwMApp application;
     private String activityTag;
 
     @Override
@@ -15,7 +15,7 @@ public class MwMApplication extends Application {
         Fresco.initialize(this);
     }
 
-    public static synchronized MwMApplication getInstance() {
+    public static synchronized MwMApp getInstance() {
         return application;
     }
 

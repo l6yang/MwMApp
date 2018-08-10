@@ -18,7 +18,7 @@ import android.view.WindowManager;
 import com.loyal.base.ui.activity.ABasicBindActivity;
 import com.loyal.base.widget.BaseDialog;
 import com.mwm.loyal.R;
-import com.mwm.loyal.app.MwMApplication;
+import com.mwm.loyal.app.MwMApp;
 import com.mwm.loyal.impl.IContact;
 import com.mwm.loyal.service.UpdateService;
 
@@ -41,11 +41,11 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends ABasicBind
 
     protected void setCurrentTag(BaseActivity activity) {
         String tag = activity.getClass().getName();
-        MwMApplication.getInstance().setActivityTag(tag);
+        MwMApp.getInstance().setActivityTag(tag);
     }
 
     protected String getCurrentTag() {
-        return MwMApplication.getInstance().getActivityTag();
+        return MwMApp.getInstance().getActivityTag();
     }
 
     @Override

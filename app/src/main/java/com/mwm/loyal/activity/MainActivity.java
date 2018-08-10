@@ -44,7 +44,6 @@ import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.RxUtil;
-import com.mwm.loyal.utils.ToastUtil;
 import com.mwm.loyal.utils.WeatherUtil;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionNo;
@@ -104,13 +103,13 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         View view = navigationView.getHeaderView(0);
-        navIcon = (SimpleDraweeView) view.findViewById(R.id.nav_icon);
+        navIcon = view.findViewById(R.id.nav_icon);
         view.findViewById(R.id.nav_zxing).setOnClickListener(this);
         if (navIcon != null) {
             navIcon.setOnClickListener(this);
         }
-        navNickName = (TextView) view.findViewById(R.id.nav_nickName);
-        navSignature = (TextView) view.findViewById(R.id.nav_signature);
+        navNickName = view.findViewById(R.id.nav_nickName);
+        navSignature = view.findViewById(R.id.nav_signature);
         updateAccount();
         appBarLayout.addOnOffsetChangedListener(this);
     }
@@ -201,7 +200,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
     //扫描并查询
     private void doScanQuery(String scanStr) {
         if (TextUtils.isEmpty(scanStr)) {
-            ToastUtil.showToast(this, "未扫描到信息");
+            showToast("未扫描到信息");
             return;
         }
         showDialog("处理中...");
@@ -257,7 +256,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
             AndPermission.defaultSettingDialog(this, IContact.Int.permissionCamera).show();
         } else {
-            ToastUtil.showDialog(this, "您已拒绝开启相机权限，程序将不能正常使用相机", false);
+            showDialog("您已拒绝开启相机权限，程序将不能正常使用相机");
         }
     }
 
@@ -272,7 +271,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
             AndPermission.defaultSettingDialog(this, IContact.Int.permissionLocation).show();
         } else {
-            ToastUtil.showDialog(this, "您已拒绝开启定位权限，程序将不能正常使用定位功能", false);
+            showDialog("您已拒绝开启定位权限，程序将不能正常使用定位功能");
         }
     }
 
@@ -395,7 +394,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
             } else if (System.currentTimeMillis() - lastTime <= 2000) {
                 finish();
             } else {
-                ToastUtil.showToast(this, "再次点击返回键退出");
+                showToast("再次点击返回键退出");
                 lastTime = System.currentTimeMillis();
             }
             return true;

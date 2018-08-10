@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
 
 android {
@@ -26,11 +28,8 @@ android {
             variant.outputs.all { output ->
                 def outputFile = output.outputFile
                 if (null != outputFile && outputFile.name.endsWith('.apk')) {
-                    def calender = Calendar.getInstance(Locale.SIMPLIFIED_CHINESE)
-                    def year = calender.get(Calendar.YEAR)
-                    def month = calender.get(Calendar.MONTH)
-                    def day = calender.get(Calendar.DAY_OF_MONTH)
-                    def date = year + "_" + (month + 1) + "_" + day
+                    def format = new SimpleDateFormat("yyyyMMdd", Locale.SIMPLIFIED_CHINESE)
+                    def date = format.format(new Date())
                     def fileName = "mwm_${defaultConfig.versionName}_${date}.apk"
                     outputFileName = fileName
                 }
