@@ -33,11 +33,6 @@ public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedbackBinding>
         initViews();
     }
 
-    @Override
-    public boolean isTransStatus() {
-        return false;
-    }
-
     private void initViews() {
         pubMenu.setVisibility(View.VISIBLE);
         pubMenu.setImageResource(R.drawable.src_history_img);

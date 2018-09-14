@@ -31,11 +31,6 @@ public class AboutActivity extends BaseSwipeActivity<ActivityAboutBinding> imple
         initViews();
     }
 
-    @Override
-    public boolean isTransStatus() {
-        return false;
-    }
-
     private void initViews() {
         pubTitle.setText("关于我们");
         pubBack.setOnClickListener(this);

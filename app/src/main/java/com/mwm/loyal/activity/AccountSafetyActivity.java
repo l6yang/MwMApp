@@ -5,13 +5,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.loyal.base.rxjava.impl.SubscribeListener;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAccountBinding;
 import com.mwm.loyal.handler.AccountSafetyHandler;
-import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.RxUtil;
 
@@ -34,11 +34,6 @@ public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBind
         binding.setDrawable(ImageUtil.getBackground(this));
         initViews();
         checkLocked();
-    }
-
-    @Override
-    public boolean isTransStatus() {
-        return false;
     }
 
     private void initViews() {

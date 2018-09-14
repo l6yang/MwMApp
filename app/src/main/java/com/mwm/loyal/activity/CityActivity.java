@@ -8,6 +8,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.loyal.base.util.GsonUtil;
+import com.loyal.base.util.ResUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.adapter.AutoCompleteAdapter;
 import com.mwm.loyal.adapter.PinnedCityAdapter;
@@ -16,7 +17,6 @@ import com.mwm.loyal.beans.CityBean;
 import com.mwm.loyal.databinding.ActivityCityBinding;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.Low2UpCase;
-import com.loyal.base.util.ResUtil;
 import com.mwm.loyal.utils.SortCity;
 import com.mwm.loyal.utils.ToastUtil;
 import com.mwm.loyal.views.PinnedHeaderListView;
@@ -30,9 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
+import io.reactivex.Observable;
 
 public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> implements View.OnClickListener, SideBar.OnTouchingLetterChangedListener {
     @BindView(R.id.pub_title)
@@ -70,11 +68,6 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
     }
 
     @Override
-    public boolean isTransStatus() {
-        return false;
-    }
-
-    @Override
     public int setEdgePosition() {
         return LEFT;
     }
@@ -88,7 +81,7 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
     private void initData() {
         editCity.setAdapter(completeAdapter = new AutoCompleteAdapter(this, new ArrayList<CityBean>()));
         cityPinnedView.setAdapter(pinnedCityAdapter = new PinnedCityAdapter(this, linkedHashMap));
-        Observable.just("allCity.json").map(new Func1<String, List<CityBean>>() {
+        /*Observable.just("allCity.json").map(new Func1<String, List<CityBean>>() {
             @Override
             public List<CityBean> call(String s) {
                 String json = ResUtil.getStrFromRes(CityActivity.this, s);
@@ -110,7 +103,7 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
                 pinnedCityAdapter.refreshData(linkedHashMap);
                 completeAdapter.refreshList(beanList);
             }
-        });
+        });*/
         sideBar.setTextView(textSideBar);
         sideBar.setOnTouchingLetterChangedListener(this);
         cityPinnedView.setOnItemClickListener(new ItemClickListener());

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.loyal.base.rxjava.impl.SubscribeListener;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.RegisterActivity;
 import com.mwm.loyal.base.BaseClickHandler;
@@ -14,12 +15,11 @@ import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityRegisterBinding;
 import com.mwm.loyal.impl.OperaOnClickListener;
-import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.OperateDialog;
 import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> implements SubscribeListener<ResultBean>, OperaOnClickListener {
     private final boolean fromLogin;

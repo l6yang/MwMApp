@@ -51,7 +51,7 @@ public class ExtractApkFileAsync extends AsyncTask<Void, String, Boolean> {
     protected void onPostExecute(Boolean status) {
         super.onPostExecute(status);
         progressDialog.dismiss();
-        Message message = Message.obtain(mHandler, IContact.Int.async2Null);
+        Message message = Message.obtain(mHandler, IContact.IntImpl.async2Null);
         message.sendToTarget();
         if (status) {
             ToastUtil.showToast(context, String.format(context.getString(R.string.dialog_saved_description), appBean.getName(), UtilsApp.getAPKFilename(appBean)));

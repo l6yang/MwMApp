@@ -69,7 +69,7 @@ public class VoiceActivity extends BaseSwipeActivity<ActivityVoiceBinding> imple
     }
 
     @Override
-    public boolean isTransStatus() {
+    public boolean isFullScreen() {
         return false;
     }
 

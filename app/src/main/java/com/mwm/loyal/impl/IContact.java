@@ -1,10 +1,10 @@
 package com.mwm.loyal.impl;
 
-import com.loyal.base.impl.IContacts;
+import com.loyal.base.impl.IBaseContacts;
 
-public interface IContact extends IContacts{
+public interface IContact extends IBaseContacts {
 
-    class IStr extends IContacts.Str {
+    class StrImpl extends IBaseContacts.BaseStr {
         public static final String appId = "9319579";
         public static final String appKey = "QAZQ5Gh8H6nAG2GOuPM0THDZ";
         public static final String secretKey = "c4f7e878acdb1314a1b5fe3ae502d645";
@@ -50,7 +50,7 @@ public interface IContact extends IContacts{
         }
     }
 
-    class Int {
+    class IntImpl {
         public static final int reqCode_Main_noRequest = 100;
         public static final int reqCode_Main_Setting = 102;
         public static final int reqCode_Main_Zing = 103;

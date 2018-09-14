@@ -30,11 +30,6 @@ public class SettingsActivity extends BaseSwipeActivity<ActivitySettingsBinding>
         initViews();
     }
 
-    @Override
-    public boolean isTransStatus() {
-        return false;
-    }
-
     private void initViews() {
         pubTitle.setText("设置");
         pubBack.setOnClickListener(this);

@@ -48,7 +48,7 @@ public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         FeedBackBean feedBackBean = beanList.get(position);
-        String time = IStr.replaceNull(feedBackBean.getTime());
+        String time = StrImpl.replaceNull(feedBackBean.getTime());
         if (time.endsWith("00:00:00"))
             time = time.replace(" 00:00:00", "");
         holder.itemTime.setText(time);

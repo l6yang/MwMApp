@@ -5,6 +5,7 @@ import android.support.annotation.IdRes;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.loyal.base.rxjava.impl.SubscribeListener;
 import com.loyal.base.util.GsonUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.ForgetActivity;
@@ -16,7 +17,6 @@ import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityLoginBinding;
-import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.service.ImageService;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.RxUtil;
@@ -73,7 +73,7 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
     private void toRegister(@IdRes int resId) {
         builder.putExtra("resId", resId);
         builder.putExtra("account", "");
-        startActivityForResultByAct(RegisterActivity.class, Int.reqCode_register);
+        startActivityForResultByAct(RegisterActivity.class, IntImpl.reqCode_register);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
                     PreferencesUtil.putLoginBean(activity, loginBean);
                     builder.putExtra("account", loginBean.account.get());
                     startActivityByAct(MainActivity.class);
-                    Intent imageIntent = new Intent().setAction(IStr.actionDownload).putExtra("account", loginBean.account.get());
+                    Intent imageIntent = new Intent().setAction(StrImpl.actionDownload).putExtra("account", loginBean.account.get());
                     ImageService.startAction(activity, imageIntent);
                     finish();
                 } else showDialog(resultBean.getResultMsg());

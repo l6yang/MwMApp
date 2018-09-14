@@ -37,10 +37,10 @@ public class VoiceUtil {
         mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_TTS_SPEECH_MODEL_FILE, FileUtil.path_voice
                 + SPEECH_FEMALE_MODEL_NAME);
         // 请替换为语音开发者平台上注册应用得到的App ID (离线授权)
-        mSpeechSynthesizer.setAppId(IContact.IStr.appId/*这里只是为了让Demo运行使用的APPID,请替换成自己的id。*/);
+        mSpeechSynthesizer.setAppId(IContact.StrImpl.appId/*这里只是为了让Demo运行使用的APPID,请替换成自己的id。*/);
         // 请替换为语音开发者平台注册应用得到的apikey和secretkey (在线授权)
-        mSpeechSynthesizer.setApiKey(IContact.IStr.appKey,
-                IContact.IStr.secretKey/*这里只是为了让Demo正常运行使用APIKey,请替换成自己的APIKey*/);
+        mSpeechSynthesizer.setApiKey(IContact.StrImpl.appKey,
+                IContact.StrImpl.secretKey/*这里只是为了让Demo正常运行使用APIKey,请替换成自己的APIKey*/);
         // 发音人（在线引擎），可用参数为0,1,2,3。。。（服务器端会动态增加，各值含义参考文档，以文档说明为准。0--普通女声，1--普通男声，2--特别男声，3--情感男声。。。）
         mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEAKER, "0");
         // 设置Mix模式的合成策略

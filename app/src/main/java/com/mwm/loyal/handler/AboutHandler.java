@@ -10,11 +10,6 @@ import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAboutBinding;
 import com.mwm.loyal.impl.ObservableServer;
 import com.mwm.loyal.utils.ApkUtil;
-import com.mwm.loyal.utils.RetrofitManage;
-
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class AboutHandler extends BaseClickHandler<ActivityAboutBinding> {
 
@@ -30,12 +25,12 @@ public class AboutHandler extends BaseClickHandler<ActivityAboutBinding> {
             case R.id.about_version:
                 progressDialog.setMessage("正在检查中");
                 progressDialog.show();
-                doVerApk();
+                //doVerApk();
                 break;
         }
     }
 
-    private void doVerApk() {
+    /*private void doVerApk() {
         ObservableServer server = RetrofitManage.getInstance().getObservableServer();
         server.doApkVer(ApkUtil.getApkVersion(activity))
                 .subscribeOn(Schedulers.newThread())
@@ -66,5 +61,5 @@ public class AboutHandler extends BaseClickHandler<ActivityAboutBinding> {
                         }
                     }
                 });
-    }
+    }*/
 }

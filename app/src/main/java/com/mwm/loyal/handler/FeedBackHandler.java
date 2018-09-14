@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.loyal.base.rxjava.impl.SubscribeListener;
 import com.loyal.base.util.TimeUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.FeedBackActivity;
@@ -12,7 +13,6 @@ import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.FeedBackBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityFeedbackBinding;
-import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.ToastUtil;
 

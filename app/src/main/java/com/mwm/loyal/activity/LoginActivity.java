@@ -12,7 +12,6 @@ import com.mwm.loyal.base.BasePermitActivity;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.databinding.ActivityLoginBinding;
 import com.mwm.loyal.handler.LoginHandler;
-import com.mwm.loyal.impl.IContact;
 import com.mwm.loyal.impl.TextChangedListener;
 import com.mwm.loyal.service.UpdateService;
 import com.mwm.loyal.utils.FileUtil;
@@ -41,12 +40,7 @@ public class LoginActivity extends BasePermitActivity<ActivityLoginBinding> impl
         binding.setClick(new LoginHandler(this, binding));
         binding.setDrawable(ImageUtil.getBackground(this));
         initViews();
-        requestPermissions(IContact.Int.permissionReadPhone, new String[]{Manifest.permission.READ_PHONE_STATE});
-    }
-
-    @Override
-    public boolean isTransStatus() {
-        return false;
+        requestPermissions(IntImpl.permissionReadPhone, new String[]{Manifest.permission.READ_PHONE_STATE});
     }
 
     private void initViews() {
@@ -59,35 +53,35 @@ public class LoginActivity extends BasePermitActivity<ActivityLoginBinding> impl
         binding.server.setAdapter(adapter);
     }
 
-    @PermissionYes(IContact.Int.permissionReadPhone)
+    @PermissionYes(IntImpl.permissionReadPhone)
     private void onReadPhoneSuccess(List<String> grantedPermissions) {
-        requestPermissions(IContact.Int.permissionMemory, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE});
+        requestPermissions(IntImpl.permissionMemory, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE});
     }
 
-    @PermissionNo(IContact.Int.permissionReadPhone)
+    @PermissionNo(IntImpl.permissionReadPhone)
     private void onReadPhoneFail(List<String> deniedPermissions) {
         if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
             // 第一种：用默认的提示语。
-            AndPermission.defaultSettingDialog(this, IContact.Int.permissionReadPhone).show();
+            AndPermission.defaultSettingDialog(this, IntImpl.permissionReadPhone).show();
         } else {
             showDialog("您已拒绝\"获取设备状态权限\"，程序将退出", true);
         }
     }
 
-    @PermissionYes(IContact.Int.permissionMemory)
+    @PermissionYes(IntImpl.permissionMemory)
     private void onMemorySuccess(List<String> grantedPermissions) {
         File file = new File(FileUtil.path_apk, FileUtil.apkFileName);
         if (file.exists())
             FileUtil.deleteFile(file);
         FileUtil.createFiles();
-        UpdateService.startActionUpdate(this, IStr.actionUpdate, null);
+        UpdateService.startActionUpdate(this, StrImpl.actionUpdate, null);
     }
 
-    @PermissionNo(IContact.Int.permissionMemory)
+    @PermissionNo(IntImpl.permissionMemory)
     private void onMemoryFailed(List<String> deniedPermissions) {
         if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
             // 第一种：用默认的提示语。
-            AndPermission.defaultSettingDialog(this, IContact.Int.permissionMemory).show();
+            AndPermission.defaultSettingDialog(this, IntImpl.permissionMemory).show();
         } else {
             showDialog("您已拒绝\"存储权限\"，程序将退出", true);
         }
@@ -96,14 +90,14 @@ public class LoginActivity extends BasePermitActivity<ActivityLoginBinding> impl
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case IContact.Int.permissionMemory:
+            case IntImpl.permissionMemory:
                 showToast("用户从设置回来了");
                 break;
         }
         if (resultCode != RESULT_OK)
             return;
         switch (requestCode) {
-            case IContact.Int.reqCode_register:
+            case IntImpl.reqCode_register:
                 binding.account.setText(data.getStringExtra("account"));
                 break;
         }

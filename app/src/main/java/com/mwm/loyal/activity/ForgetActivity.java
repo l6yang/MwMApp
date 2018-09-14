@@ -4,18 +4,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.loyal.base.rxjava.impl.SubscribeListener;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.databinding.ActivityForgetBinding;
-import com.mwm.loyal.impl.ObservableServer;
-import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.RxUtil;
 
 import butterknife.BindView;
-import rx.Observable;
 
 public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> implements View.OnClickListener, SubscribeListener<String> {
     @BindView(R.id.pub_back)
@@ -34,11 +31,6 @@ public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> imp
     public void afterOnCreate() {
         binding.setDrawable(ImageUtil.getBackground(this));
         initViews();
-    }
-
-    @Override
-    public boolean isTransStatus() {
-        return false;
     }
 
     private void initViews() {
@@ -60,10 +52,9 @@ public class ForgetActivity extends BaseSwipeActivity<ActivityForgetBinding> imp
                 finish();
                 break;
             case R.id.forget_test:
-                ObservableServer server = RetrofitManage.getInstance().getObservableServer();
-                Observable<String> call = server.doTestLogin("loyal", "111111");
-                RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(this, this);
-                RxUtil.rxExecuted(call, subscriber);
+                RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(this, "192");
+                subscriber.setSubscribeListener(this);
+                RxUtil.rxExecuted(subscriber.doTestLogin("loyal", "111111"), subscriber);
                 break;
         }
     }

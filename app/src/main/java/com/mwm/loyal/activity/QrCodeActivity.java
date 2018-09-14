@@ -20,8 +20,8 @@ import java.io.File;
 
 import butterknife.BindView;
 
-import static com.mwm.loyal.impl.IContact.IStr.action;
-import static com.mwm.loyal.impl.IContact.IStr.method_scan;
+import static com.mwm.loyal.impl.IContact.StrImpl.action;
+import static com.mwm.loyal.impl.IContact.StrImpl.method_scan;
 
 public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> implements View.OnClickListener {
     @BindView(R.id.pub_back)
@@ -54,11 +54,6 @@ public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> imp
         initViews();
     }
 
-    @Override
-    public boolean isTransStatus() {
-        return false;
-    }
-
     private void initViews() {
         pubTitle.setText("我的二维码");
         pubMenu.setVisibility(View.VISIBLE);
@@ -67,7 +62,7 @@ public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> imp
         pubBack.setOnClickListener(this);
         account = getIntent().getStringExtra("account");
         Bitmap logoBitmap = BitmapFactory.decodeFile(FileUtil.path_icon + "icon_" + account + ".jpg");
-        String str = IStr.getBaseUrl() + action + method_scan + "&k=" + CipherUtil.encodeStr(account);
+        String str = StrImpl.getBaseUrl() + action + method_scan + "&k=" + CipherUtil.encodeStr(account);
         pubMenuSave.setOnClickListener(this);
         pubMenuScan.setOnClickListener(this);
         pubMenuShare.setOnClickListener(this);

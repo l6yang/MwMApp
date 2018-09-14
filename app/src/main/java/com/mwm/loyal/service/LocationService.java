@@ -71,8 +71,8 @@ public class LocationService extends Service implements IContact, AMapLocationLi
                 case LocatedStop:
                     AMapLocation location = (AMapLocation) msg.obj;
                     Intent intent = new Intent();
-                    intent.setAction(IStr.service_action_loc);
-                    intent.putExtra("city", null == location ? "" : IStr.replaceNull(location.getCity()));
+                    intent.setAction(StrImpl.service_action_loc);
+                    intent.putExtra("city", null == location ? "" : StrImpl.replaceNull(location.getCity()));
                     LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
                     service.stopLocation();
                     service.stopSelf();

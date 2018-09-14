@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loyal.base.rxjava.impl.SubscribeListener;
 import com.loyal.base.util.GsonUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
@@ -22,10 +23,8 @@ import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityPersonalBinding;
 import com.mwm.loyal.handler.PersonalHandler;
-import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.StringUtil;
 import com.mwm.loyal.utils.ToastUtil;
@@ -69,11 +68,6 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
         String account = getIntent().getStringExtra("account");
         RxProgressSubscriber<ResultBean> querySubscribe = new RxProgressSubscriber<>(this, this);
         RxUtil.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
-    }
-
-    @Override
-    public boolean isTransStatus() {
-        return false;
     }
 
     private void initViews() {
@@ -145,13 +139,14 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
 
         @Override
         protected String doInBackground(Void... voids) {
-            Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateAccount(loginBean.toString(), "personal", "");
+            /*Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateAccount(loginBean.toString(), "personal", "");
             try {
                 return RetrofitManage.doExecuteStr(call);
             } catch (IOException e) {
                 e.printStackTrace();
                 return e.toString();
-            }
+            }*/
+            return "";
         }
 
         @Override
@@ -173,7 +168,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case Int.reqCode_Main_UCrop:
+            case IntImpl.reqCode_Main_UCrop:
                 if (resultCode == RESULT_OK) {// 成功选择了照片。
                     // 选择好了照片后，调用这个方法解析照片路径的List。
                     Uri uri = UCrop.getOutput(data);
@@ -318,15 +313,16 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
                         .addFormDataPart(loginBean.account.get(), path, RequestBody.create(MediaType.parse("image/jpeg"), file))
                         .setType(MultipartBody.FORM)
                         .build();*/
-                //return OkHttpClientManager.getInstance().post_jsonDemo(StringUtil.getServiceUrl(IStr.method_update_icon), body);
+                //return OkHttpClientManager.getInstance().post_jsonDemo(StringUtil.getServiceUrl(StrImpl.method_update_icon), body);
                 RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), file);
                 MultipartBody.Part part = MultipartBody.Part.createFormData(loginBean.account.get(), file.getName(), body);
                 //Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateIcon(body, part);
                 Map<String, RequestBody> map = new HashMap<>();
                 //map.put("file" + "\"; filename=\"" + file.getName(), body);
                 map.put("file" + "\"; filename=\"" + file.getName(), body);
-                Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateIcon(loginBean.account.get(), map);
-                return RetrofitManage.doExecute(call);
+                //Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateIcon(loginBean.account.get(), map);
+                //return RetrofitManage.doExecute(call);
+                return "";
             } catch (Exception e) {
                 e.printStackTrace();
                 return e.toString();
@@ -366,7 +362,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
         String account = getIntent().getStringExtra("account");
         if (binding.simplePersonalIcon == null)
             return;
-        binding.simplePersonalIcon.setImageURI(Uri.parse(IStr.getServerUrl(IStr.method_showIcon) + "&account=" + account));
+        binding.simplePersonalIcon.setImageURI(Uri.parse(StrImpl.getServerUrl(StrImpl.method_showIcon) + "&account=" + account));
     }
 
     @Override

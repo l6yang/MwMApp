@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.loyal.base.rxjava.impl.SubscribeListener;
 import com.loyal.base.util.StateBarUtil;
 import com.loyal.base.util.TimeUtil;
 import com.mwm.loyal.R;
@@ -37,12 +38,10 @@ import com.mwm.loyal.beans.WeatherBean;
 import com.mwm.loyal.databinding.ActivityMainBinding;
 import com.mwm.loyal.handler.MainHandler;
 import com.mwm.loyal.impl.IContact;
-import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.service.LocationService;
 import com.mwm.loyal.utils.DisplayUtil;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
-import com.mwm.loyal.utils.RetrofitManage;
 import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.WeatherUtil;
 import com.yanzhenjie.permission.AndPermission;
@@ -55,10 +54,6 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import butterknife.BindView;
-import rx.Observable;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MainActivity extends BasePermitActivity<ActivityMainBinding> implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, RationaleListener, AppBarLayout.OnOffsetChangedListener, SubscribeListener<ResultBean>, IContact {
     @BindView(R.id.pub_toolbar)
@@ -91,11 +86,6 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         initViews();
     }
 
-    @Override
-    public boolean isTransStatus() {
-        return false;
-    }
-
     private void initViews() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
@@ -119,7 +109,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         int id = item.getItemId();
         drawer.closeDrawer(GravityCompat.START);
         Message message = new Message();
-        message.what = Int.delayed2Activity;
+        message.what = IntImpl.delayed2Activity;
         message.arg1 = id;
         mHandler.sendMessageDelayed(message, 380);
         return true;
@@ -128,7 +118,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        requestPermissions(Int.permissionLocation, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION});
+        requestPermissions(IntImpl.permissionLocation, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION});
     }
 
     @Override
@@ -136,17 +126,17 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         switch (view.getId()) {
             case R.id.nav_icon:
                 hasIntentParams(true);
-                startActivityForResultByAct(PersonalActivity.class, Int.reqCode_Main_icon);
+                startActivityForResultByAct(PersonalActivity.class, IntImpl.reqCode_Main_icon);
                 break;
             case R.id.nav_zxing:
                 hasIntentParams(true);
-                startActivityForResultByAct(QrCodeActivity.class, Int.reqCode_Main_Zing);
+                startActivityForResultByAct(QrCodeActivity.class, IntImpl.reqCode_Main_Zing);
                 break;
             case R.id.text_weather:
                 if (binding.getWeather() != null && !TextUtils.isEmpty(binding.getWeather().trim())) {
                     Intent intent = new Intent(this, WeatherActivity.class);
-                    intent.putExtra("city", PreferencesUtil.getString(getApplicationContext(), IStr.KEY_CITY, IStr.defaultCity));
-                    startActivityForResult(intent, Int.reqCode_Main_weather);
+                    intent.putExtra("city", PreferencesUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity));
+                    startActivityForResult(intent, IntImpl.reqCode_Main_weather);
                 }
                 break;
         }
@@ -162,36 +152,36 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         ImageUtil.clearFrescoTemp();
         if (navIcon == null)
             return;
-        navIcon.setImageURI(Uri.parse(IStr.getServerUrl(IStr.method_showIcon) + "&account=" + getIntent().getStringExtra("account")));
+        navIcon.setImageURI(Uri.parse(StrImpl.getServerUrl(StrImpl.method_showIcon) + "&account=" + getIntent().getStringExtra("account")));
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case Int.reqCode_Main_icon:
+            case IntImpl.reqCode_Main_icon:
                 updateAccount();
                 break;
-            case Int.reqCode_Main_weather:
+            case IntImpl.reqCode_Main_weather:
                 String city;
                 if (data == null || TextUtils.isEmpty(data.getStringExtra("city")))
-                    city = PreferencesUtil.getString(getApplicationContext(), IStr.KEY_CITY, IStr.defaultCity);
+                    city = PreferencesUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity);
                 else city = data.getStringExtra("city");
-                resetCity(IStr.replaceNull(city));
+                resetCity(StrImpl.replaceNull(city));
                 break;
         }
         if (RESULT_OK != resultCode)
             return;
         switch (requestCode) {
-            case Int.reqCode_Main_Setting:
+            case IntImpl.reqCode_Main_Setting:
                 Intent intent = new Intent();
                 intent.setClass(this, LoginActivity.class);
                 startActivity(intent);
                 finish();
                 break;
-            case Int.reqCode_Main_Zing:
+            case IntImpl.reqCode_Main_Zing:
                 doScanQuery(data.getStringExtra("mwm_id"));
                 break;
-            case Int.permissionCamera:
+            case IntImpl.permissionCamera:
                 showToast("用户从设置回来了");
                 break;
         }
@@ -205,7 +195,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         }
         showDialog("处理中...");
         ContactBean contactBean = new ContactBean(getIntent().getStringExtra("account"), scanStr, TimeUtil.getDateTime());
-        Observable<ResultBean> observable = RetrofitManage.getInstance().getObservableServer().doScan(contactBean.toString(), getPackageName());
+        /*Observable<ResultBean> observable = RetrofitManage.getInstance("").createServer().doScan(contactBean.toString(), getPackageName());
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ResultBean>() {
@@ -231,7 +221,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
                             showErrorDialog("解析异常", false);
                         }
                     }
-                });
+                });*/
     }
 
     private void doUpdateAccount(String account) {
@@ -242,34 +232,34 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         RxUtil.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
     }
 
-    @PermissionYes(IContact.Int.permissionCamera)
+    @PermissionYes(IntImpl.permissionCamera)
     private void onCameraSucceed(List<String> deniedPermissions) {
         Intent intent = new Intent();
         intent.setClass(this, CaptureActivity.class);
         intent.putExtra("title", "二维码/条码扫描");
         intent.putExtra("auto", true);
-        startActivityForResult(intent, Int.reqCode_Main_Zing);
+        startActivityForResult(intent, IntImpl.reqCode_Main_Zing);
     }
 
-    @PermissionNo(IContact.Int.permissionCamera)
+    @PermissionNo(IntImpl.permissionCamera)
     private void onCameraFailed(List<String> deniedPermissions) {
         if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
-            AndPermission.defaultSettingDialog(this, IContact.Int.permissionCamera).show();
+            AndPermission.defaultSettingDialog(this, IntImpl.permissionCamera).show();
         } else {
             showDialog("您已拒绝开启相机权限，程序将不能正常使用相机");
         }
     }
 
-    @PermissionYes(Int.permissionLocation)
+    @PermissionYes(IntImpl.permissionLocation)
     private void onLocationSucceed(List<String> deniedPermissions) {
         Intent intent = new Intent(this, LocationService.class);
         startService(intent);
     }
 
-    @PermissionNo(Int.permissionLocation)
+    @PermissionNo(IntImpl.permissionLocation)
     private void onLocationFailed(List<String> deniedPermissions) {
         if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
-            AndPermission.defaultSettingDialog(this, IContact.Int.permissionLocation).show();
+            AndPermission.defaultSettingDialog(this, IntImpl.permissionLocation).show();
         } else {
             showDialog("您已拒绝开启定位权限，程序将不能正常使用定位功能");
         }
@@ -314,13 +304,13 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
             super.handleMessage(msg);
             MainActivity activity = weakReference.get();
             switch (msg.what) {
-                case Int.delayed2Activity:
+                case IntImpl.delayed2Activity:
                     int id = msg.arg1;
                     switch (id) {
                         case R.id.nav_camera:
                         case R.id.nav_gallery:
                         case R.id.nav_scan:
-                            activity.requestPermissions(IContact.Int.permissionCamera, new String[]{Manifest.permission.CAMERA});
+                            activity.requestPermissions(IntImpl.permissionCamera, new String[]{Manifest.permission.CAMERA});
                             break;
                         case R.id.nav_share:
                             activity.startActivityByAct(ShareActivity.class);
@@ -329,11 +319,11 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
                             activity.startActivityByAct(VoiceActivity.class);
                             break;
                         case R.id.nav_settings:
-                            activity.startActivityForResultByAct(SettingsActivity.class, Int.reqCode_Main_Setting);
+                            activity.startActivityForResultByAct(SettingsActivity.class, IntImpl.reqCode_Main_Setting);
                             break;
                     }
                     break;
-                case Int.rx2Weather:
+                case IntImpl.rx2Weather:
                     WeatherBean weatherBean = (WeatherBean) msg.obj;
                     try {
                         if (weatherBean != null && weatherBean.getStatus() == 1000) {
@@ -353,25 +343,25 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
     private void resetCity(String city) {
         try {
             if (TextUtils.isEmpty(city)) {
-                city = PreferencesUtil.getString(getApplicationContext(), IStr.KEY_CITY, IStr.defaultCity);
+                city = PreferencesUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity);
             } else {
-                PreferencesUtil.putString(getApplicationContext(), IStr.KEY_CITY, city);
+                PreferencesUtil.putString(getApplicationContext(), StrImpl.KEY_CITY, city);
             }
             binding.setCity(city);
             WeatherUtil.getCityWeather(city, mHandler);
         } catch (UnsupportedEncodingException e) {
-            String defaultCity = PreferencesUtil.getString(getApplicationContext(), IStr.KEY_CITY, IStr.defaultCity);
+            String defaultCity = PreferencesUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity);
             binding.setCity(defaultCity);
         }
     }
 
     private void resetWeather(String weather) {
         if (TextUtils.isEmpty(weather)) {
-            String defaultWeather = PreferencesUtil.getString(getApplicationContext(), IStr.KEY_WEATHER, IStr.defaultWeather);
+            String defaultWeather = PreferencesUtil.getString(getApplicationContext(), StrImpl.KEY_WEATHER, StrImpl.defaultWeather);
             binding.setWeather(defaultWeather + "°");
         } else {
             binding.setWeather(weather + "°");
-            PreferencesUtil.putString(getApplicationContext(), IStr.KEY_WEATHER, weather);
+            PreferencesUtil.putString(getApplicationContext(), StrImpl.KEY_WEATHER, weather);
         }
     }
 
@@ -409,7 +399,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         super.onResume();
         locatedReceiver = new LocatedReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(IStr.service_action_loc);
+        intentFilter.addAction(StrImpl.service_action_loc);
         registerReceiver(locatedReceiver, intentFilter);
     }
 
@@ -427,7 +417,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             String city = intent.getStringExtra("city");
-            if (TextUtils.equals(IStr.service_action_loc, action)) {
+            if (TextUtils.equals(StrImpl.service_action_loc, action)) {
                 if (!TextUtils.isEmpty(city)) {
                     resetCity(city);
                 }

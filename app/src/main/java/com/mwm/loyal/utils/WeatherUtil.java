@@ -4,34 +4,45 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.loyal.base.rxjava.RetrofitManage;
 import com.mwm.loyal.R;
 import com.mwm.loyal.beans.WeatherBean;
 import com.mwm.loyal.impl.IContact;
+import com.mwm.loyal.impl.ObservableServer;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import rx.Observable;
-import rx.Subscriber;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+
 
 public class WeatherUtil implements IContact {
     public static void getCityWeather(String city, final Handler handler) throws UnsupportedEncodingException {
         if (city.endsWith("市"))
             city = city.substring(0, city.length() - "市".length());
         String weatherUrl = "http://wthrcdn.etouch.cn/weather_mini?city=" + URLEncoder.encode(city, "utf-8");
-        Observable<WeatherBean> observable = RetrofitManage.getInstance().getObservableServer().getWeather(weatherUrl);
-        Subscriber<WeatherBean> subscriber = new Subscriber<WeatherBean>() {
-            @Override
-            public void onCompleted() {
-            }
+        Observable<WeatherBean> observable = RetrofitManage.getInstance(weatherUrl+"/").createServer(ObservableServer.class).getWeather(weatherUrl);
+        Observer<WeatherBean> subscriber = new Observer<WeatherBean>() {
 
             @Override
             public void onError(Throwable e) {
             }
 
             @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
             public void onNext(WeatherBean weatherBean) {
-                Message message = Message.obtain(handler, Int.rx2Weather, weatherBean);
+                Message message = Message.obtain(handler, IntImpl.rx2Weather, weatherBean);
                 message.sendToTarget();
             }
         };

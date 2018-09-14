@@ -3,6 +3,7 @@ package com.mwm.loyal.handler;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.loyal.base.rxjava.impl.SubscribeListener;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.AccountSafetyActivity;
 import com.mwm.loyal.activity.RegisterActivity;
@@ -11,7 +12,6 @@ import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAccountBinding;
-import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.ApkUtil;
 import com.mwm.loyal.utils.RxUtil;
 
@@ -24,7 +24,7 @@ public class AccountSafetyHandler extends BaseClickHandler<ActivityAccountBindin
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.account_mm_reset:
-                startActivityForResultByAct(RegisterActivity.class, Int.reqCode_UpdateMM);
+                startActivityForResultByAct(RegisterActivity.class, IntImpl.reqCode_UpdateMM);
                 break;
             case R.id.account_device_lock:
                 String des = binding.accountDeviceLock.getContentDescription().toString();
@@ -38,7 +38,7 @@ public class AccountSafetyHandler extends BaseClickHandler<ActivityAccountBindin
                 break;
             case R.id.account_destroy:
                 builder.putExtra("extra", "destroy");
-                startActivityForResultByAct(RegisterActivity.class, Int.reqCode_destroy);
+                startActivityForResultByAct(RegisterActivity.class, IntImpl.reqCode_destroy);
                 break;
         }
     }

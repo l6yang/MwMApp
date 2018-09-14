@@ -115,7 +115,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             super.handleMessage(msg);
             AppAdapter adapter = weakReference.get();
             switch (msg.what) {
-                case IContact.Int.async2Null:
+                case IContact.IntImpl.async2Null:
                     adapter.mExtraAuth = null;
                     break;
             }

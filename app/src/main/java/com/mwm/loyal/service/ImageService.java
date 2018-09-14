@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.loyal.base.rxjava.impl.SubscribeListener;
 import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.impl.IContact;
-import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.RxUtil;
@@ -35,7 +35,7 @@ public class ImageService extends IntentService implements IContact, SubscribeLi
         if (intent != null) {
             final String action = intent.getAction();
             System.out.println("onHandleIntent::" + action);
-            if (IStr.actionDownload.equals(action)) {
+            if (StrImpl.actionDownload.equals(action)) {
                 handleAction(intent);
             } else {
                 stopSelf();
@@ -49,8 +49,8 @@ public class ImageService extends IntentService implements IContact, SubscribeLi
             return;
         String account = intent.getStringExtra("account");
         RxProgressSubscriber<ResponseBody> subscriber = new RxProgressSubscriber<>(this, this);
-        subscriber.setShowDialog(false).setTag(account);
-        String url = IStr.getServerUrl(IStr.method_showIcon) + "&account=" + account;
+        subscriber.showProgressDialog(false).setTag(account);
+        String url = StrImpl.getServerUrl(StrImpl.method_showIcon) + "&account=" + account;
         RxUtil.rxExecutedByIO(subscriber.downloadImage(url), subscriber);
     }
 

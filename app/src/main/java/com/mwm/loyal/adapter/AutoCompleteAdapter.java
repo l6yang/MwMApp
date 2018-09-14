@@ -58,7 +58,7 @@ public class AutoCompleteAdapter extends BaseListAdapter<CityBean, AutoCompleteA
     @Override
     public void onViewHolder(ViewHolder holder, int position) {
         CityBean cityBean = filterList.get(position);
-        String itemStr = cityBean == null ? "" : IStr.replaceNull(cityBean.getCityName());
+        String itemStr = cityBean == null ? "" : StrImpl.replaceNull(cityBean.getCityName());
         holder.itemSpinner.setText(itemStr);
     }
 
@@ -96,8 +96,8 @@ public class AutoCompleteAdapter extends BaseListAdapter<CityBean, AutoCompleteA
                 List<CityBean> newList = new ArrayList<>(count);
                 for (int i = 0; i < count; i++) {
                     CityBean objList = beanList.get(i);
-                    String cityName = objList == null ? "" : IStr.replaceNull(objList.getCityName());
-                    String cityLetter = objList == null ? "" : IStr.replaceNull(objList.getCityLetter());
+                    String cityName = objList == null ? "" : StrImpl.replaceNull(objList.getCityName());
+                    String cityLetter = objList == null ? "" : StrImpl.replaceNull(objList.getCityLetter());
                     if (cityName.toUpperCase().startsWith(filterStr) || cityName.contains(filterStr) || TextUtils.equals(filterStr, cityLetter)) {
                         newList.add(objList);
                     }

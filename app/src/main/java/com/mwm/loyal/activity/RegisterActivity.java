@@ -39,11 +39,6 @@ public class RegisterActivity extends BaseSwipeActivity<ActivityRegisterBinding>
         initViews(fromLogin, extra);
     }
 
-    @Override
-    public boolean isTransStatus() {
-        return false;
-    }
-
     private void initViews(boolean fromLogin, String extra) {
         pubBack.setOnClickListener(this);
         if (TextUtils.isEmpty(extra)) {

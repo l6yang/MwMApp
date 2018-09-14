@@ -104,9 +104,9 @@ public class StringUtil implements IContact {
             SpinBean spinBean = (SpinBean) spinner.getSelectedItem();
             switch (key) {
                 case "dm":
-                    return IStr.replaceNull(spinBean.getDm());
+                    return StrImpl.replaceNull(spinBean.getDm());
                 case "glbm":
-                    return IStr.replaceNull(spinBean.getGlbm());
+                    return StrImpl.replaceNull(spinBean.getGlbm());
                 default:
                     return "";
             }

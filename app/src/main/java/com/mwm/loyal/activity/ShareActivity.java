@@ -4,6 +4,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -54,7 +55,7 @@ public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> imple
     }
 
     @Override
-    public boolean isTransStatus() {
+    public boolean isFullScreen() {
         return false;
     }
 
@@ -131,7 +132,7 @@ public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> imple
                             AppBean tempApp = new AppBean(packageManager.getApplicationLabel(packageInfo.applicationInfo).toString(), packageInfo.packageName, packageInfo.versionName, packageInfo.applicationInfo.sourceDir, packageInfo.applicationInfo.dataDir, packageManager.getApplicationIcon(packageInfo.applicationInfo), false);
                             appList.add(tempApp);
                         } catch (OutOfMemoryError e) {
-                            AppBean tempApp = new AppBean(packageManager.getApplicationLabel(packageInfo.applicationInfo).toString(), packageInfo.packageName, packageInfo.versionName, packageInfo.applicationInfo.sourceDir, packageInfo.applicationInfo.dataDir, getDrawable(R.mipmap.icon), false);
+                            AppBean tempApp = new AppBean(packageManager.getApplicationLabel(packageInfo.applicationInfo).toString(), packageInfo.packageName, packageInfo.versionName, packageInfo.applicationInfo.sourceDir, packageInfo.applicationInfo.dataDir, ContextCompat.getDrawable(ShareActivity.this,R.mipmap.icon), false);
                             appList.add(tempApp);
                         } catch (Exception e) {
                             e.printStackTrace();

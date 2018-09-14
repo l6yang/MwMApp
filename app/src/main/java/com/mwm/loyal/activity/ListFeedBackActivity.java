@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loyal.base.rxjava.impl.SubscribeListener;
 import com.loyal.base.util.GsonUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.adapter.FeedBackAdapter;
@@ -15,7 +16,6 @@ import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.FeedBackBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityListFeedbackBinding;
-import com.mwm.loyal.impl.SubscribeListener;
 import com.mwm.loyal.utils.DividerItemDecoration;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.RxUtil;
@@ -62,7 +62,8 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
 
     private void queryHistory() {
         String account = getIntent().getStringExtra("account");
-        RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(this, this);
+        RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(this, "");
+        subscriber.setSubscribeListener(this);
         RxUtil.rxExecuted(subscriber.getSelfFeed(account), subscriber);
     }
 
@@ -80,7 +81,7 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
     }
 
     @Override
-    public boolean isTransStatus() {
+    public boolean isFullScreen() {
         return false;
     }
 
@@ -103,8 +104,7 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
     public void onResult(int what, Object tag, ResultBean resultBean) {
         try {
             if (1 == resultBean.getResultCode()) {
-                List<FeedBackBean> beanList = GsonUtil.json2BeanList(resultBean.getResultMsg(), FeedBackBean.class);
-                this.beanList = null == beanList ? new ArrayList<FeedBackBean>() : beanList;
+                this.beanList = GsonUtil.json2BeanList(resultBean.getResultMsg(), FeedBackBean.class);
                 if (null != feedBackAdapter) {
                     feedBackAdapter.refreshList(this.beanList);
                 }
@@ -138,7 +138,8 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
         closeable.smoothCloseMenu();// 关闭被点击的菜单。
         // 如果是删除：推荐调用Adapter.notifyItemRemoved(position)，不推荐Adapter.notifyDataSetChanged();
         if (menuPosition == 0) {// 删除按钮被点击。
-            RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(this, new SubscribeListener<ResultBean>() {
+            RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(this, "");
+            subscriber.setSubscribeListener(new SubscribeListener<ResultBean>() {
                 @Override
                 public void onResult(int what, Object tag, ResultBean resultBean) {
                     if (null != resultBean) {

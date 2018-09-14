@@ -170,7 +170,7 @@ public class CipherUtil {
     }
 
     //注意: 这里的password(秘钥必须是16位的)
-    private static final String keyBytes = IContact.IStr.KAY_ENCRYPT_DECODE;
+    private static final String keyBytes = IContact.StrImpl.KAY_ENCRYPT_DECODE;
 
     /**
      * 加密

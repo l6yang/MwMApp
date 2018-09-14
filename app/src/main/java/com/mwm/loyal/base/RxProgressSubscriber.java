@@ -1,150 +1,47 @@
 package com.mwm.loyal.base;
 
 import android.content.Context;
-import android.support.annotation.IntRange;
-import android.text.TextUtils;
 
+import com.loyal.base.rxjava.BaseRxProgressSubscriber;
+import com.loyal.base.rxjava.RetrofitManage;
+import com.loyal.base.rxjava.impl.SubscribeListener;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.beans.WeatherBean;
 import com.mwm.loyal.impl.ObservableServer;
-import com.mwm.loyal.impl.ProgressCancelListener;
-import com.mwm.loyal.impl.SubscribeListener;
-import com.mwm.loyal.utils.RetrofitManage;
-import com.mwm.loyal.widget.DialogHandler;
 
+import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Field;
 import retrofit2.http.Part;
 import retrofit2.http.Url;
-import rx.Observable;
-import rx.Subscriber;
 
-public class RxProgressSubscriber<T> extends Subscriber<T> implements ProgressCancelListener, ObservableServer {
+public class RxProgressSubscriber<T> extends BaseRxProgressSubscriber<T> implements ObservableServer {
 
-    private DialogHandler.Builder builder;
-    private SubscribeListener<T> subscribeListener;
-    private int mWhat;
-    private ObservableServer server = RetrofitManage.getInstance().getObservableServer();
-    private Object tag;
-    private boolean isShowDialog = true;//是否显示dialog
-
-    public RxProgressSubscriber(Context context) {
-        this(context, null);
-    }
+    private ObservableServer server;
 
     public RxProgressSubscriber(Context context, SubscribeListener<T> listener) {
-        this(context, 2, listener);
-    }
-
-    /**
-     * @param what default=2
-     */
-    public RxProgressSubscriber(Context context, @IntRange(from = 2) int what, SubscribeListener<T> listener) {
+        this(context, "");
         setSubscribeListener(listener);
-        setWhat(what);
-        initDialog(context);
     }
 
-    public RxProgressSubscriber setWhat(@IntRange(from = 2) int what) {
-        this.mWhat = what;
-        return this;
+    public RxProgressSubscriber(Context context, String ipAdd) {
+        super(context, ipAdd);
     }
 
-    public RxProgressSubscriber setSubscribeListener(SubscribeListener<T> listener) {
-        this.subscribeListener = listener;
-        return this;
-    }
-
-    public RxProgressSubscriber setShowDialog(boolean showDialog) {
-        isShowDialog = showDialog;
-        return this;
-    }
-
-    public RxProgressSubscriber setTag(Object tag) {
-        this.tag = tag;
-        return this;
-    }
-
-    private void initDialog(Context context) {
-        builder = new DialogHandler.Builder(context, this);
-        setMessage(null);
-        setCancelable(true);
-        setCanceledOnTouchOutside(false);
-    }
-
-    public RxProgressSubscriber setMessage(CharSequence sequence) {
-        if (builder != null) {
-            builder.setMessage(sequence);
-        }
-        return this;
-    }
-
-    public RxProgressSubscriber setCancelable(boolean flag) {
-        if (builder != null)
-            builder.setCancelable(flag);
-        return this;
-    }
-
-    public RxProgressSubscriber setCanceledOnTouchOutside(boolean cancel) {
-        if (builder != null)
-            builder.setCanceledOnTouchOutside(cancel);
-        return this;
-    }
-
-    private void showDialog() {
-        if (isShowDialog && builder != null)
-            builder.show();
-    }
-
-    private void dismissDialog() {
-        if (builder != null) {
-            builder.dismiss();
-            builder = null;
-        }
-    }
-
-    public Object getTag() {
-        return tag;
+    public RxProgressSubscriber(Context context, String ipAdd, int what, boolean showDialog) {
+        super(context, ipAdd, what, showDialog);
     }
 
     @Override
-    public void onStart() {
-        showDialog();
+    public void createServer(RetrofitManage retrofitManage) {
+        server = retrofitManage.createServer(ObservableServer.class);
     }
 
     @Override
-    public void onCompleted() {
-        dismissDialog();
-    }
-
-    @Override
-    public void onNext(T result) {
-        if (subscribeListener != null)
-            subscribeListener.onResult(mWhat, tag, result);
-    }
-
-    @Override
-    public void onError(Throwable e) {
-        dismissDialog();
-        if (TextUtils.equals("已取消操作", null == e ? "" : e.getMessage())) {
-            if (subscribeListener != null)
-                subscribeListener.onError(mWhat, tag, e);
-            subscribeListener = null;
-        } else {
-            if (subscribeListener != null)
-                subscribeListener.onError(mWhat, tag, e);
-        }
-    }
-
-    @Override
-    public void onCancelProgress() {
-        onError(new Exception("已取消操作"));
-        onCompleted();
-        if (!isUnsubscribed()) {
-            unsubscribe();
-        }
+    public String serverNameSpace() {
+        return "mwm";
     }
 
     @Override
@@ -236,4 +133,5 @@ public class RxProgressSubscriber<T> extends Subscriber<T> implements ProgressCa
     public Observable<ResponseBody> downloadImage(String url) {
         return server.downloadImage(url);
     }
+
 }

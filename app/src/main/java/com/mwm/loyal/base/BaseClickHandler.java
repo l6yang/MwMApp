@@ -12,20 +12,20 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Spinner;
 
-import com.loyal.base.impl.IUIInterface;
+import com.loyal.base.impl.IUiCommandImpl;
 import com.loyal.base.impl.IntentFrame;
 import com.loyal.base.util.ConnectUtil;
-import com.loyal.base.util.IntentUtil;
+import com.loyal.base.util.IntentBuilder;
 import com.loyal.base.util.ObjectUtil;
 import com.loyal.base.util.TimeUtil;
 import com.loyal.base.util.ToastUtil;
 import com.mwm.loyal.impl.IContact;
 
-public abstract class BaseClickHandler<V extends ViewDataBinding> implements IntentFrame.ActivityFrame, IUIInterface,IContact {
+public abstract class BaseClickHandler<V extends ViewDataBinding> implements IntentFrame.ActFrame, IUiCommandImpl,IContact {
     protected ProgressDialog progressDialog;
     protected BaseActivity activity;
     protected V binding;
-    protected IntentUtil builder;
+    protected IntentBuilder builder;
 
     public BaseClickHandler(BaseActivity baseActivity) {
         this(baseActivity, null);
@@ -41,8 +41,8 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
     protected void hasIntentParams(boolean hasParam) {
         builder = null;
         if (hasParam)
-            builder = new IntentUtil(activity, activity.getIntent());
-        else builder = new IntentUtil(activity);
+            builder = new IntentBuilder(activity, activity.getIntent());
+        else builder = new IntentBuilder(activity);
     }
 
     public final String getString(@StringRes int resId) {
@@ -97,7 +97,7 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
 
     @Override
     public String replaceNull(CharSequence sequence) {
-        return Str.replaceNull(sequence);
+        return BaseStr.replaceNull(sequence);
     }
 
     @Override
@@ -107,12 +107,12 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
 
     @Override
     public String encodeStr2Utf(@NonNull String string) {
-        return Str.encodeStr2Utf(string);
+        return BaseStr.encodeStr2Utf(string);
     }
 
     @Override
     public String decodeStr2Utf(@NonNull String string) {
-        return Str.decodeStr2Utf(string);
+        return BaseStr.decodeStr2Utf(string);
     }
 
     @Override

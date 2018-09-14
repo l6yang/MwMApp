@@ -49,17 +49,17 @@ public class PreferencesUtil implements IContact {
     public static boolean putLoginBean(Context context, LoginBean bean) {
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         Editor editor = settings.edit();
-        editor.putString(IStr.KEY_ACCOUNT, bean.account.get());
-        editor.putString(IStr.KEY_PASSWORD, bean.password.get());
-        editor.putString(IStr.KEY_SERVER, bean.server.get());
+        editor.putString(StrImpl.KEY_ACCOUNT, bean.account.get());
+        editor.putString(StrImpl.KEY_PASSWORD, bean.password.get());
+        editor.putString(StrImpl.KEY_SERVER, bean.server.get());
         return editor.commit();
     }
 
     public static LoginBean getLoginBean(Context context) {
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
-        String account = settings.getString(IStr.KEY_ACCOUNT, "");
-        String password = settings.getString(IStr.KEY_PASSWORD, "");
-        String server = settings.getString(IStr.KEY_SERVER, "");
+        String account = settings.getString(StrImpl.KEY_ACCOUNT, "");
+        String password = settings.getString(StrImpl.KEY_PASSWORD, "");
+        String server = settings.getString(StrImpl.KEY_SERVER, "");
         return new LoginBean(account, password, true, server);
     }
 

@@ -26,7 +26,7 @@ public class SettingsHandler extends BaseClickHandler<ActivitySettingsBinding> {
                 activity.finish();
                 break;
             case R.id.settings_security:
-                startActivityForResultByAct(AccountSafetyActivity.class, Int.reqCode_Settings_account);
+                startActivityForResultByAct(AccountSafetyActivity.class, IntImpl.reqCode_Settings_account);
                 break;
         }
     }

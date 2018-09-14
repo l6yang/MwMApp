@@ -82,7 +82,7 @@ public class BaseuCropActivity extends BaseActivity {
     }
 
     @Override
-    public boolean isTransStatus() {
+    public boolean isFullScreen() {
         return false;
     }
 }

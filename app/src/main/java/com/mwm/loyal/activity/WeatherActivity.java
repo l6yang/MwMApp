@@ -51,15 +51,10 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
         initViews();
     }
 
-    @Override
-    public boolean isTransStatus() {
-        return false;
-    }
-
     private void initViews() {
         String city = getIntent().getStringExtra("city");
         binding.setCity(city);
-        binding.setDateTime(TimeUtil.getDateTime(IStr.TIME_WEEK));
+        binding.setDateTime(TimeUtil.getDateTime(StrImpl.TIME_WEEK));
         pubMenu.setVisibility(View.GONE);
         pubTitle.setText(getString(R.string.MwMWeather));
         pubBack.setOnClickListener(this);
@@ -86,7 +81,7 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
                 break;
             case R.id.text_change_city:
                 Intent intent = new Intent(this, CityActivity.class);
-                startActivityForResult(intent, Int.reqCode_Weather_city);
+                startActivityForResult(intent, IntImpl.reqCode_Weather_city);
                 break;
         }
     }
@@ -97,12 +92,12 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
         if (resultCode != RESULT_OK)
             return;
         switch (requestCode) {
-            case Int.reqCode_Weather_city:
+            case IntImpl.reqCode_Weather_city:
                 String cityName = data.getStringExtra("cityName");
                 if (TextUtils.isEmpty(cityName))
                     return;
                 binding.setCity(cityName);
-                PreferencesUtil.putString(getApplicationContext(), IStr.KEY_CITY, cityName);
+                PreferencesUtil.putString(getApplicationContext(), StrImpl.KEY_CITY, cityName);
                 try {
                     WeatherUtil.getCityWeather(cityName, mHandler);
                 } catch (UnsupportedEncodingException e) {
@@ -131,7 +126,7 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
             super.handleMessage(msg);
             WeatherActivity activity = weakReference.get();
             switch (msg.what) {
-                case Int.rx2Weather:
+                case IntImpl.rx2Weather:
                     WeatherBean weatherBean = (WeatherBean) msg.obj;
                     try {
                         String wendu = weatherBean.getData().getWendu();
