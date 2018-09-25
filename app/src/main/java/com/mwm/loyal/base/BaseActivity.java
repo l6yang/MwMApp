@@ -10,7 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.loyal.base.impl.CommandViewClickListener;
-import com.loyal.base.ui.activity.ABasicBindActivity;
+import com.loyal.base.ui.activity.ABasicPerMissionActivity;
 import com.loyal.base.widget.CommandDialog;
 import com.mwm.loyal.R;
 import com.mwm.loyal.impl.IContact;
@@ -18,7 +18,7 @@ import com.mwm.loyal.service.UpdateService;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseActivity<T extends ViewDataBinding> extends ABasicBindActivity implements IContact, CommandViewClickListener {
+public abstract class BaseActivity<T extends ViewDataBinding> extends ABasicPerMissionActivity implements IContact, CommandViewClickListener {
     protected ProgressDialog progressDialog;
     protected T binding;
 

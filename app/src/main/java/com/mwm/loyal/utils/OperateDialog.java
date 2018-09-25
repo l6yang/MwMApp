@@ -5,9 +5,9 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v7.app.AlertDialog;
 
 import com.mwm.loyal.impl.OperaOnClickListener;
-import com.yanzhenjie.alertdialog.AlertDialog;
 
 public class OperateDialog {
 
@@ -15,12 +15,12 @@ public class OperateDialog {
     private OperaOnClickListener listener;
 
     OperateDialog(@NonNull Context context, OperaOnClickListener listener) {
-        mBuilder = AlertDialog.build(context)
+        mBuilder = new AlertDialog.Builder(context)
                 .setCancelable(false)
-                .setTitle(com.yanzhenjie.permission.R.string.permission_title_permission_rationale)
-                .setMessage(com.yanzhenjie.permission.R.string.permission_message_permission_rationale)
-                .setPositiveButton(com.yanzhenjie.permission.R.string.permission_resume, mClickListener)
-                .setNegativeButton(com.yanzhenjie.permission.R.string.permission_cancel, mClickListener);
+                .setTitle("")
+                .setMessage("")
+                .setPositiveButton("同意", mClickListener)
+                .setNegativeButton("取消", mClickListener);
         this.listener = listener;
     }
 

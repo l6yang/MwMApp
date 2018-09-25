@@ -7,8 +7,9 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.loyal.base.impl.OnMultiplePermissionsListener;
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.BasePermitActivity;
+import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.beans.LoginBean;
 import com.mwm.loyal.databinding.ActivityLoginBinding;
 import com.mwm.loyal.handler.LoginHandler;
@@ -17,16 +18,11 @@ import com.mwm.loyal.service.UpdateService;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.PermissionNo;
-import com.yanzhenjie.permission.PermissionYes;
-import com.yanzhenjie.permission.RationaleListener;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
 
-public class LoginActivity extends BasePermitActivity<ActivityLoginBinding> implements RationaleListener, TextView.OnEditorActionListener {
+public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements OnMultiplePermissionsListener, TextView.OnEditorActionListener {
 
     @Override
     protected int actLayoutRes() {
@@ -40,7 +36,7 @@ public class LoginActivity extends BasePermitActivity<ActivityLoginBinding> impl
         binding.setClick(new LoginHandler(this, binding));
         binding.setDrawable(ImageUtil.getBackground(this));
         initViews();
-        requestPermissions(IntImpl.permissionReadPhone, new String[]{Manifest.permission.READ_PHONE_STATE});
+        multiplePermissions(this, Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
     private void initViews() {
@@ -51,40 +47,6 @@ public class LoginActivity extends BasePermitActivity<ActivityLoginBinding> impl
         String arr[] = getResources().getStringArray(R.array.server);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Arrays.asList(arr));//配置Adaptor
         binding.server.setAdapter(adapter);
-    }
-
-    @PermissionYes(IntImpl.permissionReadPhone)
-    private void onReadPhoneSuccess(List<String> grantedPermissions) {
-        requestPermissions(IntImpl.permissionMemory, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE});
-    }
-
-    @PermissionNo(IntImpl.permissionReadPhone)
-    private void onReadPhoneFail(List<String> deniedPermissions) {
-        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
-            // 第一种：用默认的提示语。
-            AndPermission.defaultSettingDialog(this, IntImpl.permissionReadPhone).show();
-        } else {
-            showDialog("您已拒绝\"获取设备状态权限\"，程序将退出", true);
-        }
-    }
-
-    @PermissionYes(IntImpl.permissionMemory)
-    private void onMemorySuccess(List<String> grantedPermissions) {
-        File file = new File(FileUtil.path_apk, FileUtil.apkFileName);
-        if (file.exists())
-            FileUtil.deleteFile(file);
-        FileUtil.createFiles();
-        UpdateService.startActionUpdate(this, StrImpl.actionUpdate, null);
-    }
-
-    @PermissionNo(IntImpl.permissionMemory)
-    private void onMemoryFailed(List<String> deniedPermissions) {
-        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
-            // 第一种：用默认的提示语。
-            AndPermission.defaultSettingDialog(this, IntImpl.permissionMemory).show();
-        } else {
-            showDialog("您已拒绝\"存储权限\"，程序将退出", true);
-        }
     }
 
     @Override
@@ -128,5 +90,27 @@ public class LoginActivity extends BasePermitActivity<ActivityLoginBinding> impl
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onMultiplePermissions(String permissionName, boolean successful, boolean shouldShow) {
+        switch (permissionName) {
+            case Manifest.permission.READ_PHONE_STATE:
+                if (successful) {
+                } else if (shouldShow) {
+                } else showDialog("您已拒绝获取设备状态权限", true);
+                break;
+            case Manifest.permission.WRITE_EXTERNAL_STORAGE:
+                if (successful) {
+                    File file = new File(FileUtil.path_apk, FileUtil.apkFileName);
+                    if (file.exists())
+                        FileUtil.deleteFile(file);
+                    FileUtil.createFiles();
+                    UpdateService.startActionUpdate(this, StrImpl.actionUpdate, null);
+                } else if (shouldShow) {
+
+                } else showDialog("您已拒绝存储权限", true);
+                break;
+        }
     }
 }

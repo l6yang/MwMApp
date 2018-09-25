@@ -26,11 +26,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.loyal.base.impl.OnSinglePermissionListener;
 import com.loyal.base.rxjava.impl.SubscribeListener;
 import com.loyal.base.util.StateBarUtil;
 import com.loyal.base.util.TimeUtil;
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.BasePermitActivity;
+import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.ContactBean;
 import com.mwm.loyal.beans.ResultBean;
@@ -44,18 +45,13 @@ import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.PreferencesUtil;
 import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.WeatherUtil;
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.PermissionNo;
-import com.yanzhenjie.permission.PermissionYes;
-import com.yanzhenjie.permission.RationaleListener;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 import butterknife.BindView;
 
-public class MainActivity extends BasePermitActivity<ActivityMainBinding> implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, RationaleListener, AppBarLayout.OnOffsetChangedListener, SubscribeListener<ResultBean>, IContact {
+public class MainActivity extends BaseActivity<ActivityMainBinding> implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, OnSinglePermissionListener, AppBarLayout.OnOffsetChangedListener, SubscribeListener<ResultBean>, IContact {
     @BindView(R.id.pub_toolbar)
     Toolbar toolbar;
     @BindView(R.id.pub_drawer_layout)
@@ -118,7 +114,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        requestPermissions(IntImpl.permissionLocation, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION});
+        singlePermission(IntImpl.permissionLocation, this, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA);
     }
 
     @Override
@@ -232,39 +228,6 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         RxUtil.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
     }
 
-    @PermissionYes(IntImpl.permissionCamera)
-    private void onCameraSucceed(List<String> deniedPermissions) {
-        Intent intent = new Intent();
-        intent.setClass(this, CaptureActivity.class);
-        intent.putExtra("title", "二维码/条码扫描");
-        intent.putExtra("auto", true);
-        startActivityForResult(intent, IntImpl.reqCode_Main_Zing);
-    }
-
-    @PermissionNo(IntImpl.permissionCamera)
-    private void onCameraFailed(List<String> deniedPermissions) {
-        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
-            AndPermission.defaultSettingDialog(this, IntImpl.permissionCamera).show();
-        } else {
-            showDialog("您已拒绝开启相机权限，程序将不能正常使用相机");
-        }
-    }
-
-    @PermissionYes(IntImpl.permissionLocation)
-    private void onLocationSucceed(List<String> deniedPermissions) {
-        Intent intent = new Intent(this, LocationService.class);
-        startService(intent);
-    }
-
-    @PermissionNo(IntImpl.permissionLocation)
-    private void onLocationFailed(List<String> deniedPermissions) {
-        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
-            AndPermission.defaultSettingDialog(this, IntImpl.permissionLocation).show();
-        } else {
-            showDialog("您已拒绝开启定位权限，程序将不能正常使用定位功能");
-        }
-    }
-
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         int height = appBarLayout.getHeight() - (getSupportActionBar() == null ? 0 : getSupportActionBar().
@@ -292,6 +255,27 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
         showErrorDialog(e.toString(), false);
     }
 
+    @Override
+    public void onSinglePermission(int reqCode, boolean successful) {
+        switch (reqCode) {
+            case IntImpl.permissionLocation:
+                if (successful) {
+                    Intent intent = new Intent(this, LocationService.class);
+                    startService(intent);
+                } else showDialog("您已拒绝开启定位权限");
+                break;
+            case IntImpl.permissionCamera:
+                if (successful) {
+                    Intent intent = new Intent();
+                    intent.setClass(this, CaptureActivity.class);
+                    intent.putExtra("title", "二维码/条码扫描");
+                    intent.putExtra("auto", true);
+                    startActivityForResult(intent, IntImpl.reqCode_Main_Zing);
+                } else showDialog("您已拒绝开启相机权限");
+                break;
+        }
+    }
+
     private static class HandlerClass extends Handler {
         private WeakReference<MainActivity> weakReference;
 
@@ -310,7 +294,7 @@ public class MainActivity extends BasePermitActivity<ActivityMainBinding> implem
                         case R.id.nav_camera:
                         case R.id.nav_gallery:
                         case R.id.nav_scan:
-                            activity.requestPermissions(IntImpl.permissionCamera, new String[]{Manifest.permission.CAMERA});
+                            activity.singlePermission(IntImpl.permissionCamera, activity, Manifest.permission.CAMERA);
                             break;
                         case R.id.nav_share:
                             activity.startActivityByAct(ShareActivity.class);
