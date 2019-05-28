@@ -3,23 +3,22 @@ package com.mwm.loyal.activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.loyal.base.util.TimeUtil;
+import com.loyal.kit.OutUtil;
+import com.loyal.kit.TimeUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.adapter.WeatherAdapter;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.WeatherBean;
 import com.mwm.loyal.databinding.ActivityWeatherBinding;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.PreferencesUtil;
+import com.mwm.loyal.utils.PreferUtil;
 import com.mwm.loyal.utils.WeatherUtil;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +26,8 @@ import java.util.List;
 import butterknife.BindView;
 
 public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> implements View.OnClickListener {
-    @BindView(R.id.pub_title)
-    TextView pubTitle;
-    @BindView(R.id.pub_back)
-    ImageView pubBack;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.grid_weather)
     GridView gridWeather;
     private HandlerClass mHandler;
@@ -46,6 +41,8 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
 
     @Override
     public void afterOnCreate() {
+        toolbar.setTitle(getString(R.string.MwMWeather));
+        setSupportActionBar(toolbar);
         binding.setDrawable(ImageUtil.getBackground(this));
         mHandler = new HandlerClass(this);
         initViews();
@@ -54,18 +51,12 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
     private void initViews() {
         String city = getIntent().getStringExtra("city");
         binding.setCity(city);
-        binding.setDateTime(TimeUtil.getDateTime(StrImpl.TIME_WEEK));
-        pubMenu.setVisibility(View.GONE);
-        pubTitle.setText(getString(R.string.MwMWeather));
-        pubBack.setOnClickListener(this);
+        binding.setDateTime(TimeUtil.getDateTime(TimeUtil.TIME_WEEK));
+
         gridWeather.setAdapter(weatherAdapter = new WeatherAdapter(this, beanList));
-        try {
-            if (city.endsWith("市"))
-                city = city.substring(0, city.length() - "市".length());
-            WeatherUtil.getCityWeather(city, mHandler);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        if (city.endsWith("市"))
+            city = city.substring(0, city.length() - "市".length());
+        WeatherUtil.getCityWeather(city, mHandler);
     }
 
     @Override
@@ -76,12 +67,9 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.pub_back:
-                finish();
-                break;
             case R.id.text_change_city:
                 Intent intent = new Intent(this, CityActivity.class);
-                startActivityForResult(intent, IntImpl.reqCode_Weather_city);
+                startActivityForResult(intent, IntImpl.reqCodeCity);
                 break;
         }
     }
@@ -92,17 +80,13 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
         if (resultCode != RESULT_OK)
             return;
         switch (requestCode) {
-            case IntImpl.reqCode_Weather_city:
+            case IntImpl.reqCodeCity:
                 String cityName = data.getStringExtra("cityName");
                 if (TextUtils.isEmpty(cityName))
                     return;
                 binding.setCity(cityName);
-                PreferencesUtil.putString(getApplicationContext(), StrImpl.KEY_CITY, cityName);
-                try {
-                    WeatherUtil.getCityWeather(cityName, mHandler);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                PreferUtil.putString(getApplicationContext(), StrImpl.KEY_CITY, cityName);
+                WeatherUtil.getCityWeather(cityName, mHandler);
                 break;
         }
     }
@@ -138,9 +122,9 @@ public class WeatherActivity extends BaseSwipeActivity<ActivityWeatherBinding> i
                         activity.binding.setWeatherImg(ImageUtil.getBackground(activity, R.mipmap.ic_weather_cloudy, false));
                         activity.binding.setGanmao(weatherBean.getData().getGanmao());
                         if (activity.weatherAdapter != null)
-                            activity.weatherAdapter.refreshList(weatherBean.getData().getForecast());
+                            activity.weatherAdapter.notifyList(weatherBean.getData().getForecast());
                     } catch (Exception e) {
-                        System.out.println("Handler::" + e.toString());
+                        OutUtil.println("Handler::" + e.toString());
                     }
                     break;
             }

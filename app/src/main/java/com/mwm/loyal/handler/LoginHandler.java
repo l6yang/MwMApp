@@ -1,97 +1,114 @@
 package com.mwm.loyal.handler;
 
-import android.content.Intent;
-import android.support.annotation.IdRes;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.loyal.base.rxjava.impl.SubscribeListener;
-import com.loyal.base.util.GsonUtil;
+import com.loyal.kit.GsonUtil;
+import com.loyal.kit.OutUtil;
+import com.loyal.rx.RxUtil;
+import com.loyal.rx.impl.RxSubscriberListener;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.ForgetActivity;
 import com.mwm.loyal.activity.LoginActivity;
 import com.mwm.loyal.activity.MainActivity;
 import com.mwm.loyal.activity.RegisterActivity;
+import com.mwm.loyal.activity.settings.ServerActivity;
 import com.mwm.loyal.base.BaseClickHandler;
-import com.mwm.loyal.base.RxProgressSubscriber;
-import com.mwm.loyal.beans.LoginBean;
+import com.mwm.loyal.beans.AccountBean;
+import com.mwm.loyal.beans.ObservableAccountBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityLoginBinding;
-import com.mwm.loyal.service.ImageService;
-import com.mwm.loyal.utils.PreferencesUtil;
-import com.mwm.loyal.utils.RxUtil;
-import com.mwm.loyal.utils.ToastUtil;
+import com.mwm.loyal.impl.TextChangedListener;
+import com.mwm.loyal.libs.rxjava.RxProgressSubscriber;
+import com.mwm.loyal.utils.PreferUtil;
+import com.mwm.loyal.utils.UIHandler;
 
-public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> implements SubscribeListener<ResultBean> {
+public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> implements RxSubscriberListener<String> {
 
     public LoginHandler(LoginActivity activity, ActivityLoginBinding binding) {
         super(activity, binding);
+        initViews();
+    }
+
+    private void initViews() {
+        binding.account.addTextChangedListener(new TextChangedListener(binding.account, binding.accountClear));
+        binding.password.addTextChangedListener(new TextChangedListener(binding.password, binding.passwordClear));
     }
 
     public void onClick(View view) {
-        ToastUtil.hideInput(activity, view.getWindowToken());
+        hideKeyBoard(view);
+        UIHandler.delay2Enable(view);
         switch (view.getId()) {
-            case R.id.pub_submit:
+            case R.id.submitView:
                 login();
                 break;
             case R.id.account_clear:
-                binding.account.getText().clear();
+                clearText(binding.account);
                 break;
             case R.id.password_clear:
-                binding.password.getText().clear();
+                clearText(binding.password);
                 break;
-            case R.id.server_clear:
-                binding.server.getText().clear();
+            case R.id.serverView:
+                startActivityByAct(ServerActivity.class);
                 break;
-            case R.id.mm_forget:
+            case R.id.forgetView:
                 startActivityByAct(ForgetActivity.class);
                 break;
-            case R.id.register:
-                toRegister(R.id.pub_submit);
+            case R.id.registerView:
+                toRegister();
                 break;
         }
     }
 
     private void login() {
-        String account = binding.account.getText().toString().trim();
-        String password = binding.password.getText().toString().trim();
+        String account = getText(binding.account);
+        String password = getText(binding.password);
         if (TextUtils.isEmpty(account)) {
-            showToast("用户名不能为空");
+            showToast("请输入用户名！");
             return;
         }
-        if (TextUtils.isEmpty(password) || password.length() < 6) {
-            showToast("密码长度格式错误");
+        if (TextUtils.isEmpty(password)) {
+            showToast("请输入密码！");
             return;
         }
-        LoginBean loginBean = new LoginBean(account, password);
+        ObservableAccountBean observableAccountBean = new ObservableAccountBean(account, password);
         //登录页面只有登录
-        RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(activity, this);
-        subscriber.setMessage("登录中...").setTag(loginBean);
-        RxUtil.rxExecuted(subscriber.doLogin(loginBean.toString()), subscriber);
+        RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(activity);
+        subscriber.setDialogMessage("登录中...").showProgressDialog(true).setTag(observableAccountBean);
+        subscriber.setSubscribeListener(this);
+        RxUtil.rxExecute(subscriber.loginByJson(observableAccountBean.toString()), subscriber);
     }
 
-    private void toRegister(@IdRes int resId) {
-        builder.putExtra("resId", resId);
-        builder.putExtra("account", "");
-        startActivityForResultByAct(RegisterActivity.class, IntImpl.reqCode_register);
+    private void toRegister() {
+        intentBuilder.putExtra("resId", R.id.submitView);
+        intentBuilder.putExtra("account", "");
+        startActivityForResultByAct(RegisterActivity.class, IntImpl.reqCodeRegister);
     }
 
     @Override
-    public void onResult(int what, Object tag, ResultBean resultBean) {
-        System.out.println("onResult::" + GsonUtil.bean2Json(resultBean));
+    public void onResult(int what, Object tag, String result) {
         try {
-            LoginBean loginBean = (LoginBean) tag;
-            if (resultBean != null) {
-                if (1 == resultBean.getResultCode()) {
-                    PreferencesUtil.putLoginBean(activity, loginBean);
-                    builder.putExtra("account", loginBean.account.get());
-                    startActivityByAct(MainActivity.class);
-                    Intent imageIntent = new Intent().setAction(StrImpl.actionDownload).putExtra("account", loginBean.account.get());
-                    ImageService.startAction(activity, imageIntent);
-                    finish();
-                } else showDialog(resultBean.getResultMsg());
+            OutUtil.println("login", result);
+            ResultBean<AccountBean> resultBean = (ResultBean<AccountBean>) GsonUtil.json2BeanObject(result, ResultBean.class, AccountBean.class);
+            ObservableAccountBean observableAccountBean = (ObservableAccountBean) tag;
+            String code = null == resultBean ? "" : replaceNull(resultBean.getCode());
+            String message = null == resultBean ? "解析失败" : replaceNull(resultBean.getMessage());
+            AccountBean accountBean = null == resultBean ? null : resultBean.getObj();
+            if (TextUtils.equals("1", code)) {
+                String locked = null == accountBean ? "" : replaceNull(accountBean.getLocked());
+                if (TextUtils.equals("1", locked)) {
+                    showToast("当前设备已被别的设备锁定");
+                    return;
+                }
+                String account = null == accountBean ? "" : replaceNull(accountBean.getAccount());
+                PreferUtil.putLoginBean(activity, observableAccountBean);
+                intentBuilder.putExtra("account", account);
+                startActivityByAct(MainActivity.class);
+                intentBuilder.setAction(StrImpl.actionDownload);
+                //ImageService.startAction(activity, intentBuilder);
+                finish();
             } else
-                showErrorDialog("解析失败");
+                showDialog(message);
         } catch (Exception e) {
             onError(what, tag, e);
         }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -8,8 +9,8 @@
         <import type="android.text.InputType" />
 
         <variable
-            name="loginBean"
-            type="com.mwm.loyal.beans.LoginBean" />
+            name="observableAccountBean"
+            type="com.mwm.loyal.beans.ObservableAccountBean" />
 
         <variable
             name="click"
@@ -21,20 +22,17 @@
     </data>
 
     <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:background="@{drawable}"
-        android:fitsSystemWindows="true"
+        style="@style/baseActStyle"
         tools:context=".activity.RegisterActivity">
 
         <include
-            android:id="@id/pub_layout_title"
-            layout="@layout/pub_title" />
+            layout="@layout/toolbar" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/pub_layout_title">
+            android:layout_below="@id/toolbar">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -44,11 +42,13 @@
                 android:orientation="vertical"
                 android:padding="8dp">
 
-                <LinearLayout
+                <android.support.v7.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/drawable_login_input"
                     android:orientation="vertical"
+                    app:showDividers="middle"
+                    app:divider="@drawable/shape_line_grey_v"
                     android:padding="8dp">
 
                     <RelativeLayout
@@ -60,39 +60,31 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="10dp"
-                            android:layout_marginRight="10dp"
-                            android:clickable="@{!loginBean.editable}"
+                            android:clickable="@{!observableAccountBean.editable}"
                             android:contentDescription="@string/empty"
                             android:onClick="@{click::onClick}"
                             android:src="@mipmap/edit_clear"
                             android:visibility="gone" />
 
-                        <EditText
+                        <android.support.v7.widget.AppCompatEditText
                             android:id="@+id/account"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_toLeftOf="@id/account_clear"
                             android:layout_toStartOf="@id/account_clear"
                             android:background="@color/white"
                             android:digits="@string/digits"
-                            android:enabled="@{loginBean.editable}"
+                            android:enabled="@{observableAccountBean.editable}"
                             android:hint="@string/hint_yhmc"
                             android:inputType="textEmailAddress"
                             android:maxLength="16"
                             android:padding="10dp"
-                            android:text="@{loginBean.account}"
+                            android:text="@{observableAccountBean.account}"
                             android:textColor="@color/black"
                             android:textColorHint="@color/grey"
                             android:textSize="@dimen/text_sp_16" />
                     </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/grey" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -103,36 +95,28 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="10dp"
-                            android:layout_marginRight="10dp"
                             android:contentDescription="@string/empty"
                             android:onClick="@{click::onClick}"
                             android:src="@mipmap/edit_clear"
                             android:visibility="gone" />
 
-                        <EditText
+                        <android.support.v7.widget.AppCompatEditText
                             android:id="@+id/nickname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:background="@color/white"
-                            android:hint="@{loginBean.editable?@string/hint_nickname:@string/hint_old_mm}"
-                            android:inputType="@{loginBean.editable?InputType.TYPE_CLASS_TEXT:InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD}"
+                            android:hint="@{observableAccountBean.editable?@string/hint_nickname:@string/hint_old_mm}"
+                            android:inputType="@{observableAccountBean.editable?InputType.TYPE_CLASS_TEXT:InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD}"
                             android:maxLength="16"
                             android:padding="10dp"
                             android:textColor="@color/black"
                             android:textColorHint="@color/grey"
                             android:textSize="@dimen/text_sp_16" />
                     </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/grey" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -143,23 +127,20 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="10dp"
-                            android:layout_marginRight="10dp"
                             android:contentDescription="@string/empty"
                             android:onClick="@{click::onClick}"
                             android:src="@mipmap/edit_clear"
                             android:visibility="gone" />
 
-                        <EditText
+                        <android.support.v7.widget.AppCompatEditText
                             android:id="@+id/password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_toLeftOf="@id/password_clear"
                             android:layout_toStartOf="@id/password_clear"
                             android:background="@color/white"
-                            android:hint="@{loginBean.editable?@string/hint_yhmm:@string/hint_new_mm}"
+                            android:hint="@{observableAccountBean.editable?@string/hint_yhmm:@string/hint_new_mm}"
                             android:inputType="textPassword"
                             android:maxLength="16"
                             android:padding="10dp"
@@ -167,11 +148,6 @@
                             android:textColorHint="@color/grey"
                             android:textSize="@dimen/text_sp_16" />
                     </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/grey" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -182,20 +158,17 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="10dp"
-                            android:layout_marginRight="10dp"
                             android:contentDescription="@string/empty"
                             android:onClick="@{click::onClick}"
                             android:src="@mipmap/edit_clear"
                             android:visibility="gone" />
 
-                        <EditText
+                        <android.support.v7.widget.AppCompatEditText
                             android:id="@+id/repeat_mm"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_toLeftOf="@id/repeat_clear"
                             android:layout_toStartOf="@id/repeat_clear"
                             android:background="@color/white"
                             android:hint="@string/repeat_yhmm"
@@ -206,10 +179,10 @@
                             android:textColorHint="@color/grey"
                             android:textSize="@dimen/text_sp_16" />
                     </RelativeLayout>
-                </LinearLayout>
+                </android.support.v7.widget.LinearLayoutCompat>
 
                 <TextView
-                    android:id="@id/pub_submit"
+                    android:id="@id/submitView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -217,7 +190,7 @@
                     android:gravity="center"
                     android:onClick="@{click::onClick}"
                     android:padding="10dp"
-                    android:text="@{loginBean.editable?@string/register:@string/submit}"
+                    android:text="@{observableAccountBean.editable?@string/register:@string/submit}"
                     android:textColor="@color/color_text_click"
                     android:textSize="@dimen/text_sp_18" />
             </LinearLayout>

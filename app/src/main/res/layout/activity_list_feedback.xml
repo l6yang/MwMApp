@@ -10,20 +10,16 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/baseActStyle"
         android:background="@{drawable}"
-        android:fitsSystemWindows="true"
         tools:context=".activity.ListFeedBackActivity">
 
-        <include
-            android:id="@id/pub_layout_title"
-            layout="@layout/pub_title" />
+        <include layout="@layout/toolbar" />
 
         <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
             android:id="@+id/listFeedBack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/pub_layout_title" />
+            android:layout_below="@id/toolbar" />
     </RelativeLayout>
 </layout>

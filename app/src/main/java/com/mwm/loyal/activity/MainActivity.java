@@ -1,10 +1,7 @@
 package com.mwm.loyal.activity;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,37 +23,48 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.loyal.base.impl.OnSinglePermissionListener;
-import com.loyal.base.rxjava.impl.SubscribeListener;
-import com.loyal.base.util.StateBarUtil;
-import com.loyal.base.util.TimeUtil;
+import com.loyal.base.gps.GpsLocBean;
+import com.loyal.base.gps.GpsLocation;
+import com.loyal.kit.GsonUtil;
+import com.loyal.kit.OutUtil;
+import com.loyal.kit.StateBarUtil;
+import com.loyal.kit.TimeUtil;
+import com.loyal.rx.RxUtil;
+import com.loyal.rx.impl.RxSubscriberListener;
+import com.loyal.rx.impl.SinglePermissionListener;
 import com.mwm.loyal.R;
+import com.mwm.loyal.activity.settings.SettingsActivity;
 import com.mwm.loyal.base.BaseActivity;
-import com.mwm.loyal.base.RxProgressSubscriber;
+import com.mwm.loyal.beans.AccountBean;
 import com.mwm.loyal.beans.ContactBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.beans.WeatherBean;
 import com.mwm.loyal.databinding.ActivityMainBinding;
 import com.mwm.loyal.handler.MainHandler;
-import com.mwm.loyal.impl.IContact;
-import com.mwm.loyal.service.LocationService;
+import com.mwm.loyal.impl.IContactImpl;
+import com.mwm.loyal.impl.ServerImpl;
+import com.mwm.loyal.libs.album.AlbumActivity;
+import com.mwm.loyal.libs.rxjava.RxProgressSubscriber;
+import com.mwm.loyal.service.CheckUpdateService;
+import com.mwm.loyal.service.ImgDownloadService;
 import com.mwm.loyal.utils.DisplayUtil;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.PreferencesUtil;
-import com.mwm.loyal.utils.RxUtil;
+import com.mwm.loyal.utils.PreferUtil;
+import com.mwm.loyal.utils.UIHandler;
 import com.mwm.loyal.utils.WeatherUtil;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.security.Permissions;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding> implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, OnSinglePermissionListener, AppBarLayout.OnOffsetChangedListener, SubscribeListener<ResultBean>, IContact {
-    @BindView(R.id.pub_toolbar)
+public class MainActivity extends BaseActivity<ActivityMainBinding> implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
+        SinglePermissionListener, AppBarLayout.OnOffsetChangedListener, RxSubscriberListener<String>, IContactImpl, GpsLocation.LocationListener {
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.pub_drawer_layout)
+    @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-    @BindView(R.id.pub_nav_view)
+    @BindView(R.id.nav_view)
     NavigationView navigationView;
     @BindView(R.id.appBarLayout)
     AppBarLayout appBarLayout;
@@ -65,6 +73,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
     private SimpleDraweeView navIcon;
     private TextView navSignature, navNickName;
     private HandlerClass mHandler;
+    private GpsLocation gpsLocation;
 
     @Override
     protected int actLayoutRes() {
@@ -77,9 +86,24 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         binding.setDrawable(ImageUtil.getBackground(this));
         toolbar.setTitle("测试");
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_add);
+        //toolbar.inflateMenu();
+        singlePermission(IntImpl.permissionLocation, this, PerMission.ACCESS_COARSE_LOCATION, PerMission.ACCESS_FINE_LOCATION);
         binding.setHandler(new MainHandler(this, binding));
         mHandler = new HandlerClass(this);
+        String city = PreferUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity);
+        binding.setCity(city);
+        resetCity(city);
         initViews();
+        startLocation();
+    }
+
+    private void startLocation() {
+        if (null == gpsLocation)
+            gpsLocation = GpsLocation.getInstance(this);
+        gpsLocation.stop();
+        gpsLocation.start();
+        gpsLocation.setLocationListener(this);
     }
 
     private void initViews() {
@@ -103,6 +127,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        UIHandler.delay2Enable(item, 380);
         drawer.closeDrawer(GravityCompat.START);
         Message message = new Message();
         message.what = IntImpl.delayed2Activity;
@@ -115,6 +140,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         singlePermission(IntImpl.permissionLocation, this, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA);
+        CheckUpdateService.startAction(this);
+        ImgDownloadService.startAction(this, getIntent().getStringExtra("account"));
     }
 
     @Override
@@ -122,17 +149,16 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         switch (view.getId()) {
             case R.id.nav_icon:
                 hasIntentParams(true);
-                startActivityForResultByAct(PersonalActivity.class, IntImpl.reqCode_Main_icon);
+                startActivityForResultByAct(PersonalActivity.class, IntImpl.reqCodeIcon);
                 break;
             case R.id.nav_zxing:
                 hasIntentParams(true);
-                startActivityForResultByAct(QrCodeActivity.class, IntImpl.reqCode_Main_Zing);
+                startActivityForResultByAct(QrCodeActivity.class, IntImpl.reqCodeZXing);
                 break;
             case R.id.text_weather:
                 if (binding.getWeather() != null && !TextUtils.isEmpty(binding.getWeather().trim())) {
-                    Intent intent = new Intent(this, WeatherActivity.class);
-                    intent.putExtra("city", PreferencesUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity));
-                    startActivityForResult(intent, IntImpl.reqCode_Main_weather);
+                    intentBuilder.putExtra("city", PreferUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity));
+                    startActivityForResultByAct(WeatherActivity.class, IntImpl.reqCodeWeather);
                 }
                 break;
         }
@@ -145,36 +171,34 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
 
     //更新头像
     private void updateIcon() {
-        ImageUtil.clearFrescoTemp();
         if (navIcon == null)
             return;
-        navIcon.setImageURI(Uri.parse(StrImpl.getServerUrl(StrImpl.method_showIcon) + "&account=" + getIntent().getStringExtra("account")));
+        ImageUtil.clearFrescoTemp();
+        navIcon.setImageURI(Uri.parse(ServerImpl.showAvatar(getIntent().getStringExtra("account"))));
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case IntImpl.reqCode_Main_icon:
+            case IntImpl.reqCodeIcon:
                 updateAccount();
                 break;
-            case IntImpl.reqCode_Main_weather:
+            case IntImpl.reqCodeWeather:
                 String city;
                 if (data == null || TextUtils.isEmpty(data.getStringExtra("city")))
-                    city = PreferencesUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity);
+                    city = PreferUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity);
                 else city = data.getStringExtra("city");
-                resetCity(StrImpl.replaceNull(city));
+                resetCity(replaceNull(city));
                 break;
         }
         if (RESULT_OK != resultCode)
             return;
         switch (requestCode) {
-            case IntImpl.reqCode_Main_Setting:
-                Intent intent = new Intent();
-                intent.setClass(this, LoginActivity.class);
-                startActivity(intent);
+            case IntImpl.reqCodeSetting:
+                startActivityByAct(LoginActivity.class);
                 finish();
                 break;
-            case IntImpl.reqCode_Main_Zing:
+            case IntImpl.reqCodeZXing:
                 doScanQuery(data.getStringExtra("mwm_id"));
                 break;
             case IntImpl.permissionCamera:
@@ -191,7 +215,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         }
         showDialog("处理中...");
         ContactBean contactBean = new ContactBean(getIntent().getStringExtra("account"), scanStr, TimeUtil.getDateTime());
-        /*Observable<ResultBean> observable = RetrofitManage.getInstance("").createServer().doScan(contactBean.toString(), getPackageName());
+        /*Observable<ResultBean> observable = RetrofitManage.getInstance("").createServer().scan(contactBean.toString(), getPackageName());
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ResultBean>() {
@@ -224,8 +248,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         if (TextUtils.isEmpty(account)) {
             return;
         }
-        RxProgressSubscriber<ResultBean> querySubscribe = new RxProgressSubscriber<>(this, this);
-        RxUtil.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
+        RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(this);
+        subscriber.setDialogMessage("...").showProgressDialog(true);
+        subscriber.setSubscribeListener(this);
+        RxUtil.rxExecute(subscriber.queryAccount(account), subscriber);
     }
 
     @Override
@@ -238,21 +264,30 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
     }
 
     @Override
-    public void onResult(int what, Object tag, ResultBean resultBean) {
-        if (resultBean != null) {
-            if (resultBean.getResultCode() == 1) {
-                navNickName.setText(replaceNull(resultBean.getResultMsg()));
-                navSignature.setText(replaceNull(resultBean.getExceptMsg()));
-            } else
-                showDialog(resultBean.getResultMsg(), false);
-        } else {
-            showErrorDialog("解析异常", false);
+    public void onResult(int what, Object tag, String result) {
+        OutUtil.println(result);
+        if (TextUtils.isEmpty(result)){
+            showDialog("未返回数据");
+            return;
         }
+        ResultBean<AccountBean> resultBean = (ResultBean<AccountBean>) GsonUtil.json2BeanObject(result, ResultBean.class, AccountBean.class);
+        if (null == resultBean) {
+            showDialog("数据格式错误");
+            return;
+        }
+        String code = replaceNull(resultBean.getCode());
+        String message = replaceNull(resultBean.getMessage());
+        AccountBean accountBean = resultBean.getObj();
+        if (TextUtils.equals("1", code)) {
+            navNickName.setText(replaceNull(null == accountBean ? "" : accountBean.getNickname()));
+            navSignature.setText(replaceNull(null == accountBean ? "" : accountBean.getSignature()));
+        } else
+            showDialog(message);
     }
 
     @Override
     public void onError(int what, Object tag, Throwable e) {
-        showErrorDialog(e.toString(), false);
+        showErrorDialog("获取用户数据失败", e);
     }
 
     @Override
@@ -260,21 +295,19 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         switch (reqCode) {
             case IntImpl.permissionLocation:
                 if (successful) {
-                    Intent intent = new Intent(this, LocationService.class);
-                    startService(intent);
+                    startLocation();
                 } else showDialog("您已拒绝开启定位权限");
                 break;
             case IntImpl.permissionCamera:
                 if (successful) {
-                    Intent intent = new Intent();
-                    intent.setClass(this, CaptureActivity.class);
-                    intent.putExtra("title", "二维码/条码扫描");
-                    intent.putExtra("auto", true);
-                    startActivityForResult(intent, IntImpl.reqCode_Main_Zing);
-                } else showDialog("您已拒绝开启相机权限");
+                    intentBuilder.putExtra("title", "二维码/条码扫描");
+                    intentBuilder.putExtra("auto", true);
+                    startActivityForResultByAct(CaptureActivity.class, IntImpl.reqCodeZXing);
+                } else showToast("已拒绝授予相机权限");
                 break;
         }
     }
+
 
     private static class HandlerClass extends Handler {
         private WeakReference<MainActivity> weakReference;
@@ -292,9 +325,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
                     int id = msg.arg1;
                     switch (id) {
                         case R.id.nav_camera:
+                            break;
                         case R.id.nav_gallery:
+                            activity.startActivityByAct(AlbumActivity.class);
+                            break;
                         case R.id.nav_scan:
-                            activity.singlePermission(IntImpl.permissionCamera, activity, Manifest.permission.CAMERA);
+                            activity.singlePermission(IntImpl.permissionCamera, activity, PerMission.CAMERA);
                             break;
                         case R.id.nav_share:
                             activity.startActivityByAct(ShareActivity.class);
@@ -303,7 +339,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
                             activity.startActivityByAct(VoiceActivity.class);
                             break;
                         case R.id.nav_settings:
-                            activity.startActivityForResultByAct(SettingsActivity.class, IntImpl.reqCode_Main_Setting);
+                            activity.hasIntentParams(true);
+                            activity.startActivityForResultByAct(SettingsActivity.class, IntImpl.reqCodeSetting);
                             break;
                     }
                     break;
@@ -325,27 +362,22 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
     }
 
     private void resetCity(String city) {
-        try {
-            if (TextUtils.isEmpty(city)) {
-                city = PreferencesUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity);
-            } else {
-                PreferencesUtil.putString(getApplicationContext(), StrImpl.KEY_CITY, city);
-            }
-            binding.setCity(city);
-            WeatherUtil.getCityWeather(city, mHandler);
-        } catch (UnsupportedEncodingException e) {
-            String defaultCity = PreferencesUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity);
-            binding.setCity(defaultCity);
+        if (TextUtils.isEmpty(city)) {
+            city = PreferUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity);
+        } else {
+            PreferUtil.putString(getApplicationContext(), StrImpl.KEY_CITY, city);
         }
+        binding.setCity(city);
+        WeatherUtil.getCityWeather(city, mHandler);
     }
 
     private void resetWeather(String weather) {
         if (TextUtils.isEmpty(weather)) {
-            String defaultWeather = PreferencesUtil.getString(getApplicationContext(), StrImpl.KEY_WEATHER, StrImpl.defaultWeather);
+            String defaultWeather = PreferUtil.getString(getApplicationContext(), StrImpl.KEY_WEATHER, StrImpl.defaultWeather);
             binding.setWeather(defaultWeather + "°");
         } else {
             binding.setWeather(weather + "°");
-            PreferencesUtil.putString(getApplicationContext(), StrImpl.KEY_WEATHER, weather);
+            PreferUtil.putString(getApplicationContext(), StrImpl.KEY_WEATHER, weather);
         }
     }
 
@@ -376,36 +408,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         return super.onKeyDown(keyCode, event);
     }
 
-    private LocatedReceiver locatedReceiver;
-
     @Override
-    protected void onResume() {
-        super.onResume();
-        locatedReceiver = new LocatedReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(StrImpl.service_action_loc);
-        registerReceiver(locatedReceiver, intentFilter);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (locatedReceiver != null) {
-            unregisterReceiver(locatedReceiver);
-        }
-    }
-
-    private class LocatedReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            String city = intent.getStringExtra("city");
-            if (TextUtils.equals(StrImpl.service_action_loc, action)) {
-                if (!TextUtils.isEmpty(city)) {
-                    resetCity(city);
-                }
-            }
-        }
+    public void onLocation(GpsLocBean gpsLocBean) {
+        String city = null == gpsLocBean ? "" : replaceNull(gpsLocBean.getCityName());
+        binding.setCity(city);
+        resetCity(city);
     }
 }

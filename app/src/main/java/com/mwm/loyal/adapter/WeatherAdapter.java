@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.loyal.kit.OutUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseListAdapter;
 import com.mwm.loyal.beans.WeatherBean;
@@ -22,7 +23,7 @@ public class WeatherAdapter extends BaseListAdapter<WeatherBean.DataBean.Forecas
     }
 
     @Override
-    protected int adapterLayout() {
+    public int adapterLayout() {
         return R.layout.item_grid_weather;
     }
 
@@ -33,27 +34,24 @@ public class WeatherAdapter extends BaseListAdapter<WeatherBean.DataBean.Forecas
 
     @Override
     public void onViewHolder(ViewHolder holder, int position) {
-        try {
-            WeatherBean.DataBean.ForecastBean forecastBean = getArrList().get(position);
-            String when = replaceNull(forecastBean.getDate());
-            int t = when.lastIndexOf("星期");
-            String date = when.substring(0, t);
-            String week = when.substring(t, when.length());
-            holder.itemWeatherDate.setText(String.format("%s\n%s", date, week));
-            String type = replaceNull(forecastBean.getType());
-            holder.itemWeatherType.setText(type);
-            int resId = WeatherUtil.getWeatherImg(type);
-            holder.simWeatherType.setImageURI(Uri.parse("res://mipmap/" + resId));
-            String high = replaceNull(forecastBean.getHigh());
-            holder.itemWeatherHigh.setText(high.replace("高温", "").trim());
-            String low = replaceNull(forecastBean.getLow());
-            holder.itemWeatherLow.setText(low.replace("低温", "").trim());
-            String wind = replaceNull(forecastBean.getFengli());
-            String windPoint = replaceNull(forecastBean.getFengxiang());
-            holder.itemWeatherWind.setText(String.format("%s\n%s", windPoint, wind));
-        } catch (Exception e) {
-            System.out.println("WeatherAdapter Err::" + e);
-        }
+        WeatherBean.DataBean.ForecastBean forecastBean = getItem(position);
+        String when = replaceNull(forecastBean.getDate());
+        int t = when.lastIndexOf("星期");
+        String date = when.substring(0, t);
+        String week = when.substring(t);
+        holder.itemWeatherDate.setText(String.format("%s\n%s", date, week));
+        String type = replaceNull(forecastBean.getType());
+        holder.itemWeatherType.setText(type);
+        int resId = WeatherUtil.getWeatherImg(type);
+        holder.simWeatherType.setImageURI(Uri.parse("res://mipmap/" + resId));
+        String high = replaceNull(forecastBean.getHigh());
+        holder.itemWeatherHigh.setText(high.replace("高温", "").trim());
+        String low = replaceNull(forecastBean.getLow());
+        holder.itemWeatherLow.setText(low.replace("低温", "").trim());
+        String windPoint = replaceNull(forecastBean.getFengxiang());
+        String wind = replaceNull(forecastBean.getFengli());
+        wind = wind.replace("<![CDATA[", "").replace("]]>","");
+        holder.itemWeatherWind.setText(String.format("%s\n%s", windPoint, wind));
     }
 
     class ViewHolder extends BaseListAdapter.ViewHolder {

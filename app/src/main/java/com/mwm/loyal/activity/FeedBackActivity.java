@@ -1,25 +1,20 @@
 package com.mwm.loyal.activity;
 
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityFeedbackBinding;
 import com.mwm.loyal.handler.FeedBackHandler;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.ToastUtil;
 
 import butterknife.BindView;
 
-public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedbackBinding> implements View.OnClickListener {
-    @BindView(R.id.pub_back)
-    View pubBack;
-    @BindView(R.id.pub_title)
-    TextView pubTitle;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
+public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedbackBinding> {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected int actLayoutRes() {
@@ -28,17 +23,10 @@ public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedbackBinding>
 
     @Override
     public void afterOnCreate() {
+        toolbar.setTitle("问题反馈");
+        setSupportActionBar(toolbar);
         binding.setClick(new FeedBackHandler(this, binding));
         binding.setDrawable(ImageUtil.getBackground(this));
-        initViews();
-    }
-
-    private void initViews() {
-        pubMenu.setVisibility(View.VISIBLE);
-        pubMenu.setImageResource(R.drawable.src_history_img);
-        pubMenu.setOnClickListener(this);
-        pubBack.setOnClickListener(this);
-        pubTitle.setText("问题反馈");
     }
 
     @Override
@@ -47,15 +35,18 @@ public class FeedBackActivity extends BaseSwipeActivity<ActivityFeedbackBinding>
     }
 
     @Override
-    public void onClick(View view) {
-        ToastUtil.hideInput(this, binding.editFeedBack.getWindowToken());
-        switch (view.getId()) {
-            case R.id.pub_back:
-                finish();
-                break;
-            case R.id.pub_menu:
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_history, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_history:
                 startActivityByAct(ListFeedBackActivity.class);
-                break;
+                return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 }

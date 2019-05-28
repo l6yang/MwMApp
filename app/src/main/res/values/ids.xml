@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="pub_drawer_layout" type="id" />
-    <item name="pub_nav_view" type="id" />
-    <item name="pub_layout_title" type="id" />
-    <item name="pub_layout" type="id" />
-    <item name="pub_title" type="id" />
-    <item name="pub_back" type="id" />
-    <item name="pub_menu" type="id" />
+    <item name="drawer_layout" type="id" />
+    <item name="nav_view" type="id" />
+    <item name="titleParent" type="id" />
+    <item name="titleView" type="id" />
+    <item name="backView" type="id" />
+    <item name="menuView" type="id" />
+    <item name="menuText" type="id" />
     <item name="pub_id" type="id" />
-    <item name="pub_submit" type="id" />
-    <item name="pub_toolbar" type="id" />
-    <item name="pub_menu_parent" type="id" />
-    <item name="pub_menu_save" type="id" />
-    <item name="pub_menu_scan" type="id" />
-    <item name="pub_menu_share" type="id" />
+    <item name="submitView" type="id" />
+    <item name="toolbar" type="id" />
+    <item name="menu_parent" type="id" />
+    <item name="menu_save" type="id" />
+    <item name="menu_scan" type="id" />
+    <item name="menu_share" type="id" />
     <!---->
     <item name="pub_decode" type="id" />
     <item name="pub_decode_failed" type="id" />

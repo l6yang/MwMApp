@@ -10,14 +10,14 @@ import android.widget.TextView;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseListAdapter;
 import com.mwm.loyal.beans.CityBean;
-import com.mwm.loyal.impl.IContact;
+import com.mwm.loyal.impl.IContactImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class AutoCompleteAdapter extends BaseListAdapter<CityBean, AutoCompleteAdapter.ViewHolder> implements Filterable, IContact {
+public class AutoCompleteAdapter extends BaseListAdapter<CityBean, AutoCompleteAdapter.ViewHolder> implements Filterable, IContactImpl {
     private ListFilter listFilter;
     private List<CityBean> filterList = new ArrayList<>();
     private final Object objLock = new Object();
@@ -46,7 +46,7 @@ public class AutoCompleteAdapter extends BaseListAdapter<CityBean, AutoCompleteA
     }
 
     @Override
-    protected int adapterLayout() {
+    public int adapterLayout() {
         return R.layout.item_grid_city;
     }
 
@@ -58,7 +58,7 @@ public class AutoCompleteAdapter extends BaseListAdapter<CityBean, AutoCompleteA
     @Override
     public void onViewHolder(ViewHolder holder, int position) {
         CityBean cityBean = filterList.get(position);
-        String itemStr = cityBean == null ? "" : StrImpl.replaceNull(cityBean.getCityName());
+        String itemStr = cityBean == null ? "" : replaceNull(cityBean.getCityName());
         holder.itemSpinner.setText(itemStr);
     }
 
@@ -82,7 +82,7 @@ public class AutoCompleteAdapter extends BaseListAdapter<CityBean, AutoCompleteA
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<CityBean> beanList = getArrList();
+            List<CityBean> beanList = getArrayList();
             FilterResults results = new FilterResults();
             if (TextUtils.isEmpty(constraint)) {
                 synchronized (objLock) {
@@ -96,8 +96,8 @@ public class AutoCompleteAdapter extends BaseListAdapter<CityBean, AutoCompleteA
                 List<CityBean> newList = new ArrayList<>(count);
                 for (int i = 0; i < count; i++) {
                     CityBean objList = beanList.get(i);
-                    String cityName = objList == null ? "" : StrImpl.replaceNull(objList.getCityName());
-                    String cityLetter = objList == null ? "" : StrImpl.replaceNull(objList.getCityLetter());
+                    String cityName = objList == null ? "" : replaceNull(objList.getCityName());
+                    String cityLetter = objList == null ? "" : replaceNull(objList.getCityLetter());
                     if (cityName.toUpperCase().startsWith(filterStr) || cityName.contains(filterStr) || TextUtils.equals(filterStr, cityLetter)) {
                         newList.add(objList);
                     }

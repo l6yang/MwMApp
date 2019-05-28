@@ -83,10 +83,12 @@ public class OperateDialog {
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
                 case DialogInterface.BUTTON_NEGATIVE:
-                    listener.dialogCancel();
+                    if (null != listener)
+                        listener.dialogCancel();
                     break;
                 case DialogInterface.BUTTON_POSITIVE:
-                    listener.goNext();
+                    if (null != listener)
+                        listener.goNext();
                     break;
             }
         }

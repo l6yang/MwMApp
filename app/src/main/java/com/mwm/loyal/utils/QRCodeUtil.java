@@ -41,7 +41,7 @@ public class QRCodeUtil {
     /**
      * 正方形二维码宽度
      */
-    private static final int CODE_WIDTH = 500;
+    private static final int CODE_WIDTH = 256;
     /**
      * LOGO宽度值,最大不能大于二维码20%宽度值,大于可能会导致二维码信息失效
      */
@@ -54,7 +54,6 @@ public class QRCodeUtil {
     /**
      * 生成带LOGO的二维码
      */
-
     public Bitmap createCode(String content, Bitmap logoBitmap)
             throws WriterException {
         int logoWidth = logoBitmap.getWidth();
@@ -92,7 +91,7 @@ public class QRCodeUtil {
         int[] pixels = new int[width * height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-            /*
+                /*
                  * 取值范围,可以画图理解下
                  * halfW + newLogoWidth / 2 - (halfW - newLogoWidth / 2) = newLogoWidth
                  * halfH + newLogoHeight / 2 - (halfH - newLogoHeight) = newLogoHeight
@@ -134,8 +133,11 @@ public class QRCodeUtil {
         Canvas canvas = new Canvas(cvBitmap);
         // 开始合成图片
         canvas.drawBitmap(bgBitmap, 0, 0, null);
-        canvas.drawBitmap(logoBitmap, (bgWidth - logoBitmap.getWidth()) / 2, (bgHeigh - logoBitmap.getHeight()) / 2, null);
-        canvas.save(Canvas.ALL_SAVE_FLAG);// 保存
+        int bmpWidth = (bgWidth - logoBitmap.getWidth()) / 2;
+        int bmpHeight = (bgHeigh - logoBitmap.getHeight()) / 2;
+        canvas.drawBitmap(logoBitmap, bmpWidth, bmpHeight, null);
+        //canvas.save(Canvas.ALL_SAVE_FLAG);// 保存
+        canvas.save();// 保存
         canvas.restore();
         if (cvBitmap.isRecycled()) {
             cvBitmap.recycle();
@@ -222,9 +224,14 @@ public class QRCodeUtil {
         try {
             Canvas canvas = new Canvas(bitmap);
             canvas.drawBitmap(src, 0, 0, null);
-            canvas.scale(scaleFactor, scaleFactor, srcWidth / 2, srcHeight / 2);
-            canvas.drawBitmap(logo, (srcWidth - logoWidth) / 2, (srcHeight - logoHeight) / 2, null);
-            canvas.save(Canvas.ALL_SAVE_FLAG);
+            int scaleWidth = srcWidth / 2;
+            int scaleHeight = srcHeight / 2;
+            canvas.scale(scaleFactor, scaleFactor, scaleWidth, scaleHeight);
+            int bmpWidth = (srcWidth - logoWidth) / 2;
+            int bmpHeight = (srcHeight - logoHeight) / 2;
+            canvas.drawBitmap(logo, bmpWidth, bmpHeight, null);
+            //canvas.save(Canvas.ALL_SAVE_FLAG);
+            canvas.save();
             canvas.restore();
         } catch (Exception e) {
             bitmap = null;
@@ -331,9 +338,11 @@ public class QRCodeUtil {
                 .createBitmap(bgWidth, bgHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(newmap);
         canvas.drawBitmap(background, 0, 0, null);
-        canvas.drawBitmap(foreground, (bgWidth - fgWidth) / 2,
-                (bgHeight - fgHeight) / 2, null);
-        canvas.save(Canvas.ALL_SAVE_FLAG);
+        int bmpWidth = (bgWidth - fgWidth) / 2;
+        int bmpHeight = (bgHeight - fgHeight) / 2;
+        canvas.drawBitmap(foreground, bmpWidth, bmpHeight, null);
+        //canvas.save(Canvas.ALL_SAVE_FLAG);
+        canvas.save();
         canvas.restore();
         return newmap;
     }

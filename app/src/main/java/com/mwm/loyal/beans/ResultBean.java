@@ -1,48 +1,39 @@
 package com.mwm.loyal.beans;
 
-public class ResultBean {
-    private int resultCode;
-    private String resultMsg;
-    private String exceptMsg;
+import com.loyal.kit.PatternBean;
 
-    public ResultBean(int resultCode, String resultMsg, String exceptMsg) {
-        this.resultCode = resultCode;
-        this.resultMsg = resultMsg;
-        this.exceptMsg = exceptMsg;
+public class ResultBean<T> extends PatternBean<T> {
+    private String  code;
+    private String message;
+    private T obj;
+
+    public ResultBean(String code, String message, T obj) {
+        this.code = code;
+        this.message = message;
+        this.obj = obj;
     }
 
-    public int getResultCode() {
-        return resultCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setResultCode(int resultCode) {
-        this.resultCode = resultCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getResultMsg() {
-        return resultMsg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setResultMsg(String resultMsg) {
-        this.resultMsg = resultMsg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public String getExceptMsg() {
-        return exceptMsg;
+    public T getObj() {
+        return obj;
     }
 
-    public void setExceptMsg(String exceptMsg) {
-        this.exceptMsg = exceptMsg;
-    }
-
-    public ResultBean() {
-    }
-
-    @Override
-    public String toString() {
-        return "{\"resultCode\":" + resultCode +
-                ",\"resultMsg\":" + (resultMsg == null ? null : "\"" + resultMsg + "\"") +
-                ",\"exceptMsg\":" + (exceptMsg == null ? null : "\"" + exceptMsg + "\"") +
-                "}";
+    public void setObj(T obj) {
+        this.obj = obj;
     }
 }

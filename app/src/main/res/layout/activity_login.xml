@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
-            name="loginBean"
-            type="com.mwm.loyal.beans.LoginBean" />
+            name="observableAccountBean"
+            type="com.mwm.loyal.beans.ObservableAccountBean" />
 
         <variable
             name="click"
@@ -17,14 +18,10 @@
     </data>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@{drawable}"
-        android:fitsSystemWindows="true"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+        style="@style/baseActStyle"
+        android:background="@{drawable}">
 
-        <LinearLayout
+        <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -32,12 +29,14 @@
             android:orientation="vertical"
             android:padding="8dp">
 
-            <LinearLayout
+            <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/drawable_login_input"
                 android:orientation="vertical"
-                android:padding="8dp">
+                android:padding="8dp"
+                app:divider="@drawable/shape_line_grey"
+                app:showDividers="middle">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -48,23 +47,19 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
                         android:contentDescription="@string/empty"
                         android:onClick="@{click::onClick}"
                         android:src="@mipmap/edit_clear"
                         android:visibility="gone" />
 
-                    <EditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/account"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@id/account_clear"
                         android:layout_toStartOf="@id/account_clear"
                         android:background="@color/white"
                         android:digits="@string/digits"
@@ -72,96 +67,60 @@
                         android:inputType="textEmailAddress"
                         android:maxLength="16"
                         android:padding="10dp"
-                        android:text="@{loginBean.account}"
+                        android:text="@{observableAccountBean.account}"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey"
                         android:textSize="@dimen/text_sp_18" />
                 </RelativeLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/grey" />
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/password_clear"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
                         android:contentDescription="@string/empty"
                         android:onClick="@{click::onClick}"
                         android:src="@mipmap/edit_clear"
                         android:visibility="gone" />
 
-                    <EditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@id/password_clear"
                         android:layout_toStartOf="@id/password_clear"
                         android:background="@color/white"
                         android:hint="@string/hint_yhmm"
-                        android:imeActionId="@+id/login"
-                        android:imeActionLabel="@string/action_sign_in"
-                        android:imeOptions="actionUnspecified"
                         android:inputType="textPassword"
                         android:maxLength="16"
                         android:padding="10dp"
-                        android:text="@{loginBean.password}"
+                        android:text="@{observableAccountBean.password}"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey"
                         android:textSize="@dimen/text_sp_18" />
                 </RelativeLayout>
 
-                <View
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/serverView"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/grey" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/server_clear"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:contentDescription="@string/empty"
-                        android:onClick="@{click::onClick}"
-                        android:src="@mipmap/edit_clear"
-                        android:visibility="gone" />
-
-                    <AutoCompleteTextView
-                        android:id="@+id/server"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@id/server_clear"
-                        android:layout_toStartOf="@id/server_clear"
-                        android:background="@color/white"
-                        android:completionThreshold="1"
-                        android:hint="@string/hint_server"
-                        android:inputType="textEmailAddress"
-                        android:maxLines="1"
-                        android:padding="10dp"
-                        android:text="@{loginBean.server}"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/grey"
-                        android:textSize="@dimen/text_sp_18" />
-                </RelativeLayout>
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:completionThreshold="1"
+                    android:hint="@string/hint_server"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:onClick="@{click::onClick}"
+                    android:text="@{observableAccountBean.server}"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/grey"
+                    android:textSize="@dimen/text_sp_18" />
+            </android.support.v7.widget.LinearLayoutCompat>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -176,11 +135,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <TextView
-                        android:id="@+id/mm_forget"
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/forgetView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:onClick="@{click::onClick}"
                         android:padding="8dp"
@@ -194,12 +152,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <TextView
-                        android:id="@+id/register"
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/registerView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:onClick="@{click::onClick}"
                         android:padding="8dp"
                         android:text="@string/register"
@@ -209,17 +166,9 @@
             </LinearLayout>
 
             <TextView
-                android:id="@id/pub_submit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/drawable_btn_login"
-                android:gravity="center"
+                style="@style/buttonStyle"
                 android:onClick="@{click::onClick}"
-                android:padding="10dp"
-                android:text="@string/login"
-                android:textColor="@color/color_text_click"
-                android:textSize="@dimen/text_sp_18" />
-        </LinearLayout>
+                android:text="@string/login" />
+        </android.support.v7.widget.LinearLayoutCompat>
     </RelativeLayout>
 </layout>

@@ -10,15 +10,12 @@
     </data>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/baseActStyle"
         android:background="@{drawable}"
-        android:fitsSystemWindows="true"
         tools:context=".activity.VoiceActivity">
 
         <include
-            android:id="@id/pub_layout_title"
-            layout="@layout/pub_title" />
+            layout="@layout/toolbar" />
 
         <Button
             android:id="@+id/button"

@@ -23,13 +23,11 @@
     </data>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:background="@{drawable}"
-        android:fitsSystemWindows="true">
+        style="@style/baseActStyle">
 
         <android.support.v4.widget.DrawerLayout
-            android:id="@id/pub_drawer_layout"
+            android:id="@id/drawer_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -57,7 +55,7 @@
                         app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                         <android.support.v7.widget.Toolbar
-                            android:id="@id/pub_toolbar"
+                            android:id="@id/toolbar"
                             android:layout_width="match_parent"
                             android:layout_height="?attr/actionBarSize"
                             android:background="?attr/colorPrimary"
@@ -70,7 +68,7 @@
             </android.support.design.widget.CoordinatorLayout>
 
             <android.support.design.widget.NavigationView
-                android:id="@id/pub_nav_view"
+                android:id="@id/nav_view"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
@@ -105,22 +103,22 @@
                         android:id="@+id/text_weather"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_above="@id/text_city"
+                        android:layout_above="@+id/text_city"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="0dp"
                         android:gravity="end"
                         android:maxLength="4"
                         android:maxLines="1"
-                        android:onClick="onClick"
-                        android:paddingBottom="4dp"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:paddingRight="@dimen/activity_horizontal_margin"
                         android:paddingTop="4dp"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingBottom="4dp"
                         android:text="@{weather}"
+                        android:onClick="@{handler::onClick}"
                         android:textColor="@color/text_color_normal"
                         android:textSize="28sp" />
                 </RelativeLayout>
             </android.support.design.widget.NavigationView>
-
         </android.support.v4.widget.DrawerLayout>
     </RelativeLayout>
 </layout>

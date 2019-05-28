@@ -1,31 +1,38 @@
 package com.mwm.loyal.base;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v7.widget.AppCompatEditText;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.loyal.base.impl.IUiCommandImpl;
+import com.loyal.base.impl.IUICommandImpl;
 import com.loyal.base.impl.IntentFrame;
-import com.loyal.base.util.ConnectUtil;
-import com.loyal.base.util.IntentBuilder;
-import com.loyal.base.util.ObjectUtil;
-import com.loyal.base.util.TimeUtil;
-import com.loyal.base.util.ToastUtil;
-import com.mwm.loyal.impl.IContact;
+import com.loyal.kit.ConnectUtil;
+import com.loyal.kit.IntentBuilder;
+import com.loyal.kit.ObjectUtil;
+import com.loyal.kit.TimeUtil;
+import com.loyal.kit.ToastUtil;
+import com.mwm.loyal.impl.IContactImpl;
 
-public abstract class BaseClickHandler<V extends ViewDataBinding> implements IntentFrame.ActFrame, IUiCommandImpl,IContact {
+public abstract class BaseClickHandler<V extends ViewDataBinding> implements IntentFrame.ActFrame, IUICommandImpl, IContactImpl {
     protected ProgressDialog progressDialog;
     protected BaseActivity activity;
     protected V binding;
-    protected IntentBuilder builder;
+    protected IntentBuilder intentBuilder;
+    private ToastUtil toastUtil;
 
     public BaseClickHandler(BaseActivity baseActivity) {
         this(baseActivity, null);
@@ -34,15 +41,16 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
     public BaseClickHandler(BaseActivity baseActivity, V binding) {
         this.activity = baseActivity;
         this.binding = binding;
+        toastUtil = new ToastUtil(baseActivity);
         initDialog(baseActivity);
         hasIntentParams(false);
     }
 
     protected void hasIntentParams(boolean hasParam) {
-        builder = null;
+        intentBuilder = null;
         if (hasParam)
-            builder = new IntentBuilder(activity, activity.getIntent());
-        else builder = new IntentBuilder(activity);
+            intentBuilder = new IntentBuilder(activity, activity.getIntent());
+        else intentBuilder = new IntentBuilder(activity);
     }
 
     public final String getString(@StringRes int resId) {
@@ -50,23 +58,45 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
     }
 
     @Override
+    public void hideKeyBoard(@NonNull View view) {
+        InputMethodManager im = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (im != null)
+            im.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    @Override
+    public void startServiceByAct(@Nullable String className) {
+        intentBuilder.startServiceByAct(className);
+    }
+
+    @Override
+    public void startActivityForResultByAct(@Nullable String className, int reqCode) {
+        intentBuilder.startActivityForResultByAct(className, reqCode);
+    }
+
+    @Override
+    public void startActivityByAct(@Nullable String className) {
+        intentBuilder.startActivityByAct(className);
+    }
+
+    @Override
     public void startActivityByAct(@Nullable Class<?> tClass) {
-        builder.startActivityByAct(tClass);
+        intentBuilder.startActivityByAct(tClass);
     }
 
     @Override
     public void startActivityForResultByAct(@Nullable Class<?> tClass, @IntRange(from = 2) int reqCode) {
-        builder.startActivityForResultByAct(tClass, reqCode);
+        intentBuilder.startActivityForResultByAct(tClass, reqCode);
     }
 
     @Override
     public void startServiceByAct(@Nullable Class<?> tClass) {
-        builder.startServiceByAct(tClass);
+        intentBuilder.startServiceByAct(tClass);
     }
 
     @Override
     public void showToast(@NonNull CharSequence sequence) {
-        ToastUtil.showToast(activity, sequence);
+        toastUtil.show(sequence);
     }
 
     @Override
@@ -92,7 +122,7 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
 
     @Override
     public void showDialog(@NonNull CharSequence sequence, boolean finish) {
-        ToastUtil.showDialog(activity, replaceNull(sequence), finish);
+        activity.showDialog(sequence, finish);
     }
 
     @Override
@@ -142,6 +172,10 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
     }
 
     public final void finish() {
+        if (null != toastUtil) {
+            toastUtil.cancel();
+            toastUtil = null;
+        }
         activity.finish();
     }
 
@@ -165,5 +199,14 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
         }
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
+    }
+
+    protected void clearText(EditText editText) {
+        editText.setText("");
+    }
+
+    protected String getText(AppCompatEditText editText) {
+        Editable editable = editText.getText();
+        return null == editable ? "" : editable.toString().trim();
     }
 }

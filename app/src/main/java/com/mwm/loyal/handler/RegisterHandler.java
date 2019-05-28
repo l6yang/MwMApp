@@ -6,22 +6,24 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.loyal.base.rxjava.impl.SubscribeListener;
+import com.loyal.kit.GsonUtil;
+import com.loyal.rx.RxUtil;
+import com.loyal.rx.impl.RxSubscriberListener;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.RegisterActivity;
 import com.mwm.loyal.base.BaseClickHandler;
-import com.mwm.loyal.base.RxProgressSubscriber;
-import com.mwm.loyal.beans.LoginBean;
+import com.mwm.loyal.beans.AccountBean;
+import com.mwm.loyal.beans.ObservableAccountBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityRegisterBinding;
 import com.mwm.loyal.impl.OperaOnClickListener;
+import com.mwm.loyal.libs.rxjava.RxProgressSubscriber;
 import com.mwm.loyal.utils.OperateDialog;
-import com.mwm.loyal.utils.RxUtil;
 import com.mwm.loyal.utils.ToastUtil;
 
 import io.reactivex.Observable;
 
-public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> implements SubscribeListener<ResultBean>, OperaOnClickListener {
+public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> implements RxSubscriberListener<String>, OperaOnClickListener {
     private final boolean fromLogin;
     private final String extra;
     private final int resultReg = 2;
@@ -37,23 +39,23 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.account_clear:
-                binding.account.getText().clear();
+                clearText(binding.account);
                 break;
             case R.id.password_clear:
-                binding.password.getText().clear();
+                clearText(binding.password);
                 break;
             case R.id.repeat_clear:
-                binding.repeatMm.getText().clear();
+                clearText(binding.repeatMm);
                 break;
             case R.id.nickname_clear:
-                binding.nickname.getText().clear();
+                clearText(binding.nickname);
                 break;
-            case R.id.pub_submit:
-                ToastUtil.hideInput(activity, binding.account.getWindowToken());
-                String account = binding.account.getText().toString().trim();
-                String nickname = binding.nickname.getText().toString().trim();
-                String password = binding.password.getText().toString().trim();
-                String repeat = binding.repeatMm.getText().toString().trim();
+            case R.id.submitView:
+                hideKeyBoard(binding.account);
+                String account = getText(binding.account);
+                String nickname = getText(binding.nickname);
+                String password = getText(binding.password);
+                String repeat = getText(binding.repeatMm);
                 if (fromLogin) {
                     doRegister(account, nickname, password, repeat);
                 } else {
@@ -70,8 +72,8 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
             showToast("用户名不能为空");
             return;
         }
-        if (!isValue(password)) {
-            showToast("密码长度少于6位");
+        if (TextUtils.isEmpty(password)) {
+            showToast("密码不能为空！");
             return;
         }
         OperateDialog operateDialog = ToastUtil.operateDialog(activity, this);
@@ -83,15 +85,20 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
             showToast("用户名不能为空");
             return;
         }
-        if (!isValue(password)) {
-            showToast("密码长度少于6位");
+        if (TextUtils.isEmpty(password)) {
+            showToast("密码不能为空");
             return;
         }
         if (!TextUtils.equals(password, repeat)) {
             showToast("两次输入密码不一致");
             return;
         }
-        doAsyncTask(new LoginBean(account, password, false, TextUtils.isEmpty(nickname) ? account : nickname));
+        ObservableAccountBean accountBean = new ObservableAccountBean();
+        accountBean.account.set(account);
+        accountBean.password.set(password);
+        accountBean.nickname.set(TextUtils.isEmpty(nickname) ? "暂未填写" : nickname);
+        accountBean.signature.set("此人很懒...");
+        doAsyncTask(accountBean);
     }
 
     private void doResetPassWord(String account, String nickname, String password, String repeat) {
@@ -99,8 +106,8 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
             showToast("旧密码不能为空");
             return;
         }
-        if (!isValue(nickname) || !isValue(password)) {
-            showToast("密码长度不得少于6位");
+        if (TextUtils.isEmpty(nickname) || TextUtils.isEmpty(password)) {
+            showToast("请输入密码");
             return;
         }
         if (TextUtils.equals(nickname, password)) {
@@ -111,46 +118,55 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
             showToast("两次输入密码不一致");
             return;
         }
-        doAsyncTask(new LoginBean(account, password, nickname));
+        ObservableAccountBean accountBean = new ObservableAccountBean();
+        accountBean.account.set(account);
+        accountBean.password.set(password);
+        accountBean.nickname.set(nickname);
+        doAsyncTask(accountBean);
     }
 
-    private void doAsyncTask(LoginBean loginBean) {
-        RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(activity, this);
-        subscriber.setWhat(resultReg);
-        Observable<ResultBean> observable = fromLogin ? subscriber.doRegister(loginBean.toString()) : subscriber.doUpdateAccount(loginBean.toString());
-        RxUtil.rxExecuted(observable, subscriber);
-    }
-
-    private boolean isValue(String string) {
-        return string.length() >= 6;
+    private void doAsyncTask(ObservableAccountBean observableAccountBean) {
+        RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(activity);
+        subscriber.setWhat(resultReg).setDialogMessage("注册中...").showProgressDialog(true);
+        subscriber.setTag(observableAccountBean).setSubscribeListener(this);
+        String json = observableAccountBean.toString();
+        json = encodeStr2Utf(json);
+        Observable<String> observable = fromLogin ? subscriber.register(json) : subscriber.passwordUpdate(json);
+        RxUtil.rxExecute(observable, subscriber);
     }
 
     @Override
-    public void onResult(int what, Object tag, ResultBean resultBean) {
-        final String account = binding.account.getText().toString().trim();
-        final String password = binding.password.getText().toString().trim();
+    public void onResult(int what, Object tag, String result) {
         switch (what) {
-            case resultReg:
-                if (resultBean != null) {
-                    if (resultBean.getResultCode() == 1) {
-                        showToast(fromLogin ? "注册成功,请牢记用户名和密码" : "修改成功，请重新登录");
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent intent = new Intent();
-                                intent.putExtra("account", account);
-                                intent.putExtra("password", fromLogin ? password : "");
-                                activity.setResult(Activity.RESULT_OK, intent);
-                                activity.finish();
-                            }
-                        }, 1000);
-                    } else showDialog(resultBean.getResultMsg(), false);
-                } else
-                    showErrorDialog("解析" + (fromLogin ? "注册" : "修改") + "信息异常", false);
-                break;
+            case resultReg: {
+                ResultBean<AccountBean> resultBean = (ResultBean<AccountBean>) GsonUtil.json2BeanObject(result, ResultBean.class, AccountBean.class);
+                if (null == resultBean) {
+                    showDialog("解析" + (fromLogin ? "注册" : "修改") + "信息异常");
+                    return;
+                }
+                String code = replaceNull(resultBean.getCode());
+                String message = replaceNull(resultBean.getMessage());
+                if (!TextUtils.equals("1", code)) {
+                    showDialog(message);
+                    return;
+                }
+                showToast(fromLogin ? "注册成功,请牢记用户名和密码" : "修改成功，请重新登录");
+                final AccountBean accountBean = resultBean.getObj();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        hasIntentParams(true);
+                        intentBuilder.putExtra("beanJson", GsonUtil.bean2Json(accountBean));
+                        activity.setResult(Activity.RESULT_OK, intentBuilder);
+                        activity.finish();
+                    }
+                }, 1000);
+            }
+            break;
             case resultDes:
+                ResultBean resultBean = GsonUtil.json2Bean(result, ResultBean.class);
                 if (resultBean != null) {
-                    if (resultBean.getResultCode() == 1) {
+                    if (TextUtils.equals("1", resultBean.getCode())) {
                         showToast("账号已注销");
                         new Handler().postDelayed(new Runnable() {
                             @Override
@@ -161,7 +177,7 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
                                 activity.finish();
                             }
                         }, 1000);
-                    } else showDialog(resultBean.getResultMsg(), false);
+                    } else showDialog(resultBean.getMessage(), false);
                 } else
                     showErrorDialog("解析注销信息异常", false);
                 break;
@@ -179,10 +195,11 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
 
     @Override
     public void goNext() {
-        String account = binding.account.getText().toString().trim();
-        String nickname = binding.nickname.getText().toString().trim();
-        RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(activity, this);
-        subscriber.setWhat(resultDes);
-        RxUtil.rxExecuted(subscriber.destroyAccount(new LoginBean(account, nickname).toString()), subscriber);
+        String account = getText(binding.account);
+        String nickname = getText(binding.nickname);
+        RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(activity);
+        subscriber.setWhat(resultDes).setDialogMessage("登录中...").showProgressDialog(true);
+        subscriber.setSubscribeListener(this);
+        RxUtil.rxExecute(subscriber.accountDestroy(new ObservableAccountBean(account, nickname).toString()), subscriber);
     }
 }

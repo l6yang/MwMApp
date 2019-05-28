@@ -1,6 +1,6 @@
 package com.mwm.loyal.utils;
 
-import com.mwm.loyal.impl.IContact;
+import com.mwm.loyal.impl.IContactImpl;
 
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -13,7 +13,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
-public class CipherUtil {
+public class CipherUtil implements IContactImpl{
 
     private static final String algorithmStr = "AES/ECB/PKCS5Padding";
 
@@ -140,7 +140,7 @@ public class CipherUtil {
      *
      * @param buf byte[]
      */
-    private static String parseByte2HexStr(byte buf[]) {
+    private static String parseByte2HexStr(byte[] buf) {
         StringBuilder sb = new StringBuilder();
         for (byte b : buf) {
             String hex = Integer.toHexString(b & 0xFF);
@@ -170,12 +170,12 @@ public class CipherUtil {
     }
 
     //注意: 这里的password(秘钥必须是16位的)
-    private static final String keyBytes = IContact.StrImpl.KAY_ENCRYPT_DECODE;
+    private static final String keyBytes = StrImpl.KAY_ENCRYPT_DECODE;
 
     /**
      * 加密
      */
-    public static String encodeStr(String content) {
+    public static String encode(String content) {
         //加密之后的字节数组,转成16进制的字符串形式输出
         try {
             return parseByte2HexStr(encrypt(content, keyBytes));
@@ -187,7 +187,7 @@ public class CipherUtil {
     /**
      * 解密
      */
-    public static String decodeStr(String content) {
+    public static String decode(String content) {
         //解密之前,先将输入的字符串按照16进制转成二进制的字节数组,作为待解密的内容输入
         byte[] b = new byte[0];
         try {

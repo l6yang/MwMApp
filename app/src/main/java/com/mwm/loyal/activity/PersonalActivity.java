@@ -5,33 +5,31 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.loyal.base.rxjava.impl.SubscribeListener;
-import com.loyal.base.util.GsonUtil;
+import com.loyal.kit.GsonUtil;
+import com.loyal.kit.OutUtil;
+import com.loyal.rx.RxUtil;
+import com.loyal.rx.impl.RxSubscriberListener;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
-import com.mwm.loyal.base.RxProgressSubscriber;
-import com.mwm.loyal.beans.LoginBean;
+import com.mwm.loyal.beans.AccountBean;
+import com.mwm.loyal.beans.ObservableAccountBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityPersonalBinding;
 import com.mwm.loyal.handler.PersonalHandler;
+import com.mwm.loyal.impl.ServerImpl;
+import com.mwm.loyal.libs.rxjava.RxProgressSubscriber;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.RxUtil;
-import com.mwm.loyal.utils.StringUtil;
-import com.mwm.loyal.utils.ToastUtil;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,17 +37,13 @@ import butterknife.BindView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.Call;
 
-public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding> implements View.OnClickListener, SubscribeListener<ResultBean> {
-    @BindView(R.id.pub_back)
-    View pubBack;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
-    @BindView(R.id.pub_title)
-    TextView pubTitle;
-    private LoginBean loginBean;
-    private UpdateAccount mUpdateAuth;
+public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding> implements RxSubscriberListener<String> {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    private ObservableAccountBean observableAccountBean;
+    private final int queryWhat = 2;
+    private final int updateWhat = 4;
 
     @Override
     protected int actLayoutRes() {
@@ -58,128 +52,106 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
 
     @Override
     public void afterOnCreate() {
+        toolbar.setTitle("个人资料");
+        setSupportActionBar(toolbar);
         binding.setDrawable(ImageUtil.getBackground(this));
         binding.setClick(new PersonalHandler(this));
+        showIcon();
         queryAccount();
-        initViews();
     }
 
     private void queryAccount() {
         String account = getIntent().getStringExtra("account");
-        RxProgressSubscriber<ResultBean> querySubscribe = new RxProgressSubscriber<>(this, this);
-        RxUtil.rxExecuted(querySubscribe.doQueryAccount(account), querySubscribe);
+        RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(this);
+        subscriber.setDialogMessage("...").showProgressDialog(true).setTag(observableAccountBean);
+        subscriber.setWhat(queryWhat).setSubscribeListener(this);
+        RxUtil.rxExecute(subscriber.queryAccount(account), subscriber);
     }
 
-    private void initViews() {
-        pubTitle.setText("个人资料");
-        pubMenu.setVisibility(View.VISIBLE);
-        pubMenu.setImageResource(R.drawable.src_edit_img);
-        pubMenu.setOnClickListener(this);
-        pubBack.setOnClickListener(this);
-        showIcon();
-    }
-
-    private void editData() {
-        if (!loginBean.editable.get()) {
-            loginBean.editable.set(true);
-            pubMenu.setImageResource(R.drawable.src_ok_save_img);
-            return;
-        }
-        pubMenu.setImageResource(R.drawable.src_edit_img);
-        String nickname = binding.personalNickname.getText().toString().trim();
-        String signature = binding.personalSignature.getText().toString().trim();
-        loginBean.nickname.set(nickname);
-        loginBean.sign.set(signature);
-        if (mUpdateAuth != null)
-            return;
-        mUpdateAuth = new UpdateAccount(loginBean);
-        mUpdateAuth.execute();
+    private void updatePersonal(AccountBean accountBean) {
+        String account = getIntent().getStringExtra("account");
+        accountBean.setAccount(account);
+        RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(this);
+        subscriber.setDialogMessage("...").showProgressDialog(true).setTag(observableAccountBean);
+        subscriber.setWhat(updateWhat).setSubscribeListener(this);
+        RxUtil.rxExecute(subscriber.accountUpdate(GsonUtil.bean2Json(accountBean)), subscriber);
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.pub_back:
-                setResult(RESULT_OK);
-                finish();
+    public void onResult(int what, Object tag, String result) {
+        OutUtil.println("person-" + what, result);
+        try {
+            switch (what) {
+                case queryWhat: {
+                    ResultBean<AccountBean> resultBean = (ResultBean<AccountBean>) GsonUtil.json2BeanObject(result, ResultBean.class, AccountBean.class);
+                    if (null == resultBean) {
+                        showDialog("解析个人信息失败", true);
+                        return;
+                    }
+                    String code = replaceNull(resultBean.getCode());
+                    String message = replaceNull(resultBean.getMessage());
+                    if (TextUtils.equals("1", code)) {
+                        observableAccountBean = new ObservableAccountBean();
+                        AccountBean accountBean = resultBean.getObj();
+                        observableAccountBean.account.set(null == accountBean ? "" : accountBean.getAccount());
+                        observableAccountBean.nickname.set(null == accountBean ? "" : accountBean.getNickname());
+                        observableAccountBean.signature.set(null == accountBean ? "" : accountBean.getSignature());
+                        observableAccountBean.editable.set(false);
+                        binding.setObservableAccountBean(observableAccountBean);
+                    } else showDialog(message);
+                }
                 break;
-            case R.id.pub_menu:
-                ToastUtil.hideInput(this, binding.personalNickname.getWindowToken());
-                editData();
-                break;
+                case updateWhat:
+                    ResultBean resultBean = GsonUtil.json2Bean(result, ResultBean.class);
+                    if (null == resultBean) {
+                        showDialog("解析个人信息失败", true);
+                        return;
+                    }
+                    String code = replaceNull(resultBean.getCode());
+                    String message = replaceNull(resultBean.getMessage());
+                    showToast(message);
+                    boolean success = TextUtils.equals("1", code);
+                    observableAccountBean.editable.set(!success);
+                    if (success) {
+                        toolbar.getMenu().clear();
+                        toolbar.inflateMenu(R.menu.menu_edit);
+                        toolbar.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                        },800);
+                    }
+                    break;
+            }
+        } catch (Exception e) {
+            onError(what, tag, e);
         }
-    }
-
-    @Override
-    public void onResult(int what, Object tag, ResultBean resultBean) {
-        if (resultBean != null) {
-            if (resultBean.getResultCode() == 1) {
-                loginBean = new LoginBean();
-                loginBean.account.set(getIntent().getStringExtra("account"));
-                loginBean.nickname.set(resultBean.getResultMsg());
-                loginBean.sign.set(resultBean.getExceptMsg());
-                loginBean.editable.set(false);
-                binding.setLoginBean(loginBean);
-            } else showDialog(resultBean.getResultMsg(), false);
-        } else
-            showErrorDialog("解析个人信息失败", false);
     }
 
     @Override
     public void onError(int what, Object tag, Throwable e) {
-        showErrorDialog(e.toString(), true);
-    }
-
-    private class UpdateAccount extends AsyncTask<Void, View, String> {
-        private final LoginBean loginBean;
-
-        UpdateAccount(LoginBean bean) {
-            loginBean = bean;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            /*Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateAccount(loginBean.toString(), "personal", "");
-            try {
-                return RetrofitManage.doExecuteStr(call);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return e.toString();
-            }*/
-            return "";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            mUpdateAuth = null;
-            System.out.println(result);
-            if (StringUtil.showErrorToast(PersonalActivity.this, result))
-                return;
-            ResultBean bean = GsonUtil.json2Bean(result, ResultBean.class);
-            if (bean.getResultCode() == 1)
-                ToastUtil.showToast(PersonalActivity.this, "信息更改成功");
-            else
-                ToastUtil.showToast(PersonalActivity.this, bean.getResultMsg());
-            loginBean.editable.set(bean.getResultCode() != 1);
+        switch (what) {
+            case queryWhat:
+                showErrorDialog("加载数据失败", e, true);
+                break;
+            case updateWhat:
+                showErrorDialog("更新失败", e);
+                break;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case IntImpl.reqCode_Main_UCrop:
+            case IntImpl.reqCodeUCrop:
                 if (resultCode == RESULT_OK) {// 成功选择了照片。
                     // 选择好了照片后，调用这个方法解析照片路径的List。
                     Uri uri = UCrop.getOutput(data);
                     if (uri == null)
                         return;
                     releasePic(uri.getPath());
-                } else if (resultCode == RESULT_CANCELED) {
-                    // 用户取消选择。
-                    new AlertDialog.Builder(this)
-                            .setTitle(R.string.title_dialog_hint)
-                            .setMessage(R.string.cancel_select_photo_hint);
                 }
                 break;
         }
@@ -244,7 +216,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
                 String upPath = "";
                 if (delete)
                     //保存裁剪之后压缩的照片
-                    upPath = ImageUtil.saveToFile(FileUtil.path_temp + loginBean.account.get() + ".jpg", ImageUtil.releasePics(path, 200));
+                    upPath = ImageUtil.saveToFile(FileUtil.path_temp + observableAccountBean.account.get() + ".jpg", ImageUtil.releasePics(path, 200));
                 if (!TextUtils.isEmpty(upPath))
                     //保存完之后删除裁剪的照片
                     FileUtil.deleteFile(FileUtil.path_temp, FileUtil.pic_UCrop);
@@ -259,7 +231,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
             super.onPostExecute(result);
             mDialog.dismiss();
             mDealAuth = null;
-            if (StringUtil.showErrorToast(PersonalActivity.this, result))
+            if (TextUtils.isEmpty(result))
                 return;
             copyImage(result);
         }
@@ -310,17 +282,17 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
             try {
                 File file = new File(path);
                 /* RequestBody body = new MultipartBody.Builder()
-                        .addFormDataPart(loginBean.account.get(), path, RequestBody.create(MediaType.parse("image/jpeg"), file))
+                        .addFormDataPart(observableAccountBean.account.get(), path, RequestBody.create(MediaType.parse("image/jpeg"), file))
                         .setType(MultipartBody.FORM)
                         .build();*/
                 //return OkHttpClientManager.getInstance().post_jsonDemo(StringUtil.getServiceUrl(StrImpl.method_update_icon), body);
                 RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), file);
-                MultipartBody.Part part = MultipartBody.Part.createFormData(loginBean.account.get(), file.getName(), body);
-                //Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateIcon(body, part);
+                MultipartBody.Part part = MultipartBody.Part.createFormData(observableAccountBean.account.get(), file.getName(), body);
+                //Call<String> call = RetrofitManage.getInstance().getRequestServer().updateAvatar(body, part);
                 Map<String, RequestBody> map = new HashMap<>();
                 //map.put("file" + "\"; filename=\"" + file.getName(), body);
                 map.put("file" + "\"; filename=\"" + file.getName(), body);
-                //Call<String> call = RetrofitManage.getInstance().getRequestServer().doUpdateIcon(loginBean.account.get(), map);
+                //Call<String> call = RetrofitManage.getInstance().getRequestServer().updateAvatar(observableAccountBean.account.get(), map);
                 //return RetrofitManage.doExecute(call);
                 return "";
             } catch (Exception e) {
@@ -334,15 +306,15 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
             super.onPostExecute(result);
             mDialog.dismiss();
             mUpImageAuth = null;
-            if (StringUtil.showErrorToast(PersonalActivity.this, result))
+            if (TextUtils.isEmpty(result))
                 return;
-            ResultBean bean = GsonUtil.json2Bean(result, ResultBean.class);
-            if (bean.getResultCode() == 1) {
+            ResultBean resultBean = GsonUtil.json2Bean(result, ResultBean.class);
+            if (TextUtils.equals("1", resultBean.getCode())) {
                 FileUtil.deleteFile(new File(path));
                 ImageUtil.clearFrescoTemp();
-                ToastUtil.showToast(PersonalActivity.this, "上传成功");
+                showToast("上传成功");
             } else
-                ToastUtil.showToast(PersonalActivity.this, bean.getResultMsg());
+                showToast(resultBean.getMessage());
             showIcon();
         }
 
@@ -362,21 +334,42 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
         String account = getIntent().getStringExtra("account");
         if (binding.simplePersonalIcon == null)
             return;
-        binding.simplePersonalIcon.setImageURI(Uri.parse(StrImpl.getServerUrl(StrImpl.method_showIcon) + "&account=" + account));
+        binding.simplePersonalIcon.setImageURI(Uri.parse(ServerImpl.showAvatar(account)));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_edit:
+                if (!observableAccountBean.editable.get()) {
+                    observableAccountBean.editable.set(true);
+                    toolbar.getMenu().clear();
+                    toolbar.inflateMenu(R.menu.menu_save);
+                }
+                return true;
+            case R.id.menu_save:
+                hideKeyBoard(toolbar);
+                String nickname = binding.personalNickname.getText().toString().trim();
+                String signature = binding.personalSignature.getText().toString().trim();
+                observableAccountBean.nickname.set(nickname);
+                observableAccountBean.signature.set(signature);
+                AccountBean accountBean = new AccountBean();
+                accountBean.setNickname(nickname);
+                accountBean.setSignature(signature);
+                updatePersonal(accountBean);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public int setEdgePosition() {
         return LEFT;
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            setResult(RESULT_OK);
-            finish();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }

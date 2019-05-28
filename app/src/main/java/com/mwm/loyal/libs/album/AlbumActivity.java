@@ -16,7 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -28,17 +27,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 
-import com.yalantis.ucrop.UCrop;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import com.mwm.loyal.R;
+import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.libs.album.adapter.AlbumContentAdapter;
 import com.mwm.loyal.libs.album.dialog.AlbumFolderDialog;
 import com.mwm.loyal.libs.album.dialog.AlbumPreviewDialog;
@@ -52,7 +42,15 @@ import com.mwm.loyal.libs.album.util.AlbumUtils;
 import com.mwm.loyal.libs.album.util.DisplayUtils;
 import com.mwm.loyal.utils.DisplayUtil;
 import com.mwm.loyal.utils.FileUtil;
-import com.mwm.loyal.utils.ToastUtil;
+import com.yalantis.ucrop.UCrop;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.yalantis.ucrop.UCrop.REQUEST_CROP;
 
@@ -60,7 +58,7 @@ import static com.yalantis.ucrop.UCrop.REQUEST_CROP;
  * <p>全局相册，选择图片入口。</p>
  * Created by Yan Zhenjie on 2016/10/17.
  */
-public class AlbumActivity extends AppCompatActivity {
+public class AlbumActivity extends BaseActivity {
 
     private static final int PERMISSION_REQUEST_STORAGE = 200;
     private static final int PERMISSION_REQUEST_CAMERA = 201;
@@ -92,10 +90,19 @@ public class AlbumActivity extends AppCompatActivity {
     private String mCameraFilePath;
 
     @Override
+    protected int actLayoutRes() {
+        DisplayUtils.initScreen(this);
+        return R.layout.activity_album;
+    }
+
+    @Override
+    public void afterOnCreate() {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DisplayUtils.initScreen(this);
-        setContentView(R.layout.activity_album);
 
         if (savedInstanceState != null) {
             mCameraFilePath = savedInstanceState.getString(INSTANCE_CAMERA_FILE_PATH);
@@ -346,7 +353,7 @@ public class AlbumActivity extends AppCompatActivity {
             int hasCheckSize = mCheckedImages.size();
             if (hasCheckSize > mAllowSelectCount) {
                 String hint = getString(R.string.album_check_limit);
-                ToastUtil.showToast(AlbumActivity.this, String.format(Locale.getDefault(), hint, mAllowSelectCount));
+                showToast(String.format(Locale.getDefault(), hint, mAllowSelectCount));
                 mCheckedImages.remove(albumImage);
                 compoundButton.setChecked(false);
                 albumImage.setChecked(false);
@@ -445,7 +452,7 @@ public class AlbumActivity extends AppCompatActivity {
             int allSize = mAlbumFolders.get(0).getPhotos().size();
             int checkSize = mCheckedImages.size();
             if (allSize > 0 && checkSize == 0) {
-                ToastUtil.showToast(this, R.string.album_check_little);
+                showToast(R.string.album_check_little);
             } else if (checkSize == 0) {
                 setResult(RESULT_CANCELED);
                 super.finish();

@@ -2,41 +2,37 @@ package com.mwm.loyal.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loyal.base.impl.ToolBarBackListener;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityQrCodeBinding;
-import com.mwm.loyal.utils.CipherUtil;
+import com.mwm.loyal.impl.ServerImpl;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ImageUtil;
 import com.mwm.loyal.utils.QRCodeUtil;
-import com.mwm.loyal.utils.ToastUtil;
 
 import java.io.File;
 
 import butterknife.BindView;
 
-import static com.mwm.loyal.impl.IContact.StrImpl.action;
-import static com.mwm.loyal.impl.IContact.StrImpl.method_scan;
-
-public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> implements View.OnClickListener {
-    @BindView(R.id.pub_back)
-    View pubBack;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
-    @BindView(R.id.pub_title)
-    TextView pubTitle;
-    @BindView(R.id.pub_menu_parent)
+public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> implements View.OnClickListener, ToolBarBackListener {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.menu_parent)
     View pubMenuParent;
-    @BindView(R.id.pub_menu_save)
+    @BindView(R.id.menu_save)
     TextView pubMenuSave;
-    @BindView(R.id.pub_menu_scan)
+    @BindView(R.id.menu_scan)
     TextView pubMenuScan;
-    @BindView(R.id.pub_menu_share)
+    @BindView(R.id.menu_share)
     TextView pubMenuShare;
     @BindView(R.id.img_qr)
     ImageView mImage_qr;
@@ -55,19 +51,17 @@ public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> imp
     }
 
     private void initViews() {
-        pubTitle.setText("我的二维码");
-        pubMenu.setVisibility(View.VISIBLE);
-        pubMenu.setImageResource(R.drawable.src_menu_img);
-        pubMenu.setOnClickListener(this);
-        pubBack.setOnClickListener(this);
+        toolbar.setTitle("我的二维码");
+        setSupportActionBar(toolbar);
+        setToolbarBackListener(this);
         account = getIntent().getStringExtra("account");
         Bitmap logoBitmap = BitmapFactory.decodeFile(FileUtil.path_icon + "icon_" + account + ".jpg");
-        String str = StrImpl.getBaseUrl() + action + method_scan + "&k=" + CipherUtil.encodeStr(account);
+        String str = ServerImpl.getQrCodeContent(account);
+        bmp_qr = QRCodeUtil.buildQrBitmap(this, logoBitmap, str, 700, 700);
         pubMenuSave.setOnClickListener(this);
         pubMenuScan.setOnClickListener(this);
         pubMenuShare.setOnClickListener(this);
         pubMenuParent.setOnClickListener(this);
-        bmp_qr = QRCodeUtil.buildQrBitmap(this, logoBitmap, str, 700, 700);
         mImage_qr.setImageBitmap(bmp_qr);
     }
 
@@ -79,35 +73,42 @@ public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> imp
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.pub_back:
-                if (pubMenuParent.isShown())
-                    pubMenuParent.setVisibility(View.GONE);
-                else
-                    finish();
-                break;
-            case R.id.pub_menu:
-                pubMenuParent.setVisibility(pubMenuParent.isShown() ? View.GONE : View.VISIBLE);
-                break;
-            case R.id.pub_menu_save:
+            case R.id.menu_save:
                 pubMenuParent.setVisibility(pubMenuParent.isShown() ? View.GONE : View.VISIBLE);
                 if (bmp_qr != null) {
                     FileUtil.deleteFile(FileUtil.path_icon + "qr_" + account + ".jpg");
                     String tr = ImageUtil.saveToFile(FileUtil.path_icon + "qr_" + account + ".jpg", bmp_qr);
                     if (!TextUtils.isEmpty(tr) && new File(tr).exists())
-                        ToastUtil.showToast(this, "图片已保存在" + tr + "路径下");
+                        showToast("图片已保存在" + tr + "路径下");
                 }
                 break;
-            case R.id.pub_menu_scan:
+            case R.id.menu_scan:
                 pubMenuParent.setVisibility(View.GONE);
                 break;
-            case R.id.pub_menu_share:
+            case R.id.menu_share:
                 pubMenuParent.setVisibility(View.GONE);
                 break;
-            case R.id.pub_menu_parent:
+            case R.id.menu_parent:
                 if (pubMenuParent.isShown())
                     pubMenuParent.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_menu:
+                pubMenuParent.setVisibility(pubMenuParent.isShown() ? View.GONE : View.VISIBLE);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -116,5 +117,13 @@ public class QrCodeActivity extends BaseSwipeActivity<ActivityQrCodeBinding> imp
             pubMenuParent.setVisibility(View.GONE);
         else
             super.onBackPressed();
+    }
+
+    @Override
+    public void onBack() {
+        if (pubMenuParent.isShown())
+            pubMenuParent.setVisibility(View.GONE);
+        else
+            finish();
     }
 }

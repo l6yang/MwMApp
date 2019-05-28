@@ -7,8 +7,7 @@ import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
@@ -16,7 +15,7 @@ import com.mwm.loyal.databinding.ActivityShareBinding;
 import com.mwm.loyal.libs.manager.AppAdapter;
 import com.mwm.loyal.libs.manager.AppBean;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.PreferencesUtil;
+import com.mwm.loyal.utils.PreferUtil;
 import com.yalantis.phoenix.PullToRefreshView;
 
 import java.util.ArrayList;
@@ -27,11 +26,9 @@ import java.util.Set;
 
 import butterknife.BindView;
 
-public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> implements View.OnClickListener, PullToRefreshView.OnRefreshListener {
-    @BindView(R.id.pub_title)
-    TextView pubTitle;
-    @BindView(R.id.pub_back)
-    View pubBack;
+public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> implements PullToRefreshView.OnRefreshListener {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.recycle_list)
     RecyclerView recyclerView;
     @BindView(R.id.pull_to_refresh)
@@ -67,8 +64,8 @@ public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> imple
     }
 
     private void initViews() {
-        pubTitle.setText("分享");
-        pubBack.setOnClickListener(this);
+        toolbar.setTitle("分享");
+        setSupportActionBar(toolbar);
         pullToRefreshView.setEnabled(false);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -80,15 +77,6 @@ public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> imple
     @Override
     public int setEdgePosition() {
         return LEFT;
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.pub_back:
-                finish();
-                break;
-        }
     }
 
     @Override
@@ -116,7 +104,7 @@ public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> imple
         protected Void doInBackground(Void... params) {
             final PackageManager packageManager = getPackageManager();
             List<PackageInfo> packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA);
-            Set<String> hiddenApps = PreferencesUtil.getHiddenApps(ShareActivity.this);
+            Set<String> hiddenApps = PreferUtil.getHiddenApps(ShareActivity.this);
             totalApps = packages.size() + hiddenApps.size();
             Collections.sort(packages, new Comparator<PackageInfo>() {
                 @Override
@@ -132,7 +120,7 @@ public class ShareActivity extends BaseSwipeActivity<ActivityShareBinding> imple
                             AppBean tempApp = new AppBean(packageManager.getApplicationLabel(packageInfo.applicationInfo).toString(), packageInfo.packageName, packageInfo.versionName, packageInfo.applicationInfo.sourceDir, packageInfo.applicationInfo.dataDir, packageManager.getApplicationIcon(packageInfo.applicationInfo), false);
                             appList.add(tempApp);
                         } catch (OutOfMemoryError e) {
-                            AppBean tempApp = new AppBean(packageManager.getApplicationLabel(packageInfo.applicationInfo).toString(), packageInfo.packageName, packageInfo.versionName, packageInfo.applicationInfo.sourceDir, packageInfo.applicationInfo.dataDir, ContextCompat.getDrawable(ShareActivity.this,R.mipmap.icon), false);
+                            AppBean tempApp = new AppBean(packageManager.getApplicationLabel(packageInfo.applicationInfo).toString(), packageInfo.packageName, packageInfo.versionName, packageInfo.applicationInfo.sourceDir, packageInfo.applicationInfo.dataDir, ContextCompat.getDrawable(ShareActivity.this, R.mipmap.icon), false);
                             appList.add(tempApp);
                         } catch (Exception e) {
                             e.printStackTrace();

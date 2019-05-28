@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.loyal.kit.ObjectUtil" />
+
+        <variable
+            name="linkBean"
+            type="com.mwm.loyal.beans.LinkBean" />
+
+    </data>
+
+    <TextView
+        android:id="@+id/item_link_text"
+        style="@style/itemAboutText"
+        android:text="@{ObjectUtil.replaceNull(linkBean.linkText)}" />
+</layout>
+

@@ -4,13 +4,14 @@ import android.content.Context;
 import android.view.View;
 
 import com.loyal.base.adapter.ABasicListAdapter;
-import com.mwm.loyal.impl.IContact;
+import com.loyal.base.adapter.ABasicListViewHolder;
+import com.mwm.loyal.impl.IContactImpl;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseListAdapter<T, V extends ABasicListAdapter.ViewHolder> extends ABasicListAdapter<T, V> implements IContact {
+public abstract class BaseListAdapter<T, VH extends ABasicListViewHolder> extends ABasicListAdapter<T, VH> implements IContactImpl {
 
     public BaseListAdapter(Context context) {
         super(context);
@@ -24,10 +25,10 @@ public abstract class BaseListAdapter<T, V extends ABasicListAdapter.ViewHolder>
         super(context, json, t, fromRes);
     }
 
-    public class ViewHolder extends ABasicListAdapter.ViewHolder {
+    public class ViewHolder extends ABasicListViewHolder {
 
         @Override
-        public void bindViews(View view) {
+        public void bindView(View view) {
             ButterKnife.bind(this, view);
         }
 

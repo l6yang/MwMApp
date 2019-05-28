@@ -3,19 +3,21 @@ package com.mwm.loyal.handler;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.loyal.base.rxjava.impl.SubscribeListener;
+import com.loyal.kit.DeviceUtil;
+import com.loyal.kit.GsonUtil;
+import com.loyal.rx.RxUtil;
+import com.loyal.rx.impl.RxSubscriberListener;
 import com.mwm.loyal.R;
 import com.mwm.loyal.activity.AccountSafetyActivity;
 import com.mwm.loyal.activity.RegisterActivity;
 import com.mwm.loyal.base.BaseClickHandler;
-import com.mwm.loyal.base.RxProgressSubscriber;
-import com.mwm.loyal.beans.LoginBean;
+import com.mwm.loyal.beans.ObservableAccountBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAccountBinding;
-import com.mwm.loyal.utils.ApkUtil;
-import com.mwm.loyal.utils.RxUtil;
+import com.mwm.loyal.impl.ServerImpl;
+import com.mwm.loyal.libs.rxjava.RxProgressSubscriber;
 
-public class AccountSafetyHandler extends BaseClickHandler<ActivityAccountBinding> implements SubscribeListener<ResultBean> {
+public class AccountSafetyHandler extends BaseClickHandler<ActivityAccountBinding> implements RxSubscriberListener<String> {
 
     public AccountSafetyHandler(AccountSafetyActivity activity, ActivityAccountBinding binding) {
         super(activity, binding);
@@ -24,29 +26,33 @@ public class AccountSafetyHandler extends BaseClickHandler<ActivityAccountBindin
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.account_mm_reset:
-                startActivityForResultByAct(RegisterActivity.class, IntImpl.reqCode_UpdateMM);
+                hasIntentParams(true);
+                startActivityForResultByAct(RegisterActivity.class, IntImpl.reqCodeUpdateMM);
                 break;
             case R.id.account_device_lock:
                 String des = binding.accountDeviceLock.getContentDescription().toString();
-                LoginBean loginBean = new LoginBean();
-                loginBean.account.set(activity.getIntent().getStringExtra("account"));
-                loginBean.locked.set(TextUtils.equals("off", replaceNull(des)) ? 1 : 0);
-                loginBean.device.set(ApkUtil.getDeviceID());
-                loginBean.serial.set(ApkUtil.getDeviceSerial());
-                RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(activity, this);
-                RxUtil.rxExecuted(subscriber.doUpdateAccount(loginBean.toString()), subscriber);
+                ObservableAccountBean observableAccountBean = new ObservableAccountBean();
+                observableAccountBean.account.set(activity.getIntent().getStringExtra("account"));
+                observableAccountBean.locked.set(TextUtils.equals("off", replaceNull(des)) ? "1" : "0");
+                observableAccountBean.device.set(ServerImpl.deviceId());
+                observableAccountBean.serial.set(DeviceUtil.deviceSerial());
+                RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(activity);
+                subscriber.setDialogMessage("").showProgressDialog(true);
+                subscriber.setSubscribeListener(this);
+                RxUtil.rxExecute(subscriber.accountUpdate(observableAccountBean.toString()), subscriber);
                 break;
             case R.id.account_destroy:
-                builder.putExtra("extra", "destroy");
-                startActivityForResultByAct(RegisterActivity.class, IntImpl.reqCode_destroy);
+                intentBuilder.putExtra("extra", "destroy");
+                startActivityForResultByAct(RegisterActivity.class, IntImpl.reqCodeDestroy);
                 break;
         }
     }
 
     @Override
-    public void onResult(int what, Object tag, ResultBean resultBean) {
+    public void onResult(int what, Object tag, String result) {
+        ResultBean resultBean = GsonUtil.json2Bean(result, ResultBean.class);
         if (null != resultBean) {
-            if (1 == resultBean.getResultCode()) {
+            if (TextUtils.equals("1", resultBean.getCode())) {
                 String des = binding.accountDeviceLock.getContentDescription().toString();
                 if (TextUtils.equals("off", des)) {
                     showToast("该账号已与此设备绑定");
@@ -57,12 +63,12 @@ public class AccountSafetyHandler extends BaseClickHandler<ActivityAccountBindin
                     binding.accountDeviceLock.setImageResource(R.mipmap.switch_off);
                     binding.accountDeviceLock.setContentDescription(getString(R.string.off));
                 }
-            } else showDialog(resultBean.getResultMsg(), false);
-        } else showErrorDialog("解析设备锁信息失败", false);
+            } else showToast(resultBean.getMessage());
+        } else showToast("解析设备锁信息失败");
     }
 
     @Override
     public void onError(int what, Object tag, Throwable e) {
-        showErrorDialog(e.toString(), false);
+        showErrorDialog("",e);
     }
 }

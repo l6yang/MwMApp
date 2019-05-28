@@ -2,23 +2,24 @@ package com.mwm.loyal.activity;
 
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.View;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.loyal.base.rxjava.impl.SubscribeListener;
-import com.loyal.base.util.GsonUtil;
+import com.loyal.kit.GsonUtil;
+import com.loyal.rx.RxUtil;
+import com.loyal.rx.impl.RxSubscriberListener;
 import com.mwm.loyal.R;
 import com.mwm.loyal.adapter.FeedBackAdapter;
 import com.mwm.loyal.base.BaseSwipeActivity;
-import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.FeedBackBean;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityListFeedbackBinding;
+import com.mwm.loyal.libs.rxjava.RxProgressSubscriber;
 import com.mwm.loyal.utils.DividerItemDecoration;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.RxUtil;
 import com.yanzhenjie.recyclerview.swipe.Closeable;
 import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
@@ -31,13 +32,9 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedbackBinding> implements View.OnClickListener, SubscribeListener<ResultBean>, SwipeMenuCreator, OnSwipeMenuItemClickListener {
-    @BindView(R.id.pub_back)
-    View pubBack;
-    @BindView(R.id.pub_title)
-    TextView pubTitle;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
+public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedbackBinding> implements RxSubscriberListener<String>, SwipeMenuCreator, OnSwipeMenuItemClickListener {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.listFeedBack)
     SwipeMenuRecyclerView recyclerView;
     private List<FeedBackBean> beanList = new ArrayList<>();
@@ -50,6 +47,8 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
 
     @Override
     public void afterOnCreate() {
+        toolbar.setTitle("反馈历史");
+        setSupportActionBar(toolbar);
         binding.setDrawable(ImageUtil.getBackground(this));
         queryHistory();
         initViews();
@@ -62,17 +61,12 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
 
     private void queryHistory() {
         String account = getIntent().getStringExtra("account");
-        RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(this, "");
+        RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(this, "192.168.0.110");
         subscriber.setSubscribeListener(this);
-        RxUtil.rxExecuted(subscriber.getSelfFeed(account), subscriber);
+        RxUtil.rxExecute(subscriber.getFeedback(account), subscriber);
     }
 
     private void initViews() {
-        pubMenu.setVisibility(View.VISIBLE);
-        pubMenu.setImageResource(R.drawable.src_sync_img);
-        pubMenu.setOnClickListener(this);
-        pubBack.setOnClickListener(this);
-        pubTitle.setText("反馈历史");
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this));// 添加分割线。
         recyclerView.setSwipeMenuCreator(this);
@@ -86,25 +80,11 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.pub_back:
-                System.gc();
-                finish();
-                break;
-            case R.id.pub_menu:
-                beanList.clear();
-                feedBackAdapter.refreshList(beanList);
-                queryHistory();
-                break;
-        }
-    }
-
-    @Override
-    public void onResult(int what, Object tag, ResultBean resultBean) {
+    public void onResult(int what, Object tag, String result) {
         try {
-            if (1 == resultBean.getResultCode()) {
-                this.beanList = GsonUtil.json2BeanList(resultBean.getResultMsg(), FeedBackBean.class);
+            ResultBean resultBean = GsonUtil.json2Bean(result, ResultBean.class);
+            if (TextUtils.equals("1", resultBean.getCode())) {
+                this.beanList = GsonUtil.json2BeanList(resultBean.getMessage(), FeedBackBean.class);
                 if (null != feedBackAdapter) {
                     feedBackAdapter.refreshList(this.beanList);
                 }
@@ -138,16 +118,17 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
         closeable.smoothCloseMenu();// 关闭被点击的菜单。
         // 如果是删除：推荐调用Adapter.notifyItemRemoved(position)，不推荐Adapter.notifyDataSetChanged();
         if (menuPosition == 0) {// 删除按钮被点击。
-            RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(this, "");
-            subscriber.setSubscribeListener(new SubscribeListener<ResultBean>() {
+            RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(this, "192.168.0.110");
+            subscriber.setSubscribeListener(new RxSubscriberListener<String>() {
                 @Override
-                public void onResult(int what, Object tag, ResultBean resultBean) {
+                public void onResult(int what, Object tag, String result) {
+                    ResultBean resultBean = GsonUtil.json2Bean(result, ResultBean.class);
                     if (null != resultBean) {
-                        if (1 == resultBean.getResultCode()) {
+                        if (TextUtils.equals("1", resultBean.getCode())) {
                             showToast("删除成功");
                             beanList.remove(adapterPosition);
                             feedBackAdapter.notifyItemRemoved(adapterPosition);
-                        } else showDialog(resultBean.getResultMsg(), false);
+                        } else showDialog(resultBean.getMessage(), false);
                     } else showDialog("解析删除反馈数据失败", false);
                 }
 
@@ -156,7 +137,25 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
                     showDialog(e.toString(), false);
                 }
             });
-            RxUtil.rxExecuted(subscriber.deleteSelfFeed(beanList.get(adapterPosition).toString()), subscriber);
+            RxUtil.rxExecute(subscriber.deleteFeedback(beanList.get(adapterPosition).toString()), subscriber);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_sync, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_sync:
+                beanList.clear();
+                feedBackAdapter.refreshList(beanList);
+                queryHistory();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

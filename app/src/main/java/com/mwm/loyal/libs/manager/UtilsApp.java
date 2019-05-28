@@ -3,8 +3,8 @@ package com.mwm.loyal.libs.manager;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.loyal.base.util.IOUtil;
-import com.mwm.loyal.impl.IContact;
+import com.loyal.kit.IOUtil;
+import com.mwm.loyal.impl.IContactImpl;
 import com.mwm.loyal.utils.FileUtil;
 
 import java.io.File;
@@ -13,7 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-public class UtilsApp implements IContact {
+public class UtilsApp implements IContactImpl {
 
     public static boolean copyFile(AppBean appInfo) {
         File initialFile = new File(appInfo.getSource());

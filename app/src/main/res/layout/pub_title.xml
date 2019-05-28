@@ -5,16 +5,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@id/pub_layout"
+        <FrameLayout
+            android:id="@id/titleParent"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
-            <TextView
-                android:id="@id/pub_title"
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@id/titleView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/app_name"
                 android:textColor="@color/white"
@@ -23,16 +23,11 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_toLeftOf="@id/pub_title"
-                android:layout_toStartOf="@id/pub_title">
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="8dp">
 
-                <ImageView
-                    android:id="@id/pub_back"
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@id/backView"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="@string/empty"
@@ -40,28 +35,33 @@
                     android:src="@drawable/src_back_img" />
             </RelativeLayout>
 
-            <RelativeLayout
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_toEndOf="@id/pub_title"
-                android:layout_toRightOf="@id/pub_title">
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="8dp">
 
-                <ImageView
-                    android:id="@id/pub_menu"
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@id/menuText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="8dp"
+                    android:textColor="@color/color_menu_text"
+                    android:textSize="@dimen/text_sp_16"
+                    android:visibility="gone"/>
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@id/menuView"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center"
                     android:contentDescription="@string/empty"
                     android:padding="5dp"
-                    android:visibility="gone"
-                    android:src="@drawable/src_menu_img" />
-            </RelativeLayout>
-        </RelativeLayout>
+                    android:src="@drawable/src_menu_img"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+        </FrameLayout>
     </android.support.design.widget.AppBarLayout>
 </layout>

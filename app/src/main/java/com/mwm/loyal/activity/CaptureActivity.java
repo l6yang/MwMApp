@@ -2,21 +2,19 @@ package com.mwm.loyal.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.zxing.Result;
-import com.loyal.base.util.StateBarUtil;
+import com.loyal.kit.OutUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.libs.zxing.AutoScannerView;
 import com.mwm.loyal.libs.zxing.BaseCaptureActivity;
 import com.mwm.loyal.libs.zxing.ViewfinderView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 默认的扫描界面
@@ -27,50 +25,41 @@ public class CaptureActivity extends BaseCaptureActivity implements View.OnClick
     SurfaceView surfaceView;
     @BindView(R.id.viewfinder_view)
     ViewfinderView viewfinderView;
-    @BindView(R.id.pub_back)
-    View pubBack;
-    @BindView(R.id.pub_title)
-    TextView pubTitle;
-    @BindView(R.id.pub_menu)
-    ImageView pubMenu;
-    @BindView(R.id.pub_layout)
-    View pubLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.flashView)
+    View flashView;
     @BindView(R.id.autoScannerView)
     AutoScannerView autoScannerView;
     private boolean autoScan = false;
     int count = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_capture);
-        ButterKnife.bind(this);
-        StateBarUtil.setTranslucentStatus(this);
+    protected int actLayoutRes() {
+        return R.layout.activity_capture;
+    }
+
+    @Override
+    public void afterOnCreate() {
+        String title = getIntent().getStringExtra("title");
+        toolbar.setTitle(TextUtils.isEmpty(title) ? "扫一扫" : title);
+        setSupportActionBar(toolbar);
         autoScan = getIntent().getBooleanExtra("auto", false);
-        pubBack.setOnClickListener(this);
-        pubTitle.setText(getIntent().getStringExtra("title"));
-        pubMenu.setVisibility(View.VISIBLE);
-        pubMenu.setImageResource(R.drawable.src_flash_img);
-        pubLayout.setBackgroundResource(R.color.pub_color_title);
         autoScannerView.setVisibility(autoScan ? View.VISIBLE : View.GONE);
         viewfinderView.setVisibility(autoScan ? View.GONE : View.VISIBLE);
-        pubMenu.setOnClickListener(this);
+        flashView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.pub_back:
-                System.gc();
-                finish();
-                break;
-            case R.id.pub_menu:
+            case R.id.flashView:
                 if (count == 0) {
-                    pubMenu.setSelected(true);
+                    view.setSelected(true);
                     cameraManager.openLight();
                     count = 1;
                 } else {
-                    pubMenu.setSelected(false);
+                    view.setSelected(false);
                     cameraManager.offLight();
                     count = 0;
                 }
@@ -97,7 +86,7 @@ public class CaptureActivity extends BaseCaptureActivity implements View.OnClick
 
     @Override
     public void dealDecode(Result rawResult, Bitmap barcode, float scaleFactor) {
-        System.out.println("dealDecode ~~~~~ " + rawResult.getText() + " " + barcode + " " + scaleFactor);
+        OutUtil.println("dealDecode ~~~~~ " + rawResult.getText() + " " + barcode + " " + scaleFactor);
         playBeepSoundAndVibrate();
         Intent intent = new Intent();
         intent.putExtra("mwm_id", rawResult.getText());

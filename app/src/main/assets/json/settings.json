@@ -1,0 +1,20 @@
+[
+  {
+    "linkClass": "com.mwm.loyal.activity.AccountSafetyActivity",
+    "linkText": "账号与安全",
+    "linkIcon": "",
+    "forResult": "nextForResult"
+  },
+  {
+    "linkClass": "com.mwm.loyal.activity.AboutActivity",
+    "linkText": "关于我们",
+    "linkIcon": "",
+    "forResult": "next"
+  },
+  {
+    "linkClass": "",
+    "linkText": "切换账号",
+    "linkIcon": "",
+    "forResult": "finishSetResult"
+  }
+]

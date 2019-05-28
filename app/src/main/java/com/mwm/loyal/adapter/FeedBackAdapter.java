@@ -1,22 +1,24 @@
 package com.mwm.loyal.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.loyal.kit.TimeUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseRecyclerViewHolder;
 import com.mwm.loyal.beans.FeedBackBean;
-import com.mwm.loyal.impl.IContact;
+import com.mwm.loyal.impl.IContactImpl;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuAdapter;
 
 import java.util.List;
 
 import butterknife.BindView;
 
-public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder> implements IContact {
+public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder> implements IContactImpl {
     private List<FeedBackBean> beanList;
     private final LayoutInflater inflater;
     private BaseRecyclerViewHolder.OnItemClickListener itemClickListener;
@@ -46,11 +48,9 @@ public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         FeedBackBean feedBackBean = beanList.get(position);
-        String time = StrImpl.replaceNull(feedBackBean.getTime());
-        if (time.endsWith("00:00:00"))
-            time = time.replace(" 00:00:00", "");
+        String time = TimeUtil.subEndTime(feedBackBean.getTime());
         holder.itemTime.setText(time);
         holder.itemContent.setText(feedBackBean.getContent());
     }
@@ -60,7 +60,7 @@ public class FeedBackAdapter extends SwipeMenuAdapter<FeedBackAdapter.ViewHolder
         return null == beanList ? 0 : beanList.size();
     }
 
-    static class ViewHolder extends BaseRecyclerViewHolder {
+    class ViewHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.item_time)
         TextView itemTime;
         @BindView(R.id.item_content)

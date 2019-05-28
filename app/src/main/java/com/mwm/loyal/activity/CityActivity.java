@@ -1,14 +1,16 @@
 package com.mwm.loyal.activity;
 
 import android.content.Intent;
+import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.TextView;
 
-import com.loyal.base.util.GsonUtil;
-import com.loyal.base.util.ResUtil;
+import com.loyal.kit.GsonUtil;
+import com.loyal.kit.Low2UpCase;
+import com.loyal.kit.ResUtil;
 import com.mwm.loyal.R;
 import com.mwm.loyal.adapter.AutoCompleteAdapter;
 import com.mwm.loyal.adapter.PinnedCityAdapter;
@@ -16,7 +18,6 @@ import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.beans.CityBean;
 import com.mwm.loyal.databinding.ActivityCityBinding;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.Low2UpCase;
 import com.mwm.loyal.utils.SortCity;
 import com.mwm.loyal.utils.ToastUtil;
 import com.mwm.loyal.views.PinnedHeaderListView;
@@ -30,27 +31,24 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
 
 public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> implements View.OnClickListener, SideBar.OnTouchingLetterChangedListener {
-    @BindView(R.id.pub_title)
-    TextView pubTitle;
-    @BindView(R.id.pub_back)
-    View pubBack;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.edit_cityName)
     AutoCompleteTextView editCity;
     @BindView(R.id.view_layout)
     View viewQuery;
     @BindView(R.id.query_cancel)
-    TextView textCancel;
+    AppCompatTextView textCancel;
     @BindView(R.id.text_city_query)
-    TextView textCity;
+    AppCompatTextView textCity;
     @BindView(R.id.city_pinned_listView)
     PinnedHeaderListView cityPinnedView;
     @BindView(R.id.sidebar)
     SideBar sideBar;
     @BindView(R.id.sidebar_dialog)
-    TextView textSideBar;
+    AppCompatTextView textSideBar;
     private PinnedCityAdapter pinnedCityAdapter;
     private LinkedHashMap<String, List<CityBean>> linkedHashMap = new LinkedHashMap<>();
     private AutoCompleteAdapter completeAdapter;
@@ -73,37 +71,28 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
     }
 
     private void initViews() {
-        pubTitle.setText("选择城市");
-        pubBack.setOnClickListener(this);
+        toolbar.setTitle("选择城市");
+        setSupportActionBar(toolbar);
         changeInput(false);
     }
 
     private void initData() {
         editCity.setAdapter(completeAdapter = new AutoCompleteAdapter(this, new ArrayList<CityBean>()));
         cityPinnedView.setAdapter(pinnedCityAdapter = new PinnedCityAdapter(this, linkedHashMap));
-        /*Observable.just("allCity.json").map(new Func1<String, List<CityBean>>() {
-            @Override
-            public List<CityBean> call(String s) {
-                String json = ResUtil.getStrFromRes(CityActivity.this, s);
-                return GsonUtil.json2BeanList(json, CityBean.class);
+        String json = ResUtil.assetsFile2String(CityActivity.this, "json/allCity.json");
+        List<CityBean> beanList = GsonUtil.json2BeanList(json, CityBean.class);
+        Collections.sort(beanList, new SortCity());
+        for (CityBean cityBean : beanList) {
+            String letter = cityBean.getCityLetter().toUpperCase();
+            List<CityBean> getList = linkedHashMap.get(letter);
+            if (getList == null) {
+                getList = new ArrayList<>();
+                linkedHashMap.put(letter, getList);
             }
-        }).subscribe(new Action1<List<CityBean>>() {
-            @Override
-            public void call(List<CityBean> beanList) {
-                Collections.sort(beanList, new SortCity());
-                for (CityBean cityBean : beanList) {
-                    String letter = cityBean.getCityLetter().toUpperCase();
-                    List<CityBean> getList = linkedHashMap.get(letter);
-                    if (getList == null) {
-                        getList = new ArrayList<>();
-                        linkedHashMap.put(letter, getList);
-                    }
-                    getList.add(cityBean);
-                }
-                pinnedCityAdapter.refreshData(linkedHashMap);
-                completeAdapter.refreshList(beanList);
-            }
-        });*/
+            getList.add(cityBean);
+        }
+        pinnedCityAdapter.refreshData(linkedHashMap);
+        completeAdapter.notifyList(beanList);
         sideBar.setTextView(textSideBar);
         sideBar.setOnTouchingLetterChangedListener(this);
         cityPinnedView.setOnItemClickListener(new ItemClickListener());
@@ -114,9 +103,6 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.pub_back:
-                finish();
-                break;
             case R.id.text_city_query:
                 changeInput(true);
                 break;
@@ -141,7 +127,7 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
             editCity.requestFocus();
         } else {
             editCity.getText().clear();
-            ToastUtil.hideInput(this, editCity.getWindowToken());
+            hideKeyBoard(editCity);
         }
     }
 

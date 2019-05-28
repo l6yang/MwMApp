@@ -1,27 +1,26 @@
 package com.mwm.loyal.activity;
 
 import android.content.Intent;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.TextView;
 
-import com.loyal.base.rxjava.impl.SubscribeListener;
+import com.loyal.kit.GsonUtil;
+import com.loyal.kit.OutUtil;
+import com.loyal.rx.RxUtil;
+import com.loyal.rx.impl.RxSubscriberListener;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
-import com.mwm.loyal.base.RxProgressSubscriber;
 import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAccountBinding;
 import com.mwm.loyal.handler.AccountSafetyHandler;
+import com.mwm.loyal.libs.rxjava.RxProgressSubscriber;
 import com.mwm.loyal.utils.ImageUtil;
-import com.mwm.loyal.utils.RxUtil;
 
 import butterknife.BindView;
 
-public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBinding> implements View.OnClickListener, SubscribeListener<ResultBean> {
-    @BindView(R.id.pub_back)
-    View pubBack;
-    @BindView(R.id.pub_title)
-    TextView pubTitle;
+public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBinding> implements RxSubscriberListener<String> {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected int actLayoutRes() {
@@ -30,30 +29,16 @@ public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBind
 
     @Override
     public void afterOnCreate() {
+        toolbar.setTitle("账号与安全");
+        setSupportActionBar(toolbar);
         binding.setClick(new AccountSafetyHandler(this, binding));
         binding.setDrawable(ImageUtil.getBackground(this));
-        initViews();
         checkLocked();
-    }
-
-    private void initViews() {
-        pubTitle.setText("账号与安全");
-        pubBack.setOnClickListener(this);
-        binding.accountDeviceLock.setOnClickListener(this);
     }
 
     @Override
     public int setEdgePosition() {
         return LEFT;
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.pub_back:
-                finish();
-                break;
-        }
     }
 
     @Override
@@ -67,18 +52,22 @@ public class AccountSafetyActivity extends BaseSwipeActivity<ActivityAccountBind
 
     private void checkLocked() {
         String account = getIntent().getStringExtra("account");
-        RxProgressSubscriber<ResultBean> subscriber = new RxProgressSubscriber<>(this, this);
-        RxUtil.rxExecuted(subscriber.doAccountLocked(account), subscriber);
+        RxProgressSubscriber<String> subscriber = new RxProgressSubscriber<>(this);
+        subscriber.setDialogMessage("加载中...").showProgressDialog(true);
+        subscriber.setSubscribeListener(this);
+        RxUtil.rxExecute(subscriber.accountLock(account), subscriber);
     }
 
     @Override
-    public void onResult(int what, Object tag, ResultBean resultBean) {
+    public void onResult(int what, Object tag, String result) {
+        OutUtil.println(result);
+        ResultBean resultBean = GsonUtil.json2Bean(result, ResultBean.class);
         if (resultBean != null) {
-            if (1 == resultBean.getResultCode()) {
-                toggleLocked(TextUtils.equals("1", replaceNull(resultBean.getResultMsg())));
-            } else showDialog(resultBean.getResultMsg(), false);
+            if (TextUtils.equals("1", resultBean.getCode())) {
+                toggleLocked(TextUtils.equals("1", replaceNull(resultBean.getMessage())));
+            } else showToast(resultBean.getMessage());
         } else
-            showErrorDialog("解析设备锁信息失败", false);
+            showToast("解析设备锁信息失败");
     }
 
     private void toggleLocked(boolean locked) {

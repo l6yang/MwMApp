@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:fresco="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -8,8 +9,8 @@
         <import type="android.text.TextUtils" />
 
         <variable
-            name="loginBean"
-            type="com.mwm.loyal.beans.LoginBean" />
+            name="observableAccountBean"
+            type="com.mwm.loyal.beans.ObservableAccountBean" />
 
         <variable
             name="click"
@@ -22,47 +23,44 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/baseActStyle"
         android:background="@{drawable}"
-        android:fitsSystemWindows="true"
         tools:context=".activity.PersonalActivity">
 
-        <include
-            android:id="@id/pub_layout_title"
-            layout="@layout/pub_title" />
+        <include layout="@layout/toolbar" />
 
-        <ScrollView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/pub_layout_title"
-            android:background="@color/albumWhiteGray"
-            android:fillViewport="true">
+            android:layout_below="@id/toolbar"
+            android:background="@color/albumWhiteGray">
 
-            <RelativeLayout
+            <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="8dp"
+                app:divider="@drawable/shape_line_grey"
+                app:showDividers="middle">
 
                 <LinearLayout
-                    android:id="@id/pub_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:padding="8dp">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="60dp"
+                        android:layout_marginTop="10dp"
                         android:gravity="bottom"
                         android:orientation="horizontal"
-                        android:paddingEnd="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingStart="8dp"
+                        android:paddingLeft="8dp"
                         android:paddingTop="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
                         android:text="@string/account"
                         android:textColor="@color/text_personal"
                         android:textSize="@dimen/text_sp_18" />
@@ -71,29 +69,30 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top|end"
-                        android:paddingBottom="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingStart="8dp"
-                        android:text="@{loginBean.account}"
+                        android:paddingLeft="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp"
+                        android:text="@{observableAccountBean.account}"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_sp_18" />
+                </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@color/grey" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
-                        android:paddingEnd="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingStart="8dp"
+                        android:paddingLeft="8dp"
                         android:paddingTop="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
                         android:text="@string/nickname"
                         android:textColor="@color/text_personal"
                         android:textSize="@dimen/text_sp_18" />
@@ -107,15 +106,15 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:gravity="center_vertical|end"
-                            android:paddingBottom="8dp"
-                            android:paddingEnd="8dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
                             android:paddingStart="8dp"
-                            android:text="@{TextUtils.isEmpty(loginBean.nickname)?@string/key_default:loginBean.nickname}"
-                            android:textColor="@{TextUtils.isEmpty(loginBean.nickname)?@color/text_personal:@color/black}"
+                            android:paddingLeft="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="8dp"
+                            android:text="@{TextUtils.isEmpty(observableAccountBean.nickname)?@string/key_default:observableAccountBean.nickname}"
+                            android:textColor="@{TextUtils.isEmpty(observableAccountBean.nickname)?@color/text_personal:@color/black}"
                             android:textSize="@dimen/text_sp_18"
-                            android:visibility="@{loginBean.editable?View.GONE:View.VISIBLE}" />
+                            android:visibility="@{observableAccountBean.editable?View.GONE:View.VISIBLE}" />
 
                         <EditText
                             android:id="@+id/personal_nickname"
@@ -127,31 +126,32 @@
                             android:hint="@string/hint_nickname"
                             android:maxLength="18"
                             android:maxLines="1"
-                            android:paddingBottom="8dp"
-                            android:paddingEnd="8dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
                             android:paddingStart="8dp"
-                            android:text="@{loginBean.nickname}"
+                            android:paddingLeft="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="8dp"
+                            android:text="@{observableAccountBean.nickname}"
                             android:textColor="@color/text_personal"
                             android:textSize="@dimen/text_sp_18"
-                            android:visibility="@{loginBean.editable?View.VISIBLE:View.GONE}" />
+                            android:visibility="@{observableAccountBean.editable?View.VISIBLE:View.GONE}" />
                     </RelativeLayout>
+                </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@color/grey" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
-                        android:paddingEnd="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingStart="8dp"
+                        android:paddingLeft="8dp"
                         android:paddingTop="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
                         android:text="@string/sign"
                         android:textColor="@color/text_personal"
                         android:textSize="@dimen/text_sp_18" />
@@ -165,15 +165,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical|end"
-                            android:paddingBottom="8dp"
-                            android:paddingEnd="8dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
                             android:paddingStart="8dp"
-                            android:text="@{TextUtils.isEmpty(loginBean.sign)?@string/key_default:loginBean.sign}"
-                            android:textColor="@{TextUtils.isEmpty(loginBean.sign)?@color/text_personal:@color/black}"
+                            android:paddingLeft="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="8dp"
+                            android:text="@{TextUtils.isEmpty(observableAccountBean.signature)?@string/key_default:observableAccountBean.signature}"
+                            android:textColor="@{TextUtils.isEmpty(observableAccountBean.signature)?@color/text_personal:@color/black}"
                             android:textSize="@dimen/text_sp_18"
-                            android:visibility="@{loginBean.editable?View.GONE:View.VISIBLE}" />
+                            android:visibility="@{observableAccountBean.editable?View.GONE:View.VISIBLE}" />
 
                         <EditText
                             android:id="@+id/personal_signature"
@@ -184,31 +184,32 @@
                             android:gravity="center_vertical|end"
                             android:hint="@string/hint_signature"
                             android:maxLength="100"
-                            android:paddingBottom="8dp"
-                            android:paddingEnd="8dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
                             android:paddingStart="8dp"
-                            android:text="@{loginBean.sign}"
+                            android:paddingLeft="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="8dp"
+                            android:text="@{observableAccountBean.signature}"
                             android:textColor="@color/text_personal"
                             android:textSize="@dimen/text_sp_18"
-                            android:visibility="@{loginBean.editable?View.VISIBLE:View.GONE}" />
+                            android:visibility="@{observableAccountBean.editable?View.VISIBLE:View.GONE}" />
                     </RelativeLayout>
+                </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@color/grey" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
-                        android:paddingEnd="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingStart="8dp"
+                        android:paddingLeft="8dp"
                         android:paddingTop="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
                         android:text="@string/qr"
                         android:textColor="@color/text_personal"
                         android:textSize="@dimen/text_sp_18" />
@@ -224,26 +225,25 @@
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:contentDescription="@string/empty"
                             android:src="@mipmap/qr_pressed" />
                     </RelativeLayout>
                 </LinearLayout>
+            </android.support.v7.widget.LinearLayoutCompat>
 
-                <com.facebook.drawee.view.SimpleDraweeView
-                    android:id="@+id/simple_personal_icon"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="48dp"
-                    android:onClick="@{click::onClick}"
-                    fresco:actualImageScaleType="centerInside"
-                    fresco:roundAsCircle="true"
-                    fresco:roundingBorderColor="@color/white"
-                    fresco:roundingBorderWidth="2dp" />
-            </RelativeLayout>
-        </ScrollView>
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/simple_personal_icon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="58dp"
+                android:onClick="@{click::onClick}"
+                fresco:actualImageScaleType="centerInside"
+                fresco:roundAsCircle="true"
+                fresco:roundingBorderColor="@color/white"
+                fresco:roundingBorderWidth="2dp"
+                fresco:viewAspectRatio="1" />
+        </FrameLayout>
     </RelativeLayout>
 </layout>

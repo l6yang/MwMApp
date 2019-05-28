@@ -10,20 +10,17 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:background="@{drawable}"
-        android:fitsSystemWindows="true"
+        style="@style/baseActStyle"
         tools:context=".activity.ForgetActivity">
 
         <include
-            android:id="@id/pub_layout_title"
-            layout="@layout/pub_title" />
+            layout="@layout/toolbar" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/pub_layout_title">
+            android:layout_below="@id/toolbar">
 
             <Button
                 android:id="@+id/forget_test"

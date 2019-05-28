@@ -7,7 +7,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.loyal.base.util.IOUtil;
+import com.loyal.kit.IOUtil;
+import com.loyal.kit.OutUtil;
 import com.mwm.loyal.R;
 
 import java.io.ByteArrayOutputStream;
@@ -36,15 +37,15 @@ public class ImageUtil {
         int hm = h - 1;
         int wh = w * h;
         int div = radius + radius + 1;
-        int r[] = new int[wh];
-        int g[] = new int[wh];
-        int b[] = new int[wh];
+        int[] r = new int[wh];
+        int[] g = new int[wh];
+        int[] b = new int[wh];
         int rsum, gsum, bsum, x, y, i, p, yp, yi, yw;
-        int vmin[] = new int[Math.max(w, h)];
+        int[] vmin = new int[Math.max(w, h)];
 
         int divsum = (div + 1) >> 1;
         divsum *= divsum;
-        int dv[] = new int[256 * divsum];
+        int[] dv = new int[256 * divsum];
         for (i = 0; i < 256 * divsum; i++) {
             dv[i] = (i / divsum);
         }
@@ -210,7 +211,7 @@ public class ImageUtil {
         // 得到图片的宽、高
         int w = options.outWidth;
         int h = options.outHeight;
-        System.out.println("--img src,w:" + w + " h:" + h);
+        OutUtil.println("--img src,w:" + w + " h:" + h);
         // 最小边
         int min = w < h ? w : h;
         // 压缩比。
@@ -224,7 +225,7 @@ public class ImageUtil {
         // 压缩。
         bmp = BitmapFactory.decodeFile(path, options);
         if (bmp != null) {
-            System.out.println("--img dst,w:" + bmp.getWidth() + " h:" + bmp.getHeight());
+            OutUtil.println("--img dst,w:" + bmp.getWidth() + " h:" + bmp.getHeight());
         }
         return bmp;
     }
@@ -251,6 +252,7 @@ public class ImageUtil {
             FileUtil.deleteFile(FileUtil.path_temp, "camera_tmp.jpg");
             return jpgFile.getPath();
         } catch (Exception e) {
+            e.printStackTrace();
             return "";
         }
     }
@@ -271,9 +273,27 @@ public class ImageUtil {
             IOUtil.closeStream(outputStream);
             return jpgFile.getPath();
         } catch (Exception e) {
+            e.printStackTrace();
             return "";
         } finally {
             IOUtil.closeStream(inputStream);
+        }
+    }
+
+    public static String saveToFile(File jpgFile, byte[] bytes) {
+        if (null == bytes)
+            return "";
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
+            bos.write(bytes, 0, bytes.length);
+            FileOutputStream outputStream = new FileOutputStream(jpgFile);
+            outputStream.write(bos.toByteArray());
+            IOUtil.closeStream(outputStream);
+            return jpgFile.getPath();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
     }
 
@@ -300,7 +320,7 @@ public class ImageUtil {
                 src.getWidth() / scaleRatio,
                 src.getHeight() / scaleRatio,
                 filter);
-        return ImageUtil.doBlur(scaledBitmap, blurRadius, true);
+        return doBlur(scaledBitmap, blurRadius, true);
     }
 
     public static void clearFrescoTemp() {

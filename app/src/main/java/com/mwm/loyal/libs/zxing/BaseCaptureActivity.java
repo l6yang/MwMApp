@@ -16,7 +16,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
@@ -27,13 +26,14 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.mwm.loyal.R;
+import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.libs.zxing.camera.CameraManager;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
-public abstract class BaseCaptureActivity extends AppCompatActivity implements SurfaceHolder.Callback {
+public abstract class BaseCaptureActivity extends BaseActivity implements SurfaceHolder.Callback {
 
     private static final String SCHEME = "package";
     /**

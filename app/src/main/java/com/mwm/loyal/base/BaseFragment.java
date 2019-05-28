@@ -3,12 +3,12 @@ package com.mwm.loyal.base;
 import android.view.View;
 
 import com.loyal.base.ui.fragment.ABasicFragment;
-import com.mwm.loyal.impl.IContact;
+import com.mwm.loyal.impl.IContactImpl;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class BaseFragment extends ABasicFragment implements View.OnClickListener, IContact {
+public abstract class BaseFragment extends ABasicFragment implements View.OnClickListener, IContactImpl {
 
     private Unbinder unbinder;
 

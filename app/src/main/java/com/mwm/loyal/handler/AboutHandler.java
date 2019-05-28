@@ -6,10 +6,7 @@ import com.mwm.loyal.R;
 import com.mwm.loyal.activity.AboutActivity;
 import com.mwm.loyal.activity.FeedBackActivity;
 import com.mwm.loyal.base.BaseClickHandler;
-import com.mwm.loyal.beans.ResultBean;
 import com.mwm.loyal.databinding.ActivityAboutBinding;
-import com.mwm.loyal.impl.ObservableServer;
-import com.mwm.loyal.utils.ApkUtil;
 
 public class AboutHandler extends BaseClickHandler<ActivityAboutBinding> {
 
@@ -32,7 +29,7 @@ public class AboutHandler extends BaseClickHandler<ActivityAboutBinding> {
 
     /*private void doVerApk() {
         ObservableServer server = RetrofitManage.getInstance().getObservableServer();
-        server.doApkVer(ApkUtil.getApkVersion(activity))
+        server.checkUpdate(DeviceUtil.apkVersion(activity))
                 .subscribeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

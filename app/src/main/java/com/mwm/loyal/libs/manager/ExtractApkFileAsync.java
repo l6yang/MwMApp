@@ -8,9 +8,9 @@ import android.os.Message;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.loyal.kit.ToastUtil;
 import com.mwm.loyal.R;
-import com.mwm.loyal.impl.IContact;
-import com.mwm.loyal.utils.ToastUtil;
+import com.mwm.loyal.impl.IContactImpl;
 
 public class ExtractApkFileAsync extends AsyncTask<Void, String, Boolean> {
     private Context context;
@@ -51,12 +51,13 @@ public class ExtractApkFileAsync extends AsyncTask<Void, String, Boolean> {
     protected void onPostExecute(Boolean status) {
         super.onPostExecute(status);
         progressDialog.dismiss();
-        Message message = Message.obtain(mHandler, IContact.IntImpl.async2Null);
+        Message message = Message.obtain(mHandler, IContactImpl.IntImpl.async2Null);
         message.sendToTarget();
+        ToastUtil toastUtil = new ToastUtil(context);
         if (status) {
-            ToastUtil.showToast(context, String.format(context.getString(R.string.dialog_saved_description), appBean.getName(), UtilsApp.getAPKFilename(appBean)));
+            toastUtil.show(String.format(context.getString(R.string.dialog_saved_description), appBean.getName(), UtilsApp.getAPKFilename(appBean)));
         } else {
-            ToastUtil.showToast(context, context.getString(R.string.dialog_extract_fail) + "\n" + context.getString(R.string.dialog_extract_fail_description));
+            toastUtil.show(context.getString(R.string.dialog_extract_fail) + "\n" + context.getString(R.string.dialog_extract_fail_description));
         }
     }
 }
