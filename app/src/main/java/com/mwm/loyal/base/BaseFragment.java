@@ -2,7 +2,7 @@ package com.mwm.loyal.base;
 
 import android.view.View;
 
-import com.loyal.base.ui.fragment.ABasicFragment;
+import com.loyal.basex.ui.fragment.ABasicFragment;
 import com.mwm.loyal.impl.IContactImpl;
 
 import butterknife.ButterKnife;

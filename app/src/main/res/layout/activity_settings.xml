@@ -13,7 +13,7 @@
             type="com.mwm.loyal.adapter.SettingsLinkAdapter" />
     </data>
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <androidx.appcompat.widget.LinearLayoutCompat
         style="@style/baseActStyle"
         android:background="@{drawable}"
         tools:context=".activity.settings.SettingsActivity">
@@ -31,5 +31,5 @@
             android:divider="@color/grey"
             android:dividerHeight="1dp" />
 
-    </android.support.v7.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

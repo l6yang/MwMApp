@@ -3,27 +3,34 @@ package com.mwm.loyal.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.loyal.base.impl.CommandViewClickListener;
+import com.loyal.basex.impl.CommandViewClickListener;
+import com.loyal.basex.impl.AndPerMission;
 import com.loyal.rx.impl.MultiplePermissionsListener;
 import com.mwm.loyal.R;
-import com.mwm.loyal.base.BaseFullScreenActivity;
+import com.mwm.loyal.base.BaseActivity;
 import com.mwm.loyal.databinding.ActivitySplashBinding;
-import com.mwm.loyal.service.CheckUpdateService;
 import com.mwm.loyal.utils.FileUtil;
 import com.mwm.loyal.utils.ImageUtil;
 
 import butterknife.BindView;
 
-public class SplashActivity extends BaseFullScreenActivity<ActivitySplashBinding> implements MultiplePermissionsListener {
+public class SplashActivity extends BaseActivity<ActivitySplashBinding> implements MultiplePermissionsListener {
     @BindView(R.id.pub_id)
     TextView mContentView;
     private final SplashRunnable runnable = new SplashRunnable(3);
     private StringBuilder stringBuilder = new StringBuilder();
+
+    @Override
+    public boolean isFullScreen() {
+        return true;
+    }
 
     @Override
     protected int actLayoutRes() {
@@ -33,8 +40,8 @@ public class SplashActivity extends BaseFullScreenActivity<ActivitySplashBinding
     @Override
     public void afterOnCreate() {
         binding.setDrawable(ImageUtil.getBackground(this));
-        multiplePermissions(this, PerMission.READ_PHONE_STATE,
-                PerMission.WRITE_EXTERNAL_STORAGE, PerMission.READ_EXTERNAL_STORAGE);
+        multiplePermissions(this, AndPerMission.READ_PHONE_STATE,
+                AndPerMission.WRITE_EXTERNAL_STORAGE, AndPerMission.READ_EXTERNAL_STORAGE);
     }
 
     public void onClick(View view) {
@@ -48,10 +55,10 @@ public class SplashActivity extends BaseFullScreenActivity<ActivitySplashBinding
         permissionName = replaceNull(permissionName);
         if (!successful) {
             switch (permissionName) {
-                case PerMission.READ_PHONE_STATE:
+                case AndPerMission.READ_PHONE_STATE:
                     stringBuilder.append(" 设备状态权限，");
                     break;
-                case PerMission.WRITE_EXTERNAL_STORAGE:
+                case AndPerMission.WRITE_EXTERNAL_STORAGE:
                     stringBuilder.append(" 存储权限，");
                     break;
             }
@@ -69,9 +76,9 @@ public class SplashActivity extends BaseFullScreenActivity<ActivitySplashBinding
             return;
         }
         switch (permissionName) {
-            case PerMission.READ_PHONE_STATE:
+            case AndPerMission.READ_PHONE_STATE:
                 break;
-            case PerMission.WRITE_EXTERNAL_STORAGE:
+            case AndPerMission.WRITE_EXTERNAL_STORAGE:
                 FileUtil.createFiles();
                 mContentView.setVisibility(View.VISIBLE);
                 mContentView.setText(String.format(getString(R.string.skip), 3));

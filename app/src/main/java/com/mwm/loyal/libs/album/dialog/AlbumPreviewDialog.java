@@ -2,11 +2,11 @@ package com.mwm.loyal.libs.album.dialog;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;

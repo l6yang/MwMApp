@@ -1,13 +1,15 @@
 package com.mwm.loyal.base;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
+
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.loyal.base.adapter.ABasicBindListAdapter;
+import com.loyal.basex.adapter.ABasicBindListAdapter;
 
 import java.util.List;
 
@@ -44,10 +46,5 @@ public abstract class BaseBindAdapter<T, B extends ViewDataBinding> extends ABas
         T t = getItem(position);
         binding.setVariable(variableId(), t);
         return convertView;
-    }
-
-    @Override
-    public View getConvertView(int resId, ViewGroup parent) {
-        return null;
     }
 }

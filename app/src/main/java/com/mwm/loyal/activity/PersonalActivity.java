@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,7 +83,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
         try {
             switch (what) {
                 case queryWhat: {
-                    ResultBean<AccountBean> resultBean = (ResultBean<AccountBean>) GsonUtil.json2BeanObject(result, ResultBean.class, AccountBean.class);
+                    ResultBean<AccountBean> resultBean = (ResultBean<AccountBean>) GsonUtil.json2Object(result, ResultBean.class, AccountBean.class);
                     if (null == resultBean) {
                         showDialog("解析个人信息失败", true);
                         return;
@@ -144,6 +144,7 @@ public class PersonalActivity extends BaseSwipeActivity<ActivityPersonalBinding>
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case IntImpl.reqCodeUCrop:
                 if (resultCode == RESULT_OK) {// 成功选择了照片。

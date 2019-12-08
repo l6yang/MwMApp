@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/AlbumMatchParent"
@@ -7,18 +7,18 @@
     tools:context=".libs.album.AlbumActivity"
     tools:ignore="MergeRootFrame,Overdraw,UnusedAttribute">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         style="@style/AlbumWrapContent.WidthMatchParent"
         android:background="@color/albumTransparent"
         android:theme="@style/AppTheme.PopupOverlay">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/AlbumToolbar"
             android:background="@color/albumTransparent"
             app:navigationIcon="@drawable/album_ic_back_white" />
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.mwm.loyal.libs.album.widget.FixViewPager
         android:id="@+id/view_pager"
@@ -31,7 +31,7 @@
         android:layout_gravity="bottom"
         android:background="@color/albumSheetBackground">
 
-        <android.support.v7.widget.AppCompatCheckBox
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/cb_album_check"
             style="@style/AlbumCheckBox.WrapContent"
             android:layout_alignParentEnd="true"
@@ -44,4 +44,4 @@
             android:textSize="@dimen/text_sp_16" />
 
     </RelativeLayout>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

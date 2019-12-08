@@ -1,9 +1,9 @@
 package com.mwm.loyal.beans;
 
-import android.databinding.BaseObservable;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.support.annotation.NonNull;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.annotation.NonNull;
 
 import com.loyal.kit.DeviceUtil;
 import com.mwm.loyal.impl.IContactImpl;

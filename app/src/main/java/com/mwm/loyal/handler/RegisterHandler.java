@@ -130,7 +130,7 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
         subscriber.setWhat(resultReg).setDialogMessage("注册中...").showProgressDialog(true);
         subscriber.setTag(observableAccountBean).setSubscribeListener(this);
         String json = observableAccountBean.toString();
-        json = encodeStr2Utf(json);
+        json = encode2Utf8(json);
         Observable<String> observable = fromLogin ? subscriber.register(json) : subscriber.passwordUpdate(json);
         RxUtil.rxExecute(observable, subscriber);
     }
@@ -139,7 +139,7 @@ public class RegisterHandler extends BaseClickHandler<ActivityRegisterBinding> i
     public void onResult(int what, Object tag, String result) {
         switch (what) {
             case resultReg: {
-                ResultBean<AccountBean> resultBean = (ResultBean<AccountBean>) GsonUtil.json2BeanObject(result, ResultBean.class, AccountBean.class);
+                ResultBean<AccountBean> resultBean = (ResultBean<AccountBean>) GsonUtil.json2Object(result, ResultBean.class, AccountBean.class);
                 if (null == resultBean) {
                     showDialog("解析" + (fromLogin ? "注册" : "修改") + "信息异常");
                     return;

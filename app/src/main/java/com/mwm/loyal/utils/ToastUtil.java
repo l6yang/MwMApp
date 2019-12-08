@@ -2,13 +2,14 @@ package com.mwm.loyal.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+
 import android.view.inputmethod.InputMethodManager;
 
-import com.loyal.base.impl.IBaseContacts;
 import com.mwm.loyal.impl.OperaOnClickListener;
 
-public class ToastUtil implements IBaseContacts {
+public class ToastUtil {
 
     public static
     @NonNull

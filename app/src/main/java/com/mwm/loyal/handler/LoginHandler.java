@@ -89,7 +89,7 @@ public class LoginHandler extends BaseClickHandler<ActivityLoginBinding> impleme
     public void onResult(int what, Object tag, String result) {
         try {
             OutUtil.println("login", result);
-            ResultBean<AccountBean> resultBean = (ResultBean<AccountBean>) GsonUtil.json2BeanObject(result, ResultBean.class, AccountBean.class);
+            ResultBean<AccountBean> resultBean = (ResultBean<AccountBean>) GsonUtil.json2Object(result, ResultBean.class, AccountBean.class);
             ObservableAccountBean observableAccountBean = (ObservableAccountBean) tag;
             String code = null == resultBean ? "" : replaceNull(resultBean.getCode());
             String message = null == resultBean ? "解析失败" : replaceNull(resultBean.getMessage());

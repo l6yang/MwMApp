@@ -7,8 +7,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.loyal.kit.IOUtil;
 import com.loyal.kit.OutUtil;
+import com.loyal.kit.StreamUtil;
 import com.mwm.loyal.R;
 
 import java.io.ByteArrayOutputStream;
@@ -248,7 +248,7 @@ public class ImageUtil {
             }
             FileOutputStream outputStream = new FileOutputStream(jpgFile);
             outputStream.write(baos.toByteArray());
-            IOUtil.closeStream(outputStream);
+            StreamUtil.closeStream(outputStream);
             FileUtil.deleteFile(FileUtil.path_temp, "camera_tmp.jpg");
             return jpgFile.getPath();
         } catch (Exception e) {
@@ -270,13 +270,13 @@ public class ImageUtil {
             }
             FileOutputStream outputStream = new FileOutputStream(jpgFile);
             outputStream.write(bos.toByteArray());
-            IOUtil.closeStream(outputStream);
+            StreamUtil.closeStream(outputStream);
             return jpgFile.getPath();
         } catch (Exception e) {
             e.printStackTrace();
             return "";
         } finally {
-            IOUtil.closeStream(inputStream);
+            StreamUtil.closeStream(inputStream);
         }
     }
 
@@ -289,7 +289,7 @@ public class ImageUtil {
             bos.write(bytes, 0, bytes.length);
             FileOutputStream outputStream = new FileOutputStream(jpgFile);
             outputStream.write(bos.toByteArray());
-            IOUtil.closeStream(outputStream);
+            StreamUtil.closeStream(outputStream);
             return jpgFile.getPath();
         } catch (Exception e) {
             e.printStackTrace();

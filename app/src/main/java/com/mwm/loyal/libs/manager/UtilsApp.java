@@ -3,7 +3,7 @@ package com.mwm.loyal.libs.manager;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.loyal.kit.IOUtil;
+import com.loyal.kit.StreamUtil;
 import com.mwm.loyal.impl.IContactImpl;
 import com.mwm.loyal.utils.FileUtil;
 
@@ -31,8 +31,8 @@ public class UtilsApp implements IContactImpl {
             e.printStackTrace();
             return false;
         }finally {
-            IOUtil.closeStream(inputChannel);
-            IOUtil.closeStream(outputChannel);
+            StreamUtil.closeStream(inputChannel);
+            StreamUtil.closeStream(outputChannel);
         }
     }
 

@@ -2,13 +2,8 @@ package com.mwm.loyal.utils;
 
 import android.os.Environment;
 
-import com.loyal.kit.IOUtil;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class FileUtil {
     // sd卡路径
@@ -56,46 +51,6 @@ public class FileUtil {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-    }
-
-    public static void writeFile(InputStream in, File file) {
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file);
-            byte[] buffer = new byte[1024 * 128];
-            int len;
-            while ((len = in.read(buffer)) != -1) {
-                fos.write(buffer, 0, len);
-            }
-            fos.flush();
-            fos.close();
-            in.close();
-        } catch (IOException e) {
-            //
-        } finally {
-            IOUtil.closeStream(fos);
-            IOUtil.closeStream(in);
-        }
-    }
-
-    // 将保存在文件的数据读载到所需要的控件中
-    public static String getFileContent(String path, String fileName) {
-        File f = new File(path + "/" + fileName);
-        try {
-            FileInputStream fis;
-            fis = new FileInputStream(f);
-            byte[] b = new byte[1024];
-            int len;
-            StringBuilder sb = new StringBuilder();
-            while ((len = fis.read(b)) != -1) {
-                sb.append(new String(b, 0, len, "utf-8"));
-            }
-            fis.close();
-            return sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
     }
 
     /**

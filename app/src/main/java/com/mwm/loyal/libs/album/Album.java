@@ -2,9 +2,9 @@ package com.mwm.loyal.libs.album;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import java.util.Collections;
 import java.util.List;

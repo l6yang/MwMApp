@@ -1,8 +1,8 @@
 package com.mwm.loyal.activity;
 
 import android.graphics.Color;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -84,7 +84,7 @@ public class ListFeedBackActivity extends BaseSwipeActivity<ActivityListFeedback
         try {
             ResultBean resultBean = GsonUtil.json2Bean(result, ResultBean.class);
             if (TextUtils.equals("1", resultBean.getCode())) {
-                this.beanList = GsonUtil.json2BeanList(resultBean.getMessage(), FeedBackBean.class);
+                this.beanList = GsonUtil.json2List(resultBean.getMessage(), FeedBackBean.class);
                 if (null != feedBackAdapter) {
                     feedBackAdapter.refreshList(this.beanList);
                 }

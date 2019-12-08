@@ -15,7 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;

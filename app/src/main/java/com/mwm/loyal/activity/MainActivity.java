@@ -7,15 +7,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -23,8 +27,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.loyal.base.gps.GpsLocBean;
-import com.loyal.base.gps.GpsLocation;
+import com.loyal.basex.gps.GpsLocBean;
+import com.loyal.basex.gps.GpsLocation;
+import com.loyal.basex.impl.AndPerMission;
 import com.loyal.kit.GsonUtil;
 import com.loyal.kit.OutUtil;
 import com.loyal.kit.StateBarUtil;
@@ -54,7 +59,6 @@ import com.mwm.loyal.utils.UIHandler;
 import com.mwm.loyal.utils.WeatherUtil;
 
 import java.lang.ref.WeakReference;
-import java.security.Permissions;
 
 import butterknife.BindView;
 
@@ -88,7 +92,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_add);
         //toolbar.inflateMenu();
-        singlePermission(IntImpl.permissionLocation, this, PerMission.ACCESS_COARSE_LOCATION, PerMission.ACCESS_FINE_LOCATION);
+        singlePermission(IntImpl.permissionLocation, this, AndPerMission.ACCESS_COARSE_LOCATION, AndPerMission.ACCESS_FINE_LOCATION);
         binding.setHandler(new MainHandler(this, binding));
         mHandler = new HandlerClass(this);
         String city = PreferUtil.getString(getApplicationContext(), StrImpl.KEY_CITY, StrImpl.defaultCity);
@@ -179,6 +183,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case IntImpl.reqCodeIcon:
                 updateAccount();
@@ -266,11 +271,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
     @Override
     public void onResult(int what, Object tag, String result) {
         OutUtil.println(result);
-        if (TextUtils.isEmpty(result)){
+        if (TextUtils.isEmpty(result)) {
             showDialog("未返回数据");
             return;
         }
-        ResultBean<AccountBean> resultBean = (ResultBean<AccountBean>) GsonUtil.json2BeanObject(result, ResultBean.class, AccountBean.class);
+        ResultBean<AccountBean> resultBean = (ResultBean<AccountBean>) GsonUtil.json2Object(result, ResultBean.class, AccountBean.class);
         if (null == resultBean) {
             showDialog("数据格式错误");
             return;
@@ -330,7 +335,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements N
                             activity.startActivityByAct(AlbumActivity.class);
                             break;
                         case R.id.nav_scan:
-                            activity.singlePermission(IntImpl.permissionCamera, activity, PerMission.CAMERA);
+                            activity.singlePermission(IntImpl.permissionCamera, activity, AndPerMission.CAMERA);
                             break;
                         case R.id.nav_share:
                             activity.startActivityByAct(ShareActivity.class);

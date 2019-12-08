@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.util.LruCache;
+import androidx.collection.LruCache;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;

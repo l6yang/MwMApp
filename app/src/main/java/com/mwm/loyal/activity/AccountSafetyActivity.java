@@ -1,7 +1,7 @@
 package com.mwm.loyal.activity;
 
 import android.content.Intent;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 
 import com.loyal.kit.GsonUtil;

@@ -82,7 +82,7 @@ public class AutoCompleteAdapter extends BaseListAdapter<CityBean, AutoCompleteA
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<CityBean> beanList = getArrayList();
+            List<CityBean> beanList = getList();
             FilterResults results = new FilterResults();
             if (TextUtils.isEmpty(constraint)) {
                 synchronized (objLock) {

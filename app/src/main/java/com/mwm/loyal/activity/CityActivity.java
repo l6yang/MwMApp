@@ -1,8 +1,8 @@
 package com.mwm.loyal.activity;
 
 import android.content.Intent;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -80,7 +80,7 @@ public class CityActivity extends BaseSwipeActivity<ActivityCityBinding> impleme
         editCity.setAdapter(completeAdapter = new AutoCompleteAdapter(this, new ArrayList<CityBean>()));
         cityPinnedView.setAdapter(pinnedCityAdapter = new PinnedCityAdapter(this, linkedHashMap));
         String json = ResUtil.assetsFile2String(CityActivity.this, "json/allCity.json");
-        List<CityBean> beanList = GsonUtil.json2BeanList(json, CityBean.class);
+        List<CityBean> beanList = GsonUtil.json2List(json, CityBean.class);
         Collections.sort(beanList, new SortCity());
         for (CityBean cityBean : beanList) {
             String letter = cityBean.getCityLetter().toUpperCase();

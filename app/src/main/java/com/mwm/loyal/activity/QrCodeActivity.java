@@ -2,7 +2,7 @@ package com.mwm.loyal.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.loyal.base.impl.ToolBarBackListener;
+import com.loyal.basex.impl.ToolBarBackListener;
 import com.mwm.loyal.R;
 import com.mwm.loyal.base.BaseSwipeActivity;
 import com.mwm.loyal.databinding.ActivityQrCodeBinding;

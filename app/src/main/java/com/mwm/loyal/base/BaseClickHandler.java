@@ -3,12 +3,14 @@ package com.mwm.loyal.base;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.ViewDataBinding;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v7.widget.AppCompatEditText;
+
+import androidx.databinding.ViewDataBinding;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.AppCompatEditText;
+
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,11 +20,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.loyal.base.impl.IUICommandImpl;
-import com.loyal.base.impl.IntentFrame;
+import com.loyal.basex.impl.IUICommandImpl;
+import com.loyal.basex.impl.IntentBuilder;
+import com.loyal.basex.impl.IntentFrame;
 import com.loyal.kit.ConnectUtil;
-import com.loyal.kit.IntentBuilder;
-import com.loyal.kit.ObjectUtil;
+import com.loyal.kit.ResUtil;
 import com.loyal.kit.TimeUtil;
 import com.loyal.kit.ToastUtil;
 import com.mwm.loyal.impl.IContactImpl;
@@ -127,7 +129,7 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
 
     @Override
     public String replaceNull(CharSequence sequence) {
-        return BaseStr.replaceNull(sequence);
+        return ResUtil.replaceNull(sequence);
     }
 
     @Override
@@ -136,18 +138,18 @@ public abstract class BaseClickHandler<V extends ViewDataBinding> implements Int
     }
 
     @Override
-    public String encodeStr2Utf(@NonNull String string) {
-        return BaseStr.encodeStr2Utf(string);
+    public String encode2Utf8(@NonNull String string) {
+        return ResUtil.encode2Utf8(string);
     }
 
     @Override
-    public String decodeStr2Utf(@NonNull String string) {
-        return BaseStr.decodeStr2Utf(string);
+    public String decode2Utf8(@NonNull String string) {
+        return ResUtil.decode2Utf8(string);
     }
 
     @Override
     public String getSpinSelectStr(Spinner spinner, @NonNull String methodName) {
-        return (String) ObjectUtil.getMethodValue(spinner.getSelectedItem(), methodName);
+        return (String) ResUtil.getMethodValue(spinner.getSelectedItem(), methodName);
     }
 
     @Override

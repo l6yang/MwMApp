@@ -13,7 +13,7 @@
         android:contentDescription="@string/album_title_activity_gallery"
         android:scaleType="centerCrop" />
 
-    <android.support.v7.widget.AppCompatRadioButton
+    <androidx.appcompat.widget.AppCompatRadioButton
         android:id="@+id/rb_gallery_preview_check"
         style="@style/AlbumWrapContent"
         android:layout_alignParentEnd="true"

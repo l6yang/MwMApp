@@ -4,8 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
-import com.loyal.base.impl.IBaseContacts;
 import com.loyal.kit.OutUtil;
+import com.loyal.kit.ResUtil;
 import com.loyal.rx.RetrofitManage;
 import com.loyal.rx.RxUtil;
 import com.mwm.loyal.R;
@@ -17,11 +17,11 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class WeatherUtil implements IContactImpl, IBaseContacts {
+public class WeatherUtil implements IContactImpl {
     public static void getCityWeather(String city, final Handler handler) {
         if (city.endsWith("市"))
             city = city.substring(0, city.length() - "市".length());
-        String weatherUrl = "http://wthrcdn.etouch.cn/weather_mini?city=" + BaseStr.encodeStr2Utf(city);
+        String weatherUrl = "http://wthrcdn.etouch.cn/weather_mini?city=" + ResUtil.encode2Utf8(city);
         Observable<WeatherBean> observable = RetrofitManage.getInstance("http://192.168.0.1/").createServer(ObservableServer.class).getWeather(weatherUrl);
         Observer<WeatherBean> subscriber = new Observer<WeatherBean>() {
 

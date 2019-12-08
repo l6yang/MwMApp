@@ -1,6 +1,6 @@
 package com.mwm.loyal.libs.swipback.app;
 
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
 
 import com.mwm.loyal.base.BaseActivity;

@@ -24,11 +24,9 @@
                 android:id="@+id/item_appName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="70dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="70dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="70dp"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-thin"
                 android:maxLines="1"
@@ -39,7 +37,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/item_appName"
-                android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
                 android:fontFamily="sans-serif-thin"
                 android:textSize="14sp" />
@@ -48,15 +45,13 @@
                 android:id="@+id/imgIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/item_appName"
+                android:layout_alignParentEnd="true"
                 android:layout_marginEnd="20dp"
-                android:layout_marginRight="14dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/empty"
-                android:maxHeight="50dp"
-                android:maxWidth="50dp" />
+                android:maxWidth="50dp"
+                android:maxHeight="50dp" />
 
             <LinearLayout
                 style="?android:attr/buttonBarStyle"
@@ -75,10 +70,9 @@
                     android:id="@+id/btnExtract"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
                     android:layout_marginStart="12dp"
+                    android:layout_weight="1"
                     android:background="@color/white"
                     android:text="@string/button_extract"
                     android:textColor="@color/colorPrimary" />
@@ -87,10 +81,9 @@
                     android:id="@+id/btnShare"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
-                    android:layout_marginRight="12dp"
+                    android:layout_weight="1"
                     android:background="@color/white"
                     android:text="@string/button_share"
                     android:textColor="@color/colorPrimary" />

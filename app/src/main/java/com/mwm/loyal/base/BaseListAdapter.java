@@ -3,15 +3,15 @@ package com.mwm.loyal.base;
 import android.content.Context;
 import android.view.View;
 
-import com.loyal.base.adapter.ABasicListAdapter;
-import com.loyal.base.adapter.ABasicListViewHolder;
+import com.loyal.basex.adapter.ABasicListAdapter;
+import com.loyal.basex.adapter.ABasicListViewHolder;
 import com.mwm.loyal.impl.IContactImpl;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseListAdapter<T, VH extends ABasicListViewHolder> extends ABasicListAdapter<T, VH> implements IContactImpl {
+public abstract class BaseListAdapter<T, VH extends BaseListAdapter.ViewHolder> extends ABasicListAdapter<T, VH> implements IContactImpl {
 
     public BaseListAdapter(Context context) {
         super(context);

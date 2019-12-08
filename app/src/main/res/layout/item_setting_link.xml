@@ -3,7 +3,7 @@
 
     <data>
 
-        <import type="com.loyal.kit.ObjectUtil" />
+        <import type="com.loyal.kit.ResUtil" />
 
         <variable
             name="linkBean"
@@ -14,6 +14,6 @@
     <TextView
         android:id="@+id/item_link_text"
         style="@style/itemAboutText"
-        android:text="@{ObjectUtil.replaceNull(linkBean.linkText)}" />
+        android:text="@{ResUtil.replaceNull(linkBean.linkText)}" />
 </layout>
 

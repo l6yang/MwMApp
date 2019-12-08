@@ -1,21 +1,27 @@
 package com.mwm.loyal.base;
 
 import android.app.ProgressDialog;
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.loyal.base.ui.activity.ABasicFragActivity;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+
+import com.loyal.basex.ui.activity.ABasicFullScreenActivity;
 import com.mwm.loyal.impl.IContactImpl;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseActivity<T extends ViewDataBinding> extends ABasicFragActivity implements IContactImpl {
+public abstract class BaseActivity<T extends ViewDataBinding> extends ABasicFullScreenActivity implements IContactImpl {
     protected ProgressDialog progressDialog;
     protected T binding;
+
+    @Override
+    public boolean isFullScreen() {
+        return false;
+    }
 
     @Override
     public void setViewByLayoutRes() {

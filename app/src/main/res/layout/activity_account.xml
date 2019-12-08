@@ -14,14 +14,14 @@
             type="android.graphics.drawable.Drawable" />
     </data>
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <androidx.appcompat.widget.LinearLayoutCompat
         style="@style/baseActStyle"
         android:background="@{drawable}"
         tools:context=".activity.AccountSafetyActivity">
 
         <include layout="@layout/toolbar" />
 
-        <android.support.v7.widget.LinearLayoutCompat
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -63,6 +63,6 @@
                 style="@style/itemAboutText"
                 android:onClick="@{click::onClick}"
                 android:text="@string/destroy_account" />
-        </android.support.v7.widget.LinearLayoutCompat>
-    </android.support.v7.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

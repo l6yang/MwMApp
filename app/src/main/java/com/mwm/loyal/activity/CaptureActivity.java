@@ -2,7 +2,7 @@ package com.mwm.loyal.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.SurfaceView;
 import android.view.View;

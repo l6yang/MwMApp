@@ -35,7 +35,7 @@
             android:layout_below="@id/toolbar"
             android:background="@color/albumWhiteGray">
 
-            <android.support.v7.widget.LinearLayoutCompat
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -230,7 +230,7 @@
                             android:src="@mipmap/qr_pressed" />
                     </RelativeLayout>
                 </LinearLayout>
-            </android.support.v7.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/simple_personal_icon"

@@ -10,7 +10,7 @@
             type="android.graphics.drawable.Drawable" />
     </data>
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <androidx.appcompat.widget.LinearLayoutCompat
         style="@style/baseActStyle"
         android:background="@{drawable}"
         app:divider="@drawable/shape_line_grey_v"
@@ -19,7 +19,7 @@
 
         <include layout="@layout/toolbar" />
 
-        <android.support.v7.widget.LinearLayoutCompat
+        <androidx.appcompat.widget.LinearLayoutCompat
             style="@style/layout_white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -67,9 +67,9 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/text_sp_18" />
             </RadioGroup>
-        </android.support.v7.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <android.support.v7.widget.LinearLayoutCompat
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/trustedCertLayout"
             style="@style/layout_white"
             android:gravity="center_vertical"
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <android.support.v7.widget.LinearLayoutCompat
+            <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/rightWeightStyle"
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
@@ -97,7 +97,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/text_sp_16" />
 
-                <android.support.v7.widget.SwitchCompat
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchTrustedCert"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -108,10 +108,10 @@
                     app:switchPadding="10dp"
                     app:switchTextAppearance="@style/SwitchCompat.TextAppearance" />
 
-            </android.support.v7.widget.LinearLayoutCompat>
-        </android.support.v7.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <android.support.v7.widget.LinearLayoutCompat
+        <androidx.appcompat.widget.LinearLayoutCompat
             style="@style/layout_white"
             android:orientation="horizontal"
             app:divider="@drawable/shape_line_grey_h"
@@ -128,7 +128,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_sp_18" />
 
-            <android.support.v7.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/edit_ipAdd"
                 style="@style/rightWeightStyle"
                 android:background="@null"
@@ -136,9 +136,9 @@
                 android:maxLines="1"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_sp_18" />
-        </android.support.v7.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <android.support.v7.widget.LinearLayoutCompat
+        <androidx.appcompat.widget.LinearLayoutCompat
             style="@style/layout_white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -155,7 +155,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_sp_18" />
 
-            <android.support.v7.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/edit_port"
                 style="@style/rightWeightStyle"
                 android:background="@null"
@@ -164,9 +164,9 @@
                 android:maxLines="1"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_sp_18" />
-        </android.support.v7.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <android.support.v7.widget.LinearLayoutCompat
+        <androidx.appcompat.widget.LinearLayoutCompat
             style="@style/layout_white"
             android:layout_marginTop="20dp"
             android:background="@null"
@@ -188,7 +188,7 @@
                 android:layout_weight="1"
                 android:onClick="onClick"
                 android:text="@string/save" />
-        </android.support.v7.widget.LinearLayoutCompat>
-    </android.support.v7.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </layout>

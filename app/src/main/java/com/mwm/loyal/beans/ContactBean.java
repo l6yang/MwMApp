@@ -1,6 +1,6 @@
 package com.mwm.loyal.beans;
 
-import android.databinding.ObservableField;
+import androidx.databinding.ObservableField;
 
 public class ContactBean {
     private ObservableField<String> account = new ObservableField<>();

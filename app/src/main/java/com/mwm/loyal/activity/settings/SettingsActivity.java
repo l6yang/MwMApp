@@ -1,7 +1,7 @@
 package com.mwm.loyal.activity.settings;
 
 import android.content.Intent;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 
